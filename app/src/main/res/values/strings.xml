@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">WhatToDo</string>
     <string name="signin">Sign In</string>
+    <!--<string name="default_web_client_ids"> 637473864215-6qu5onukflcpv6fk0lj1dao2jsed169u.apps.googleusercontent.com </string>-->
 </resources>
