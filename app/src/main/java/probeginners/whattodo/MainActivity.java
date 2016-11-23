@@ -2,7 +2,6 @@ package probeginners.whattodo;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -146,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
-                        Intent intent=new Intent(MainActivity.this,TaskList.class);
+                        Intent intent=new Intent(MainActivity.this, TaskList.class);
                         startActivity(intent);
                         finish();
                         // If sign in fails, display a message to the user. If sign in succeeds
