@@ -1,5 +1,6 @@
 package probeginners.whattodo;
 
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,17 +8,14 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
+
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import probeginners.whattodo.R;
 import tasklist.DividerItemDecoration;
 import tasklist.TaskAdapter;
 import tasklist.TaskData;
@@ -30,6 +28,8 @@ public class TaskList extends AppCompatActivity {
     TextView username;
     FloatingActionButton fb;
     ArrayList<TaskData> taskDataList=new ArrayList<>();
+    private String name;
+    private int count;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +77,8 @@ public class TaskList extends AppCompatActivity {
         fb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(TaskList.this, "Floating", Toast.LENGTH_SHORT).show();
+                Intent intent=new Intent(TaskList.this,NewList.class);
+                startActivityForResult(intent,11);
 
             }
         });
@@ -85,23 +86,20 @@ public class TaskList extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(data!=null&&requestCode==11){
+            name=data.getStringExtra("name");
+            count=0;
+            addTask(name,count);
+        }
+    }
+
     private void preparedata() {
-        addTask("hello",21);
-        addTask("hello",21);
-        addTask("hello",21);
-        addTask("hello",21);
-        addTask("hello",21);
-        addTask("hello",21);
-        addTask("hello",21);
-        addTask("hello",21);
-        addTask("hello",21);
-        addTask("hello",21);
-        addTask("hello",21);
-        addTask("hello",21);
-        addTask("hello",21);
-        addTask("hello",21);
-        addTask("hello",21);
-        addTask("hello",21);
+        addTask("hello12222",21);
+        addTask("hello32",21);
+        addTask("hello345",21);
 
 
     }
@@ -111,6 +109,5 @@ public class TaskList extends AppCompatActivity {
     public void addTask(String name,int count){
         taskDataList.add(new TaskData(name,count));adapter.notifyDataSetChanged();
     }
-
 
 }
