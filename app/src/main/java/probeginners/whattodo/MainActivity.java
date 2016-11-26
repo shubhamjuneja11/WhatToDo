@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
-                        Intent intent=new Intent(MainActivity.this, TaskList.class);
+                        Intent intent=new Intent(MainActivity.this, MyList.class);
                         startActivity(intent);
                         finish();
                         // If sign in fails, display a message to the user. If sign in succeeds

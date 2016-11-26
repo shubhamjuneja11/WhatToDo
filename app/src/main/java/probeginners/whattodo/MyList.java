@@ -16,11 +16,14 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import interfaces.ClickListener;
 import tasklist.DividerItemDecoration;
+import tasklist.RecyclerTouchListener;
 import tasklist.TaskAdapter;
 import tasklist.TaskData;
 
-public class TaskList extends AppCompatActivity {
+
+public class MyList extends AppCompatActivity {
     Toolbar toolbar;
     TaskAdapter adapter;
     RecyclerView recyclerView;
@@ -58,32 +61,43 @@ public class TaskList extends AppCompatActivity {
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(TaskList.this, "search", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MyList.this, "search", Toast.LENGTH_SHORT).show();
 
             }
         });
         usericon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(TaskList.this, "image", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MyList.this, "image", Toast.LENGTH_SHORT).show();
             }
         });
         username.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(TaskList.this, "name", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MyList.this, "name", Toast.LENGTH_SHORT).show();
             }
         });
         fb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(TaskList.this,NewList.class);
+                Intent intent=new Intent(MyList.this,NewList.class);
                 startActivityForResult(intent,11);
 
             }
         });
 
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+               TaskData taskData=taskDataList.get(position);
+                Toast.makeText(getApplicationContext(), taskData.getTaskname() + " is selected!", Toast.LENGTH_SHORT).show();
+            }
 
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
     }
 
     @Override

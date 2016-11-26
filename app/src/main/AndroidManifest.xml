@@ -13,9 +13,9 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/signin"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
-            android:name=".TaskList"
+            android:name=".MyList"
             android:label="Tasks"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -24,7 +24,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".NewList"></activity>
+        <activity android:name=".NewList" />
+        <activity android:name=".TasksActivity"></activity>
     </application>
 
 </manifest>
