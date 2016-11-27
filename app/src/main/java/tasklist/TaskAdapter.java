@@ -1,5 +1,6 @@
 package tasklist;
 
+
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +21,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
         public TextView taskname,taskcount;
         public MyViewHolder(View itemView) {
             super(itemView);
-            taskname=(TextView)itemView.findViewById(R.id.tasktopic);
+            taskname=(TextView)itemView.findViewById(R.id.title);
             taskcount=(TextView)itemView.findViewById(R.id.taskcount);
 
         }
@@ -32,7 +33,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     View itemView= LayoutInflater.from(parent.getContext())
-            .inflate(R.layout.taskactivityrow,parent,false);
+            .inflate(R.layout.mytask_card,parent,false);
+
         return new MyViewHolder(itemView);
     }
 

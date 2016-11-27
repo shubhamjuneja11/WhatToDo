@@ -17,7 +17,7 @@
         <activity
             android:name=".MyList"
             android:label="Tasks"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,7 +25,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".NewList" />
-        <activity android:name=".TasksActivity"></activity>
+        <activity android:name=".TasksActivity" />
+        <activity android:name=".NewTaskActivity"></activity>
     </application>
 
 </manifest>
