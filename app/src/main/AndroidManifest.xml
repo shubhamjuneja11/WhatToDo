@@ -3,6 +3,8 @@
     package="probeginners.whattodo">
 
     <uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"></uses-permission>
 
     <application
         android:allowBackup="true"
@@ -29,6 +31,9 @@
         <activity android:name=".TaskDetailsActivity">
 
         </activity>
+
+        <receiver android:name=".AlarmReciever"></receiver>
+
     </application>
 
 </manifest>
