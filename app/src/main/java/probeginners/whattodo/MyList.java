@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.graphics.Rect;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,7 +12,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
@@ -28,7 +25,6 @@ import db.DatabaseHandler;
 import interfaces.ClickListener;
 import tasklist.RecyclerTouchListener;
 import tasklist.TaskAdapter;
-import tasklist.TaskData;
 
 
 public class MyList extends AppCompatActivity {
@@ -66,7 +62,7 @@ public class MyList extends AppCompatActivity {
         preparedata();
         //Recyclerview create and setadapter
         recyclerView=(RecyclerView)findViewById(R.id.recycler_view);
-       adapter=new TaskAdapter(taskDataList);
+        adapter=new TaskAdapter(taskDataList);
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -133,7 +129,7 @@ public class MyList extends AppCompatActivity {
                 //List list=myRecyclerAdapter.
                List taskData=taskDataList.get(position);
                 Intent intent=new Intent(MyList.this,NewTaskActivity.class);
-                intent.putExtra("task",taskData.getlistname());
+                intent.putExtra("listname",taskData.getlistname());
                 startActivity(intent);
             }
 
