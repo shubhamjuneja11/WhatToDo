@@ -6,10 +6,11 @@ package tasklist;
 public class TaskData {
     private String taskname;
     private int taskcount;
-
-    public TaskData(String taskname,int taskcount)
+    private int taskdone;
+    public TaskData(String taskname,int taskdone,int taskcount)
     {
         this.taskname=taskname;
+        this.taskdone=taskdone;
         this.taskcount=taskcount;
     }
 
@@ -20,6 +21,7 @@ public class TaskData {
     public void setTaskcount(int taskcount){
         this.taskcount=taskcount;
     }
+    public void setTaskdone(int taskdone){this.taskdone=taskdone;}
 
     public String getTaskname(){
         return taskname;
@@ -28,5 +30,7 @@ public class TaskData {
     public int getTaskcount(){
         return taskcount;
     }
+
+    public int getTaskdone(){return taskdone;}
 
 }
