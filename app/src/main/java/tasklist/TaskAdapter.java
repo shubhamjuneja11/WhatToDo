@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -21,11 +22,13 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView taskname,taskcount;
         public ProgressBar progressBar;
+        public ImageView taskimage;
         public MyViewHolder(View itemView) {
             super(itemView);
             taskname=(TextView)itemView.findViewById(R.id.title);
             taskcount=(TextView)itemView.findViewById(R.id.taskcount);
             progressBar=(ProgressBar)itemView.findViewById(R.id.progressBar);
+            taskimage=(ImageView)itemView.findViewById(R.id.taskimage);
 
         }
     }
@@ -50,6 +53,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
         if(taskData.getTotaltasks()!=0)
         holder.progressBar.setProgress((taskData.getTaskdone()*100)/taskData.getTotaltasks());
         else holder.progressBar.setProgress(100);
+        holder.taskimage.setImageBitmap(taskData.getIcon());
     }
 
     @Override
