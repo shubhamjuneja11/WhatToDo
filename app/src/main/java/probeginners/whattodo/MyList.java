@@ -36,7 +36,6 @@ public class MyList extends AppCompatActivity {
     FloatingActionButton fb;
     ArrayList<List> taskDataList=new ArrayList<>();
     Cursor cursor;
-    MyRecyclerAdapter myRecyclerAdapter;
     SQLiteDatabase readdatabase;
     DatabaseHandler handler;
     private String name;
@@ -72,7 +71,7 @@ public class MyList extends AppCompatActivity {
 
 
 
-        /*myRecyclerAdapter=new MyRecyclerAdapter(this,cursor);
+        /*
         recyclerView.setAdapter(myRecyclerAdapter);*/
 
 
@@ -158,7 +157,7 @@ public class MyList extends AppCompatActivity {
             //addNewList(name,count);
             //readdatabase.notifyAll();
             /*cursor=readdatabase.rawQuery(query,null);
-            myRecyclerAdapter=new MyRecyclerAdapter(this,cursor);
+
             recyclerView.setAdapter(myRecyclerAdapter);*/
 
         }
