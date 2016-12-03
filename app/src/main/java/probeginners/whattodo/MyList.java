@@ -17,11 +17,13 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -153,11 +155,6 @@ public class MyList extends AppCompatActivity {
                         list.puticon(image);
                         adapter.notifyDataSetChanged();
                         handler.updateList(list);
-                        //convert bitmap to byte
-                        /*ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        image.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                        byte imageByte[] = stream.toByteArray();
-                        taskDataList.get(positiontoopen);*/
                     }
                 }
 
@@ -233,6 +230,34 @@ public class MyList extends AppCompatActivity {
                     case R.id.changeicon:
                         changeicon();
                         break;
+                    case R.id.changename:
+                        final AlertDialog.Builder builder=new AlertDialog.Builder(MyList.this);
+                        builder.setTitle("Enter new name");
+                        final EditText editText=new EditText(MyList.this);
+                        editText.setInputType(InputType.TYPE_CLASS_TEXT);
+                        builder.setView(editText);
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String input=editText.getText().toString();
+                                List list=taskDataList.get(positiontoopen);
+                                String oldname=list.getlistname();
+                                list.putlistname(input);
+                                adapter.notifyDataSetChanged();
+                                Log.e("11","11");
+                                handler.changeListname(oldname,list.getlistname());
+                                Log.e("w2","22");
+                            }
+                        });
+                        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+                        builder.show();
+
+                        break;
                 }
 
                 return true;
@@ -282,14 +307,6 @@ public class MyList extends AppCompatActivity {
 
     public void useCamera() {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-       /*cameraIntent.putExtra("crop", "true");
-        cameraIntent.putExtra("aspectX", 0);
-        cameraIntent.putExtra("aspectY", 0);
-        cameraIntent.putExtra("outputX", 200);
-        cameraIntent.putExtra("outputY", 150);*/
-        //cameraIntent.putExtra("return-data", true);
-
         startActivityForResult(cameraIntent, CAMERA_REQUEST);
 
 
@@ -301,10 +318,6 @@ public class MyList extends AppCompatActivity {
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         intent.putExtra("crop", "true");
-        /*intent.putExtra("aspectX", 0);
-        intent.putExtra("aspectY", 0);
-        intent.putExtra("outputX", 200);
-        intent.putExtra("outputY", 150);*/
         intent.putExtra("return-data", true);
         startActivityForResult(
                 Intent.createChooser(intent, "Complete action using"),

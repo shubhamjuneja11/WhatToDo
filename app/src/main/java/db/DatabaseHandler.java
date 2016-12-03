@@ -101,13 +101,19 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void updateList(List list){
         if(db==null)
             db=this.getWritableDatabase();
-
+Log.e("ji","ji");
         ContentValues values=new ContentValues();
         values.put(listname,list.getlistname());
         values.put(totaltask,list.getTotaltasks());
         values.put(listimage,list.getBytesIcon());
         db.update(List_Table,values,"listname=?",new String[]{list.getlistname()});
-        // Log.i("value","added");
+         Log.i("value","added");
+    }
+
+    public void changeListname(String oldname,String newname){
+        ContentValues values=new ContentValues();
+        values.put(listname,newname);
+        db.update(List_Table,values,"listname=?",new String[]{oldname});
     }
 
   public void deleteList(List list){

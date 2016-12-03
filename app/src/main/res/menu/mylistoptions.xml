@@ -3,6 +3,8 @@
 <item android:title="Change icon"
     android:id="@+id/changeicon"
     ></item>
+    <item android:title="Change List name"
+        android:id="@+id/changename"></item>
 <item android:title="Delete"
     android:id="@+id/deletelist"
     ></item>
