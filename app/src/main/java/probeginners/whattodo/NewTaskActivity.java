@@ -46,12 +46,12 @@ public class NewTaskActivity extends AppCompatActivity {
     int positiontoopen;
     ArrayList<Task> list = new ArrayList<>();
     ImageButton fav;
-    //CardView cardView;
     boolean flag = false, favflag = false;
     SQLiteDatabase readdatabase;
     DatabaseHandler handler;
     String query, listname;
     Cursor cursor;
+    int taskdone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +62,7 @@ public class NewTaskActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         listname = getIntent().getStringExtra("listname");
+        taskdone=getIntent().getIntExtra("taskdone",0);
 
         query = "select * from " + DatabaseHandler.Task_Table + " where listname = ?";
         handler = new DatabaseHandler(this);
@@ -176,6 +177,7 @@ public class NewTaskActivity extends AppCompatActivity {
         list.add(task);
         adapter.notifyDataSetChanged();
         handler.addTask(task);
+        handler.changeListTotalTask(listname,adapter.getItemCount());
     }
 
     /**
@@ -281,22 +283,12 @@ public class NewTaskActivity extends AppCompatActivity {
                         boolean f = list.get(positiontoopen).getcompleted();
                         list.get(positiontoopen).putcompleted(!f);
                         handler.updateTask(list.get(positiontoopen));
-                       // Log.e("positiontoopen",positiontoopen+"");
-                        Log.e("myvalue",list.get(positiontoopen).getTaskname());
-                        /*if (f) {
-                            name.setPaintFlags(name.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                            cardView.setCardBackgroundColor(Color.parseColor("#cccccc"));
-                            favourite.setBackgroundColor(Color.parseColor("#cccccc"));
-                            adapter.notifyDataSetChanged();
-                        } else {
-                            name.setPaintFlags(0);
-                            cardView.setCardBackgroundColor(getResources().getColor(R.color.white));
-                            favourite.setBackgroundColor(getResources().getColor(R.color.white));
-
-                            adapter.notifyDataSetChanged();
-
-                        }*/
-
+                        if(!f)
+                        taskdone++;
+                        else taskdone--;
+                        //if(check.isChecked())
+                        //handler.changeListTaskDone(listname,list.get(positiontoopen).getTaskname(),true);
+                        handler.changeListTaskDone(listname,taskdone);
                         break;
 
                     case R.id.favourite2:

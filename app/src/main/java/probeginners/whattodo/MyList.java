@@ -58,6 +58,12 @@ public class MyList extends AppCompatActivity {
     private String query;
 
     @Override
+    protected void onResume() {
+        super.onResume();Log.e("resuming","ffff");
+        preparedata();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_list);
@@ -75,10 +81,11 @@ public class MyList extends AppCompatActivity {
         handler = new DatabaseHandler(this);
         readdatabase = handler.getReadableDatabase();
         cursor = readdatabase.rawQuery(query, null);
+        adapter = new TaskAdapter(taskDataList);
         preparedata();
         //Recyclerview create and setadapter
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        adapter = new TaskAdapter(taskDataList);
+
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -182,6 +189,9 @@ public class MyList extends AppCompatActivity {
 
 
     private void preparedata() {
+        //taskDataList=null;
+        taskDataList.clear();
+        cursor = readdatabase.rawQuery(query, null);
         byte[] bytes;Log.e("cursor",cursor.getCount()+"");
         if (cursor.moveToFirst()) {
             do {
@@ -190,7 +200,7 @@ public class MyList extends AppCompatActivity {
                 taskDataList.add(new List(cursor.getString(1), cursor.getInt(2), cursor.getInt(3),bitmap));
 
             } while (cursor.moveToNext());
-        }
+        }adapter.notifyDataSetChanged();
 
     }
 
@@ -244,8 +254,9 @@ public class MyList extends AppCompatActivity {
                                 String oldname=list.getlistname();
                                 list.putlistname(input);
                                 adapter.notifyDataSetChanged();
-                                Log.e("11","11");
                                 handler.changeListname(oldname,list.getlistname());
+                                Log.e("11","11");
+
                                 Log.e("w2","22");
                             }
                         });
@@ -272,6 +283,7 @@ public class MyList extends AppCompatActivity {
         List taskData = taskDataList.get(positiontoopen);
         Intent intent = new Intent(MyList.this, NewTaskActivity.class);
         intent.putExtra("listname", taskData.getlistname());
+        intent.putExtra("taskdone",taskData.getTaskdone());
         startActivity(intent);
     }
 

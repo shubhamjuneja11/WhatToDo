@@ -2,6 +2,7 @@ package db;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
@@ -20,7 +21,7 @@ import classes.TaskDetails;
  */
 
 public class DatabaseHandler extends SQLiteOpenHelper {
-    private static final int DB_VERSION=24;
+    private static final int DB_VERSION=25;
     private static final String DB_NAME="Database";
     public static final String Task_Table="TaskTable";
     public static final String List_Table="ListTable";
@@ -71,6 +72,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 
 
+
     }
 
     @Override
@@ -93,7 +95,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(totaltask,list.getTotaltasks());
         values.put(listimage,list.getBytesIcon());
         db.insert(List_Table,null,values);
-       // Log.i("value","added");
+        Log.i("value","added");
     }
 
 
@@ -111,10 +113,38 @@ Log.e("ji","ji");
     }
 
     public void changeListname(String oldname,String newname){
+        if(db==null)
+            db=this.getWritableDatabase();
         ContentValues values=new ContentValues();
         values.put(listname,newname);
         db.update(List_Table,values,"listname=?",new String[]{oldname});
+        db.update(Task_Table,values,"listname=?",new String[]{oldname});
     }
+
+
+    public void changeListTaskDone(String name,int task){
+        if(db==null)
+            db=this.getWritableDatabase();
+        ContentValues values=new ContentValues();
+        values.put(taskcount,task);
+        db.update(List_Table,values,"listname=?",new String[]{name});
+            //query="update "+List_Table+" set "+taskcount+"="+taskcount+" +1 where "+listname+" = ?";
+            //query="update ? set ? = ? +1 where ? = ? and ? = ? ";  new String[]{List_Table,taskcount,taskcount,listname,name,taskname,taskname2}
+            //db.rawQuery(query,new String[]{name});
+
+            //Cursor cursor=db.rawQuery("select * from ? where ? = ?",new String[]{List_Table});
+
+            Log.e("task","done");
+
+        // db.update(List_Table,values,"listname=? and taskname=?",new String[]{name,taskname});
+
+    }
+ public void changeListTotalTask(String name,int task){
+     ContentValues values=new ContentValues();
+     values.put(totaltask,task);
+     db.update(List_Table,values,"listname=?",new String[]{name});
+ }
+
 
   public void deleteList(List list){
       if(db==null)
@@ -150,7 +180,7 @@ Log.e("ji","ji");
         values.put(taskname,task.getTaskname());
         values.put(favourite,task.getfavourite()?1:0);
         values.put(completed,task.getcompleted()?1:0);
-        int ip= db.update(Task_Table,values,"taskname=?",new String[]{task.getTaskname()});
+        db.update(Task_Table,values,"taskname=?",new String[]{task.getTaskname()});
 
     }
 
