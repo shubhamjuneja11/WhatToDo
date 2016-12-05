@@ -1,8 +1,11 @@
 package classes;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 
 /**
  * Created by junejaspc on 2/12/16.
@@ -12,10 +15,11 @@ public class List {
     public String listname;
     public int totaltasks;
     public int taskdone;
-    public Bitmap icon;
+    public String  icon;
+    Bitmap bitmap;
 
 
-    public List(String listname,int taskdone,int totaltasks,Bitmap icon){
+    public List(String listname,int taskdone,int totaltasks,String icon){
         this.listname=listname;
         this.taskdone=taskdone;
         this.totaltasks=totaltasks;
@@ -28,7 +32,7 @@ public class List {
         this.totaltasks=totaltasks;
     }
     public void puttaskdone(int taskdone){this.taskdone=taskdone;}
-    public void puticon(Bitmap icon){this.icon=icon;}
+    public void puticon(String icon){this.icon=icon;}
 
     public String getlistname(){
         return listname;
@@ -37,13 +41,11 @@ public class List {
         return totaltasks;
     }
     public int getTaskdone(){return taskdone;}
-    public Bitmap getIcon(){return icon;}
-    public byte[] getBytesIcon(){
-        byte[] bytes;
-        ByteArrayOutputStream byteArrayOutputStream;
-        byteArrayOutputStream=new ByteArrayOutputStream();
-        getIcon().compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-        bytes=byteArrayOutputStream.toByteArray();
-        return bytes;
+    public String getIcon(){return icon;}
+    public Bitmap getImage() {
+
+        bitmap = BitmapFactory.decodeFile(icon);
+        return bitmap;
+
     }
 }

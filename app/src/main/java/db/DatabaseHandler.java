@@ -21,7 +21,7 @@ import classes.TaskDetails;
  */
 
 public class DatabaseHandler extends SQLiteOpenHelper {
-    private static final int DB_VERSION=25;
+    private static final int DB_VERSION=26;
     private static final String DB_NAME="Database";
     public static final String Task_Table="TaskTable";
     public static final String List_Table="ListTable";
@@ -61,7 +61,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(query);
         query="create table "+List_Table+"("+id+" integer primary key,"
                 +listname+" text,"+taskcount+" integer,"+totaltask+" integer,"
-                +listimage+" blob"
+                +listimage+" string"
                 +")";
         db.execSQL(query);
         query="create table "+Details_Task+"("+id+" integer primary key,"
@@ -93,7 +93,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ContentValues values=new ContentValues();
         values.put(listname,list.getlistname());
         values.put(totaltask,list.getTotaltasks());
-        values.put(listimage,list.getBytesIcon());
+        values.put(listimage,list.getIcon());
         db.insert(List_Table,null,values);
         Log.i("value","added");
     }
@@ -107,7 +107,7 @@ Log.e("ji","ji");
         ContentValues values=new ContentValues();
         values.put(listname,list.getlistname());
         values.put(totaltask,list.getTotaltasks());
-        values.put(listimage,list.getBytesIcon());
+        values.put(listimage,list.getIcon());
         db.update(List_Table,values,"listname=?",new String[]{list.getlistname()});
          Log.i("value","added");
     }

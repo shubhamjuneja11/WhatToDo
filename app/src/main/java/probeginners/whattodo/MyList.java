@@ -7,7 +7,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -29,7 +31,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import classes.List;
 import classes.Task;
@@ -37,6 +43,9 @@ import db.DatabaseHandler;
 import interfaces.ClickListener;
 import tasklist.RecyclerTouchListener;
 import tasklist.TaskAdapter;
+
+import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
+import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;
 
 
 public class MyList extends AppCompatActivity {
@@ -56,7 +65,9 @@ public class MyList extends AppCompatActivity {
     int positiontoopen;
     private String name;
     private String query;
+    public Uri uri;
 
+    private static final String IMAGE_DIRECTORY_NAME = "WhatToDo";
     @Override
     protected void onResume() {
         super.onResume();Log.e("resuming","ffff");
@@ -148,36 +159,51 @@ public class MyList extends AppCompatActivity {
             case NEW_LIST:
                 if (data != null)
                     name = data.getStringExtra("name");
-                Bitmap icon= BitmapFactory.decodeResource(getResources(),R.drawable.grocery);
-                addTask(name, 0, 0,icon);
+                //Bitmap icon= BitmapFactory.decodeResource(getResources(),R.drawable.grocery);
+               // Uri urip = Uri.parse("android.resource://com.probeginners.whattodo/drawable/grocery.jpg");
+                // icon="drawable://" + R.drawable.grocery;
+               // String icon="android.resource://probeginners.whattodo/"+R.drawable.grocery;
+                //String icon=urip.getPath();
+               // Log.e("myppppppp",icon);
+                addTask(name, 0, 0,"");
                 break;
 
 
             case CAMERA_REQUEST:
                 try {
-                    Bundle extras2 = data.getExtras();
-                    if (extras2 != null) {
-                        Bitmap image = extras2.getParcelable("data");
+                    //Bundle extras2 = data.getExtras();
+                    //if (extras2 != null) {
+                       // Bitmap image = extras2.getParcelable("data");
                         List list=taskDataList.get(positiontoopen);
-                        list.puticon(image);
+
+
+
+                    /****************important***************/
+
+                    String x=uri.getPath();
+                    /******************************/
+                        list.puticon(x);
                         adapter.notifyDataSetChanged();
                         handler.updateList(list);
-                    }
+
                 }
 
                 catch (Exception e){e.printStackTrace();
-                    Log.e("my","bad");}
+                    }
                 break;
 
             case PICK_FROM_GALLERY:
                 try {
                     Bundle extras = data.getExtras();
                     if (extras != null) {
-                        Bitmap image = extras.getParcelable("data");
+                        //Bitmap image = extras.getParcelable("data");
+                        Uri uri1=data.getData();
                         List list=taskDataList.get(positiontoopen);
-                        list.puticon(image);
+                        list.puticon(getRealPathFromURI(uri1));
                         adapter.notifyDataSetChanged();
                         handler.updateList(list);
+
+
                     }
                 }
                 catch (Exception e){
@@ -187,26 +213,35 @@ public class MyList extends AppCompatActivity {
         }
         }
 
-
+    public String getRealPathFromURI(Uri uri) {
+        String[] projection = { MediaStore.Images.Media.DATA };
+        @SuppressWarnings("deprecation")
+        Cursor cursor = managedQuery(uri, projection, null, null, null);
+        int column_index = cursor
+                .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
+    }
     private void preparedata() {
         //taskDataList=null;
         taskDataList.clear();
         cursor = readdatabase.rawQuery(query, null);
-        byte[] bytes;Log.e("cursor",cursor.getCount()+"");
+        //byte[] bytes;Log.e("cursor",cursor.getCount()+"");
         if (cursor.moveToFirst()) {
             do {
-                bytes=cursor.getBlob(4);
-                Bitmap bitmap=BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                taskDataList.add(new List(cursor.getString(1), cursor.getInt(2), cursor.getInt(3),bitmap));
+                //bytes=cursor.getBlob(4);
+               // Bitmap bitmap=BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                taskDataList.add(new List(cursor.getString(1), cursor.getInt(2), cursor.getInt(3),cursor.getString(4)));
 
             } while (cursor.moveToNext());
+            Log.e("123","456");
         }adapter.notifyDataSetChanged();
 
     }
 
     //add task function
 
-    public void addTask(String name, int done, int total,Bitmap icon) {
+    public void addTask(String name, int done, int total,String icon) {
         List taskData = new List(name, done, total,icon);
         taskDataList.add(taskData);
         adapter.notifyDataSetChanged();
@@ -319,10 +354,48 @@ public class MyList extends AppCompatActivity {
 
     public void useCamera() {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        uri= getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,uri);
         startActivityForResult(cameraIntent, CAMERA_REQUEST);
 
 
     }
+    public Uri getOutputMediaFileUri(int type) {
+        return Uri.fromFile(getOutputMediaFile(type));
+    }
+    private  File getOutputMediaFile(int type) {
+
+        // External sdcard location
+        File mediaStorageDir = new File(
+                Environment
+                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                IMAGE_DIRECTORY_NAME);
+
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Log.d(IMAGE_DIRECTORY_NAME, "Oops! Failed create "
+                        + IMAGE_DIRECTORY_NAME + " directory");
+                return null;
+            }
+        }
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
+                Locale.getDefault()).format(new Date());
+        File mediaFile;
+        if (type == MEDIA_TYPE_IMAGE) {
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator
+                    + "IMG_" + timeStamp + ".jpg");
+        } else if (type == MEDIA_TYPE_VIDEO) {
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator
+                    + "VID_" + timeStamp + ".mp4");
+        } else {
+            return null;
+        }
+        uri=Uri.parse(timeStamp);
+        return mediaFile;
+    }
+
 
     /*---------Using Gallery----------*/
     public void useGallery() {
