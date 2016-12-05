@@ -21,7 +21,7 @@ import classes.TaskDetails;
  */
 
 public class DatabaseHandler extends SQLiteOpenHelper {
-    private static final int DB_VERSION=26;
+    private static final int DB_VERSION=28;
     private static final String DB_NAME="Database";
     public static final String Task_Table="TaskTable";
     public static final String List_Table="ListTable";
@@ -56,11 +56,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         Toast.makeText(context, "dfdfd", Toast.LENGTH_SHORT).show();
         Log.e("database created","dddd");
         query="create table "+Task_Table+"("+id+" integer primary key,"
-                +listname+" text,"+taskname+" text,"+completed+
+                +listname+" text,"+taskname+" text unique,"+completed+
                 " integer,"+favourite+" integer)";
         db.execSQL(query);
         query="create table "+List_Table+"("+id+" integer primary key,"
-                +listname+" text,"+taskcount+" integer,"+totaltask+" integer,"
+                +listname+" text unique,"+taskcount+" integer,"+totaltask+" integer,"
                 +listimage+" string"
                 +")";
         db.execSQL(query);
@@ -109,16 +109,18 @@ Log.e("ji","ji");
         values.put(totaltask,list.getTotaltasks());
         values.put(listimage,list.getIcon());
         db.update(List_Table,values,"listname=?",new String[]{list.getlistname()});
-         Log.i("value","added");
     }
 
-    public void changeListname(String oldname,String newname){
+    public  void changeListname(String oldname,String newname){
         if(db==null)
             db=this.getWritableDatabase();
         ContentValues values=new ContentValues();
         values.put(listname,newname);
-        db.update(List_Table,values,"listname=?",new String[]{oldname});
-        db.update(Task_Table,values,"listname=?",new String[]{oldname});
+        int x=db.update(List_Table, values, "listname=?", new String[]{oldname});
+        Log.e("value",x+"");
+        db.update(Task_Table, values, "listname=?", new String[]{oldname});
+
+
     }
 
 

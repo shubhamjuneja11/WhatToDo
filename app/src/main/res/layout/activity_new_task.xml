@@ -30,6 +30,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/appbarlayout"
         android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:id="@+id/relativelayout"
         android:background="@color/white"
 
@@ -41,6 +43,7 @@
             android:weightSum="20"
             android:background="@color/white"
             android:layout_marginRight="5dp"
+            android:focusable="true" android:focusableInTouchMode="true"
             >
             <EditText
                 android:layout_width="0dp"
@@ -54,6 +57,7 @@
                 android:background="@color/white"
                 android:textAlignment="center"
                 android:textColorHint="@color/hintcolor"
+
                 />
             <ImageButton
                 android:layout_width="6dp"

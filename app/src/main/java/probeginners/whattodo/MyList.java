@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -30,7 +28,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,7 +35,6 @@ import java.util.Date;
 import java.util.Locale;
 
 import classes.List;
-import classes.Task;
 import db.DatabaseHandler;
 import interfaces.ClickListener;
 import tasklist.RecyclerTouchListener;
@@ -52,6 +48,8 @@ public class MyList extends AppCompatActivity {
     private static final int CAMERA_REQUEST = 1;
     private static final int PICK_FROM_GALLERY = 2;
     private static final int NEW_LIST = 11;
+    private static final String IMAGE_DIRECTORY_NAME = "WhatToDo";
+    public Uri uri;
     Toolbar toolbar;
     TaskAdapter adapter;
     RecyclerView recyclerView;
@@ -65,12 +63,11 @@ public class MyList extends AppCompatActivity {
     int positiontoopen;
     private String name;
     private String query;
-    public Uri uri;
 
-    private static final String IMAGE_DIRECTORY_NAME = "WhatToDo";
     @Override
     protected void onResume() {
-        super.onResume();Log.e("resuming","ffff");
+        super.onResume();
+        Log.e("resuming", "ffff");
         preparedata();
     }
 
@@ -103,9 +100,6 @@ public class MyList extends AppCompatActivity {
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
-
-
-
 
 
         //listeners
@@ -159,37 +153,27 @@ public class MyList extends AppCompatActivity {
             case NEW_LIST:
                 if (data != null)
                     name = data.getStringExtra("name");
-                //Bitmap icon= BitmapFactory.decodeResource(getResources(),R.drawable.grocery);
-               // Uri urip = Uri.parse("android.resource://com.probeginners.whattodo/drawable/grocery.jpg");
-                // icon="drawable://" + R.drawable.grocery;
-               // String icon="android.resource://probeginners.whattodo/"+R.drawable.grocery;
-                //String icon=urip.getPath();
-               // Log.e("myppppppp",icon);
-                addTask(name, 0, 0,"");
+                addTask(name, 0, 0, "");
                 break;
 
 
             case CAMERA_REQUEST:
                 try {
-                    //Bundle extras2 = data.getExtras();
-                    //if (extras2 != null) {
-                       // Bitmap image = extras2.getParcelable("data");
-                        List list=taskDataList.get(positiontoopen);
 
+                    List list = taskDataList.get(positiontoopen);
 
 
                     /****************important***************/
 
-                    String x=uri.getPath();
+                    String x = uri.getPath();
                     /******************************/
-                        list.puticon(x);
-                        adapter.notifyDataSetChanged();
-                        handler.updateList(list);
+                    list.puticon(x);
+                    adapter.notifyDataSetChanged();
+                    handler.updateList(list);
 
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-
-                catch (Exception e){e.printStackTrace();
-                    }
                 break;
 
             case PICK_FROM_GALLERY:
@@ -197,24 +181,27 @@ public class MyList extends AppCompatActivity {
                     Bundle extras = data.getExtras();
                     if (extras != null) {
                         //Bitmap image = extras.getParcelable("data");
-                        Uri uri1=data.getData();
-                        List list=taskDataList.get(positiontoopen);
+                        Uri uri1 = data.getData();
+                        List list = taskDataList.get(positiontoopen);
                         list.puticon(getRealPathFromURI(uri1));
                         adapter.notifyDataSetChanged();
                         handler.updateList(list);
 
 
                     }
-                }
-                catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
-                    Log.e("my","bad222");}
+                    Log.e("my", "bad222");
+                }
 
         }
-        }
+    }
 
+    /**************
+     * function  to get path of image from gallery
+     ***************/
     public String getRealPathFromURI(Uri uri) {
-        String[] projection = { MediaStore.Images.Media.DATA };
+        String[] projection = {MediaStore.Images.Media.DATA};
         @SuppressWarnings("deprecation")
         Cursor cursor = managedQuery(uri, projection, null, null, null);
         int column_index = cursor
@@ -222,27 +209,28 @@ public class MyList extends AppCompatActivity {
         cursor.moveToFirst();
         return cursor.getString(column_index);
     }
+
     private void preparedata() {
-        //taskDataList=null;
         taskDataList.clear();
         cursor = readdatabase.rawQuery(query, null);
-        //byte[] bytes;Log.e("cursor",cursor.getCount()+"");
         if (cursor.moveToFirst()) {
             do {
-                //bytes=cursor.getBlob(4);
-               // Bitmap bitmap=BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                taskDataList.add(new List(cursor.getString(1), cursor.getInt(2), cursor.getInt(3),cursor.getString(4)));
+
+                taskDataList.add(new List(cursor.getString(1), cursor.getInt(2), cursor.getInt(3), cursor.getString(4)));
 
             } while (cursor.moveToNext());
-            Log.e("123","456");
-        }adapter.notifyDataSetChanged();
+            Log.e("123", "456");
+        }
+        adapter.notifyDataSetChanged();
 
     }
 
-    //add task function
+    /*****************
+     * function  to  add task
+     *******************/
 
-    public void addTask(String name, int done, int total,String icon) {
-        List taskData = new List(name, done, total,icon);
+    public void addTask(String name, int done, int total, String icon) {
+        List taskData = new List(name, done, total, icon);
         taskDataList.add(taskData);
         adapter.notifyDataSetChanged();
         handler.addList(taskData);
@@ -276,23 +264,30 @@ public class MyList extends AppCompatActivity {
                         changeicon();
                         break;
                     case R.id.changename:
-                        final AlertDialog.Builder builder=new AlertDialog.Builder(MyList.this);
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(MyList.this);
                         builder.setTitle("Enter new name");
-                        final EditText editText=new EditText(MyList.this);
+                        final EditText editText = new EditText(MyList.this);
                         editText.setInputType(InputType.TYPE_CLASS_TEXT);
                         builder.setView(editText);
                         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                String input=editText.getText().toString();
-                                List list=taskDataList.get(positiontoopen);
-                                String oldname=list.getlistname();
-                                list.putlistname(input);
-                                adapter.notifyDataSetChanged();
-                                handler.changeListname(oldname,list.getlistname());
-                                Log.e("11","11");
-
-                                Log.e("w2","22");
+                                String input = editText.getText().toString();
+                                List list = taskDataList.get(positiontoopen);
+                                String oldname = list.getlistname();
+                                boolean change=true;
+                                for(int i=0;i<taskDataList.size();i++){
+                                    if(i==positiontoopen)continue;
+                                    if(taskDataList.get(i).getlistname().equals(input))
+                                    {change=false;break;}
+                                }
+                                    if(change)
+                                {
+                                    handler.changeListname(oldname, list.getlistname());
+                                    list.putlistname(input);
+                                    adapter.notifyDataSetChanged();
+                                }
+                                 else Toast.makeText(MyList.this,"Try a different name",Toast.LENGTH_SHORT).show();
                             }
                         });
                         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -318,7 +313,7 @@ public class MyList extends AppCompatActivity {
         List taskData = taskDataList.get(positiontoopen);
         Intent intent = new Intent(MyList.this, NewTaskActivity.class);
         intent.putExtra("listname", taskData.getlistname());
-        intent.putExtra("taskdone",taskData.getTaskdone());
+        intent.putExtra("taskdone", taskData.getTaskdone());
         startActivity(intent);
     }
 
@@ -354,16 +349,18 @@ public class MyList extends AppCompatActivity {
 
     public void useCamera() {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        uri= getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,uri);
+        uri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         startActivityForResult(cameraIntent, CAMERA_REQUEST);
 
 
     }
+
     public Uri getOutputMediaFileUri(int type) {
         return Uri.fromFile(getOutputMediaFile(type));
     }
-    private  File getOutputMediaFile(int type) {
+
+    private File getOutputMediaFile(int type) {
 
         // External sdcard location
         File mediaStorageDir = new File(
@@ -392,7 +389,7 @@ public class MyList extends AppCompatActivity {
         } else {
             return null;
         }
-        uri=Uri.parse(timeStamp);
+        uri = Uri.parse(timeStamp);
         return mediaFile;
     }
 

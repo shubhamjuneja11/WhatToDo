@@ -28,6 +28,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +64,7 @@ public class NewTaskActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         listname = getIntent().getStringExtra("listname");
         taskdone=getIntent().getIntExtra("taskdone",0);
-
+        toolbar.setTitle(listname);
         query = "select * from " + DatabaseHandler.Task_Table + " where listname = ?";
         handler = new DatabaseHandler(this);
         readdatabase = handler.getReadableDatabase();
@@ -165,7 +166,7 @@ public class NewTaskActivity extends AppCompatActivity {
     private void preparedata() {
         if (cursor.moveToFirst()) {
             do {
-                list.add(new Task(cursor.getString(1), cursor.getString(2), cursor.getInt(3) == 1, cursor.getInt(4) == 1));
+                list.add(0,new Task(cursor.getString(1), cursor.getString(2), cursor.getInt(3) == 1, cursor.getInt(4) == 1));
             } while (cursor.moveToNext());
         }
 
@@ -173,11 +174,20 @@ public class NewTaskActivity extends AppCompatActivity {
     }
 
     private void adddata(String name, boolean flag, boolean fav) {
-        Task task = new Task(listname, name, flag, fav);
-        list.add(task);
-        adapter.notifyDataSetChanged();
-        handler.addTask(task);
-        handler.changeListTotalTask(listname,adapter.getItemCount());
+        boolean decide=true;
+        for(int i=0;i<list.size();i++)
+        {
+            if(list.get(i).getTaskname().equals(name))
+                decide=false;break;
+        }
+        if(decide) {
+            Task task = new Task(listname, name, flag, fav);
+            list.add(0, task);
+            adapter.notifyDataSetChanged();
+            handler.addTask(task);
+            handler.changeListTotalTask(listname, adapter.getItemCount());
+        }
+        else Toast.makeText(this, "Try a different name", Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -257,7 +267,7 @@ public class NewTaskActivity extends AppCompatActivity {
             public CardView cardView;
             public ViewHolder(View itemView) {
                 super(itemView);
-                Log.e("view name",itemView.getClass()+"");
+
                 name = (TextView) itemView.findViewById(R.id.name);
                 check = (CheckBox) itemView.findViewById(R.id.check);
                 favourite = (ImageButton) itemView.findViewById(R.id.favourite2);
