@@ -180,7 +180,6 @@ public class MyList extends AppCompatActivity {
                 try {
                     Bundle extras = data.getExtras();
                     if (extras != null) {
-                        //Bitmap image = extras.getParcelable("data");
                         Uri uri1 = data.getData();
                         List list = taskDataList.get(positiontoopen);
                         list.puticon(getRealPathFromURI(uri1));
@@ -219,8 +218,8 @@ public class MyList extends AppCompatActivity {
                 taskDataList.add(new List(cursor.getString(1), cursor.getInt(2), cursor.getInt(3), cursor.getString(4)));
 
             } while (cursor.moveToNext());
-            Log.e("123", "456");
         }
+        cursor.close();
         adapter.notifyDataSetChanged();
 
     }

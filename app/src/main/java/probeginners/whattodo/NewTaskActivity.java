@@ -186,6 +186,7 @@ public class NewTaskActivity extends AppCompatActivity {
             adapter.notifyDataSetChanged();
             handler.addTask(task);
             handler.changeListTotalTask(listname, adapter.getItemCount());
+            handler.addTaskDetails(listname,task.getTaskname());
         }
         else Toast.makeText(this, "Try a different name", Toast.LENGTH_SHORT).show();
     }
@@ -284,7 +285,8 @@ public class NewTaskActivity extends AppCompatActivity {
                 switch (v.getId()) {
                     case R.id.name:
                         Intent intent = new Intent(NewTaskActivity.this, TaskDetailsActivity.class);
-                        intent.putExtra("name", list.get(positiontoopen).getlistname());
+                        intent.putExtra("listname", list.get(positiontoopen).getlistname());
+                        intent.putExtra("taskname",list.get(positiontoopen).getTaskname());
                         startActivity(intent);
                         break;
 

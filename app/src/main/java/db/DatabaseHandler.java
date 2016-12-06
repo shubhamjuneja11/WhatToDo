@@ -21,15 +21,17 @@ import classes.TaskDetails;
  */
 
 public class DatabaseHandler extends SQLiteOpenHelper {
-    private static final int DB_VERSION=28;
+
+
+    private static final int DB_VERSION=30;
     private static final String DB_NAME="Database";
     public static final String Task_Table="TaskTable";
     public static final String List_Table="ListTable";
-    private static final String Details_Task="TaskDetails";
+    public static final String Details_Task="TaskDetails";
 
     private static final String id="_id";
     public static final String listname="listname";
-    private static final String taskname="taskname";
+    public static final String taskname="taskname";
     private static final String completed="completed";
     private static final String favourite="favourite";
     private static final String alarmtime="alarmtime";
@@ -37,6 +39,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String totaltask="totaltask";
     private static final String listimage="listimage";
     private static final String taskcount="taskcount";
+    private static final String imagename="imagename";
+    private static final String alarmstatus="alarmstatus";
 
 
 
@@ -44,7 +48,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     Context context;
     SQLiteDatabase db;
 
-    Bitmap bitmap;
     public DatabaseHandler(Context context){
         super(context,DB_NAME,null,DB_VERSION);
         this.context=context;
@@ -53,8 +56,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        Toast.makeText(context, "dfdfd", Toast.LENGTH_SHORT).show();
-        Log.e("database created","dddd");
         query="create table "+Task_Table+"("+id+" integer primary key,"
                 +listname+" text,"+taskname+" text unique,"+completed+
                 " integer,"+favourite+" integer)";
@@ -66,7 +67,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(query);
         query="create table "+Details_Task+"("+id+" integer primary key,"
                 +listname+" text,"+taskname+" text,"+alarmtime+
-                " text,"+note+" text"+")";
+                " text,"+note+" text,"+imagename+" string,"+alarmstatus+" integer"+")";
         db.execSQL(query);
 
 
@@ -130,16 +131,6 @@ Log.e("ji","ji");
         ContentValues values=new ContentValues();
         values.put(taskcount,task);
         db.update(List_Table,values,"listname=?",new String[]{name});
-            //query="update "+List_Table+" set "+taskcount+"="+taskcount+" +1 where "+listname+" = ?";
-            //query="update ? set ? = ? +1 where ? = ? and ? = ? ";  new String[]{List_Table,taskcount,taskcount,listname,name,taskname,taskname2}
-            //db.rawQuery(query,new String[]{name});
-
-            //Cursor cursor=db.rawQuery("select * from ? where ? = ?",new String[]{List_Table});
-
-            Log.e("task","done");
-
-        // db.update(List_Table,values,"listname=? and taskname=?",new String[]{name,taskname});
-
     }
  public void changeListTotalTask(String name,int task){
      ContentValues values=new ContentValues();
@@ -195,24 +186,30 @@ Log.e("ji","ji");
     /*----------TASK  DETAILS------------*/
 
 
-    public void addTaskDetails(TaskDetails taskDetails){
+    public void addTaskDetails(String listname,String taskname){
         if(db==null)
             db=this.getWritableDatabase();
 
         ContentValues values=new ContentValues();
-        values.put(listname,taskDetails.getlistname());
-        values.put(taskname,taskDetails.getTaskname());
-        values.put(alarmtime,taskDetails.getAlarmtime());
-        values.put(note,taskDetails.getNote());
-
+        values.put(this.listname,listname);
+        values.put(this.taskname,taskname);
         db.insert(Details_Task,null,values);
     }
 
-    /*public void updateTaskDetails(TaskDetails taskDetails){
+
+
+    public void updateTaskDetails(TaskDetails taskDetails){
         if(db==null)
             db=this.getWritableDatabase();
         ContentValues values=new ContentValues();
-        values.put();
-    }*/
+        values.put(alarmtime,taskDetails.getAlarmtime());
+        values.put(note,taskDetails.getNote());
+        values.put(imagename,taskDetails.getImagename());
+        values.put(alarmstatus,taskDetails.getAlarmstatus());
+
+        db.update(Details_Task,values,"listname=? and taskname=?"
+        ,new String[]{taskDetails.getlistname(),taskDetails.getTaskname()
+                });
+    }
 
 }
