@@ -206,6 +206,7 @@ addimage.setOnClickListener(new View.OnClickListener() {
     }
 
     public void modifyview(){
+        Log.d("myalarm,status",task.getAlarmstatus()+"");
         datetime.setText(task.getAlarmtime());
         notetext.setText(task.getNote());
         if(task.getAlarmstatus()==1)
@@ -229,6 +230,7 @@ addimage.setOnClickListener(new View.OnClickListener() {
             Toast.makeText(TaskDetailsActivity.this, "Alarm off", Toast.LENGTH_SHORT).show();
 
             Intent intent = new Intent(this, AlarmReciever.class);
+
             PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), i, intent, 0);
 
             AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -255,6 +257,8 @@ addimage.setOnClickListener(new View.OnClickListener() {
                 Toast.makeText(TaskDetailsActivity.this, "Alarm on", Toast.LENGTH_SHORT).show();
                 image.setImageResource(R.drawable.alarmon);
                 Intent intent = new Intent(this, AlarmReciever.class);
+                intent.putExtra("listname",listname);
+                intent.putExtra("taskname",taskname);
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), 0, intent, 0);
 
                 AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -355,6 +359,9 @@ addimage.setOnClickListener(new View.OnClickListener() {
                 Intent.createChooser(intent, "Complete action using"),
                 PICK_FROM_GALLERY);
 
+
+
+
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -382,10 +389,12 @@ addimage.setOnClickListener(new View.OnClickListener() {
 
                     Log.d("fall","gall");
                         Uri uri1 = data.getData();
-                        task.putimagename(getRealPathFromURI(uri1));
-                    Log.d("path",getRealPathFromURI(uri));
-                        //reminderimage.setImageBitmap(task.getImage());
-                            reminderimage.setImageBitmap(task.getImage());
+
+
+                    task.putimagename(getRealPathFromURI(uri1));
+                    Log.d("path",getRealPathFromURI(uri1));
+                        reminderimage.setImageBitmap(task.getImage());
+                           // reminderimage.setImageBitmap(task.getImage());
 
 
                     //}

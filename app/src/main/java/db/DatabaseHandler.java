@@ -211,5 +211,13 @@ Log.e("ji","ji");
         ,new String[]{taskDetails.getlistname(),taskDetails.getTaskname()
                 });
     }
-
+public void turnalarmoff(String list,String task){
+    if(db==null)
+        db=this.getWritableDatabase();
+    Log.d(list,task);
+    ContentValues contentValues=new ContentValues();
+    contentValues.put(alarmstatus,0);
+    int x=db.update(Details_Task,contentValues,"listname=? and taskname=?",new String[]{list,task});
+    Log.d("alarm abcdef",x+"");
+}
 }
