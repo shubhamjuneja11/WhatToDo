@@ -162,12 +162,14 @@ addimage.setOnClickListener(new View.OnClickListener() {
                 AlertDialog.Builder builder = new AlertDialog.Builder(TaskDetailsActivity.this);
                 builder.setTitle("My Note");
 
+
 // Set up the input
                 final EditText input = new EditText(TaskDetailsActivity.this);
 // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
                 input.setInputType(InputType.TYPE_CLASS_TEXT);
                 builder.setView(input);
-
+                input.setSingleLine(false);
+                input.setText(task.getNote());
 // Set up the buttons
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
@@ -187,7 +189,10 @@ addimage.setOnClickListener(new View.OnClickListener() {
                     }
                 });
 
-                builder.show();
+               // builder.show();
+                AlertDialog dialog = builder.create();
+                //dialog.getWindow().setLayout(500,700);
+                dialog.show();
             }
         });
 
