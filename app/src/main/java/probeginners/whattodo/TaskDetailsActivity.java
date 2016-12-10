@@ -49,7 +49,7 @@ import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;
 public class TaskDetailsActivity extends AppCompatActivity {
     RelativeLayout reminder, note,addimage;
     TextView datetime, notetext;
-    boolean alarmset = false;
+    boolean alarmset;
     Toolbar toolbar;
     Calendar alarmcalendar;
     CustomDateTimePicker custom;
@@ -69,6 +69,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         preparedata();
+        alarmset=task.getAlarmstatus()==1;
     }
 
     @Override
@@ -203,10 +204,10 @@ addimage.setOnClickListener(new View.OnClickListener() {
             cursor.close();
             modifyview();
         }
+
     }
 
     public void modifyview(){
-        Log.d("myalarm,status",task.getAlarmstatus()+"");
         datetime.setText(task.getAlarmtime());
         notetext.setText(task.getNote());
         if(task.getAlarmstatus()==1)
@@ -224,22 +225,24 @@ addimage.setOnClickListener(new View.OnClickListener() {
     public void setalarm(View view){
         ImageView image=(ImageView)view;
         if(alarmset){
-            int i;
-            i=sharedPreferences.getInt("alarmnumber",0);
+
             alarmset=false;
             Toast.makeText(TaskDetailsActivity.this, "Alarm off", Toast.LENGTH_SHORT).show();
 
             Intent intent = new Intent(this, AlarmReciever.class);
-
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), i, intent, 0);
-
+            intent.putExtra("listname",listname);
+            intent.putExtra("taskname",taskname);
+            int i;
+            i=sharedPreferences.getInt(listname+taskname,0);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(),i, intent, 0);
+            SharedPreferences.Editor editor=sharedPreferences.edit();
+            editor.remove(listname+taskname);
+            editor.commit();
             AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
               alarmManager.cancel(pendingIntent);
             status=0;
             image.setImageResource(R.drawable.alarmoff);
-            SharedPreferences.Editor editor=sharedPreferences.edit();
-            editor.putInt("alarmnumber",i+1);
-            editor.commit();
+
             task.putalarmstatus(status);
             handler.updateTaskDetails(task);
             //handler.updateTaskDetails(new TaskDetails(listname,taskname,datetime.getText().toString(),notetext.getText().toString(),uri.getPath(),status));
@@ -250,6 +253,12 @@ addimage.setOnClickListener(new View.OnClickListener() {
         else{
             Calendar calendar=alarmcalendar;
             if(calendar!=null) {
+                int i;
+                i=sharedPreferences.getInt("alarmnumber",0);
+                SharedPreferences.Editor editor=sharedPreferences.edit();
+                editor.putInt(listname+taskname,i);
+                editor.putInt("alarmnumber",i+1);
+                editor.commit();
                 alarmset = true;
                 //Calendar calendar = Calendar.getInstance();
                 //calendar.set(Calendar.MINUTE, 23);
@@ -259,7 +268,7 @@ addimage.setOnClickListener(new View.OnClickListener() {
                 Intent intent = new Intent(this, AlarmReciever.class);
                 intent.putExtra("listname",listname);
                 intent.putExtra("taskname",taskname);
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), 0, intent, 0);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), i, intent, 0);
 
                 AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
                 task.putalarmstatus(status);

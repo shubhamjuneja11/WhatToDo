@@ -144,6 +144,8 @@ Log.e("ji","ji");
           db=this.getWritableDatabase();
 
       db.delete(List_Table,"listname=?",new String[]{list.getlistname()});
+      db.delete(Task_Table,"listname=?",new String[]{list.getlistname()});
+      db.delete(Details_Task,"listname=?",new String[]{list.getlistname()});
 
   }
 
@@ -181,6 +183,7 @@ Log.e("ji","ji");
         if(db==null)
             db=this.getWritableDatabase();
         db.delete(Task_Table,"listname=? and taskname=?",new String[]{task.getlistname(),task.getTaskname()});
+
     }
 
     /*----------TASK  DETAILS------------*/
