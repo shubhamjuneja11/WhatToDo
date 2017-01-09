@@ -79,7 +79,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         Intent intent = getIntent();
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(intent.getStringExtra("name"));
+
         reminder = (RelativeLayout) findViewById(R.id.relativelayout1);
         note = (RelativeLayout) findViewById(R.id.relativelayout2);
         addimage=(RelativeLayout)findViewById(R.id.relativelayout3);
@@ -90,6 +90,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("alarm", Context.MODE_PRIVATE);
         listname=getIntent().getStringExtra("listname");
         taskname=getIntent().getStringExtra("taskname");
+        getSupportActionBar().setTitle(taskname);
 
         //listeners
 
