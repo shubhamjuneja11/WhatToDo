@@ -295,7 +295,8 @@ public class MyList extends AppCompatActivity {
         switch (requestCode) {
             case NEW_LIST:
                 if (data != null)
-                    name = data.getStringExtra("name");
+                    name = data.getStringExtra("name").trim();
+                if(data!=null&&name!=null)//some stupid stuff happening
                 addTask(name, 0, 0, "");
                 break;
 
@@ -346,31 +347,7 @@ public class MyList extends AppCompatActivity {
         }
     }
 
-    /**************
-     * function  to get path of image from gallery
-     ***************/
-    public String getRealPathFromURI(Uri uri) {
-        /*String[] projection = {MediaStore.Images.Media.DATA};
-        @SuppressWarnings("deprecation")
-        Cursor cursor = managedQuery(uri, projection, null, null, null);
-        int column_index = cursor
-                .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        return cursor.getString(column_index);*/
 
-
-        Uri selectedImage = uri;
-        String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
-        Cursor cursor = getContentResolver().query(selectedImage,
-                filePathColumn, null, null, null);
-        cursor.moveToFirst();
-        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-        String picturePath = cursor.getString(columnIndex);
-        cursor.close();
-        return picturePath;
-
-    }
 
     private void preparedata() {
         taskDataList.clear();

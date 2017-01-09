@@ -3,6 +3,7 @@ package probeginners.whattodo;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -32,12 +33,37 @@ public class AlarmReciever extends BroadcastReceiver {
         DatabaseHandler handler=new DatabaseHandler(context);
         handler.turnalarmoff(listname,taskname);
         Notification.Builder builder=new Notification.Builder(context)
-                .setContentTitle("alarm")
+                .setContentTitle(taskname)
                 .setSmallIcon(R.drawable.done)
 
                 //.setSound(Uri.parse("android.resource://" + context.getPackageName() + "/" + R.raw.sanam))
                 .setAutoCancel(true);
         builder.setSound(uri);
+
+
+        // Creates an explicit intent for an Activity in your app
+        Intent resultIntent = new Intent(context, TaskDetailsActivity.class);
+        resultIntent.putExtra("listname",listname);
+        resultIntent.putExtra("taskname",taskname);
+
+// The stack builder object will contain an artificial back stack for the
+// started Activity.
+// This ensures that navigating backward from the Activity leads out of
+// your application to the Home screen.
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+// Adds the back stack for the Intent (but not the Intent itself)
+        stackBuilder.addParentStack(TaskDetailsActivity.class);
+// Adds the Intent that starts the Activity to the top of the stack
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(
+                        0,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+        builder.setContentIntent(resultPendingIntent);
+
+
+
         //builder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
         NotificationManager notificationmanager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);

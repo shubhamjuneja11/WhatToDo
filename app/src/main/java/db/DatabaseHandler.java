@@ -142,7 +142,7 @@ Log.e("ji","ji");
   public void deleteList(List list){
       if(db==null)
           db=this.getWritableDatabase();
-
+Log.e("abc","delete");
       db.delete(List_Table,"listname=?",new String[]{list.getlistname()});
       db.delete(Task_Table,"listname=?",new String[]{list.getlistname()});
       db.delete(Details_Task,"listname=?",new String[]{list.getlistname()});
