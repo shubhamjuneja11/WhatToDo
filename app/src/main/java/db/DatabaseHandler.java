@@ -156,7 +156,7 @@ Log.e("abc","delete");
     public void addTask(Task task){
         if(db==null)
          db=this.getWritableDatabase();
-
+Log.e("abc","add");
         ContentValues values=new ContentValues();
         values.put(taskname,task.getTaskname());
         values.put(listname,task.getlistname());
@@ -170,7 +170,7 @@ Log.e("abc","delete");
         if(db==null)
             db=this.getWritableDatabase();
 
-
+Log.e("abc","updated");
         ContentValues values=new ContentValues();
         values.put(taskname,task.getTaskname());
         values.put(favourite,task.getfavourite()?1:0);
@@ -182,6 +182,7 @@ Log.e("abc","delete");
     public void deleteTask(Task task){
         if(db==null)
             db=this.getWritableDatabase();
+        Log.e("abc","delete");
         db.delete(Task_Table,"listname=? and taskname=?",new String[]{task.getlistname(),task.getTaskname()});
 
     }

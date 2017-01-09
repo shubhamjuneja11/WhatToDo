@@ -195,10 +195,12 @@ public class NewTaskActivity extends AppCompatActivity {
         return false;
     }
 
-    private void preparedata() {
+    private void preparedata() {Task task;
         if (cursor.moveToFirst()) {
-            do {
-                list.add(0,new Task(cursor.getString(1), cursor.getString(2), cursor.getInt(3) == 1, cursor.getInt(4) == 1));
+            do {task=new Task(cursor.getString(1), cursor.getString(2), cursor.getInt(3) == 1, cursor.getInt(4) == 1);
+                if(!task.completed)
+                list.add(0,task);
+                else list.add(list.size(),task);
             } while (cursor.moveToNext());
         }
 
@@ -326,7 +328,23 @@ public class NewTaskActivity extends AppCompatActivity {
                         Log.e("name",positiontoopen+"");
                         boolean f = list.get(positiontoopen).getcompleted();
                         list.get(positiontoopen).putcompleted(!f);
-                        handler.updateTask(list.get(positiontoopen));
+                        Task task= list.get(positiontoopen);
+                        //handler.deleteTask(task);
+                        list.remove(positiontoopen);
+                        if(f){
+
+                            list.add(0,task);
+                            adapter.notifyDataSetChanged();
+                        }
+                        else {
+
+                            list.add(list.size(),task);
+                            adapter.notifyDataSetChanged();
+                        }
+                        //handler.addTask(task);
+                        handler.updateTask(task);
+
+
                         if(!f)
                         taskdone++;
                         else taskdone--;
