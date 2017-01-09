@@ -62,11 +62,12 @@ public class NewTaskActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_task);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         listname = getIntent().getStringExtra("listname");
         taskdone=getIntent().getIntExtra("taskdone",0);
-        toolbar.setTitle(listname);
+        getSupportActionBar().setTitle(listname);
         query = "select * from " + DatabaseHandler.Task_Table + " where listname = ?";
         handler = new DatabaseHandler(this);
         readdatabase = handler.getReadableDatabase();

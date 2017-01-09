@@ -19,35 +19,7 @@
         android:background="?attr/colorPrimary"
         app:popupTheme="@style/AppTheme.PopupOverlay"
         >
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_alignParentLeft="true"
-                android:layout_height="match_parent"
-                android:id="@+id/userimage"
-                android:src="@drawable/userimage"
-                 />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:id="@+id/username"
-                android:layout_toRightOf="@+id/userimage"
-                android:layout_marginLeft="10dp"
-                android:gravity="center"
-                android:textSize="@dimen/activity_vertical_margin"
-                android:text="Shubham Juneja"
-                android:textColor="@color/white"
-                />
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/search"
-                android:id="@+id/search"
-                android:layout_alignParentRight="true"
-                />
-        </RelativeLayout>
+
     </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>

@@ -78,7 +78,8 @@ public class TaskDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_task_details);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         Intent intent = getIntent();
-        toolbar.setTitle(intent.getStringExtra("name"));
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(intent.getStringExtra("name"));
         reminder = (RelativeLayout) findViewById(R.id.relativelayout1);
         note = (RelativeLayout) findViewById(R.id.relativelayout2);
         addimage=(RelativeLayout)findViewById(R.id.relativelayout3);

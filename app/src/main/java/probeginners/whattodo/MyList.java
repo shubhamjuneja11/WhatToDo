@@ -61,8 +61,6 @@ public class MyList extends AppCompatActivity {
     Toolbar toolbar;
     TaskAdapter adapter;
     RecyclerView recyclerView;
-    ImageView usericon, search;
-    TextView username;
     FloatingActionButton fb;
     ArrayList<List> taskDataList = new ArrayList<>();
     Cursor cursor;
@@ -220,10 +218,9 @@ public class MyList extends AppCompatActivity {
         setContentView(R.layout.activity_task_list);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.app_name);
+        //toolbar.setTitle(R.string.app_name);
 
-        search = (ImageView) findViewById(R.id.search);
-        usericon = (ImageView) findViewById(R.id.userimage);
-        username = (TextView) findViewById(R.id.username);
         fb = (FloatingActionButton) findViewById(R.id.floatingActionButton);
 
 
@@ -246,25 +243,6 @@ public class MyList extends AppCompatActivity {
 
 
         //listeners
-        search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MyList.this, "search", Toast.LENGTH_SHORT).show();
-
-            }
-        });
-        usericon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MyList.this, "image", Toast.LENGTH_SHORT).show();
-            }
-        });
-        username.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MyList.this, "name", Toast.LENGTH_SHORT).show();
-            }
-        });
         fb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
