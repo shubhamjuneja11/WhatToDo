@@ -1,5 +1,7 @@
 package probeginners.whattodo;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -99,10 +101,40 @@ public class NewTaskActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onLongClick(View view, int position) {
+            public void onLongClick(View view, final int position) {
+
+                AlertDialog dialog=new AlertDialog.Builder(NewTaskActivity.this)
+                        //set message, title, and icon
+                        .setTitle("Delete")
+                        .setMessage("Delete Task?")
+                        .setIcon(R.drawable.delete)
+
+                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                handler.deleteTask(list.get(position));
+                                list.remove(position);
+                                adapter.notifyDataSetChanged();
+                                dialog.dismiss();
+                            }
+
+                        })
+
+
+
+                        .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                dialog.dismiss();
+
+                            }
+                        })
+                        .create();
+                        dialog.show();
 
             }
         }));
+
 
 
 //menu listener
