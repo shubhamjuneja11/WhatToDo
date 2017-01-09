@@ -364,11 +364,11 @@ addimage.setOnClickListener(new View.OnClickListener() {
     /*---------Using Gallery----------*/
     public void useGallery() {
         Intent intent = new Intent();
-        Log.d("use","gallery");
+        Log.d("abc","gallery");
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         intent.putExtra("crop", "true");
-        intent.putExtra("return-data", true);
+        //intent.putExtra("return-data", true);
         startActivityForResult(
                 Intent.createChooser(intent, "Complete action using"),
                 PICK_FROM_GALLERY);
@@ -399,21 +399,28 @@ addimage.setOnClickListener(new View.OnClickListener() {
 
             case PICK_FROM_GALLERY:
                 try {
-                    Bundle extras = data.getExtras();
+                    //Bundle extras = data.getExtras();
 
-                    Log.d("fall","gall");
+                    Log.d("abc","gall");
                         Uri uri1 = data.getData();
 
+                    task.putimagename(MyList.getPath(this,uri1));
+                    handler.updateTaskDetails(task);
+                    reminderimage.setImageBitmap(BitmapFactory.decodeFile(MyList.getPath(this,uri1)));
+                    //task.putimagename(getRealPathFromURI(uri1));
+                    Log.d("abc",getRealPathFromURI(uri1));
+                    Log.d("abc",MyList.getPath(this,uri1));
+                    if(task.getImage()==null)
+                        Log.d("abc","nullbava");
 
-                    task.putimagename(getRealPathFromURI(uri1));
-                    Log.d("path",getRealPathFromURI(uri1));
-                        reminderimage.setImageBitmap(task.getImage());
+                    else Log.d("abc","hihi");
+
                            // reminderimage.setImageBitmap(task.getImage());
 
 
                     //}
                 } catch (Exception e) {
-                    Log.d("chimpu","nana");
+                    Log.d("abc","nana");
                     e.printStackTrace();
                 }
 
