@@ -226,8 +226,7 @@ public class Navigation extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Navigation.this, NewList.class);
-                startActivityForResult(intent, 11);
+
             }
         });
 
@@ -300,7 +299,9 @@ public class Navigation extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.addlist) {
+            Intent intent = new Intent(Navigation.this, NewList.class);
+            startActivityForResult(intent, 11);
             return true;
         }
 
