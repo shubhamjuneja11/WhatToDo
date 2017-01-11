@@ -406,12 +406,12 @@ addimage.setOnClickListener(new View.OnClickListener() {
                     Log.d("abc","gall");
                         Uri uri1 = data.getData();
 
-                    task.putimagename(MyList.getPath(this,uri1));
+                    task.putimagename(Navigation.getPath(this,uri1));
                     handler.updateTaskDetails(task);
-                    reminderimage.setImageBitmap(BitmapFactory.decodeFile(MyList.getPath(this,uri1)));
+                    reminderimage.setImageBitmap(BitmapFactory.decodeFile(Navigation.getPath(this,uri1)));
                     //task.putimagename(getRealPathFromURI(uri1));
                     Log.d("abc",getRealPathFromURI(uri1));
-                    Log.d("abc",MyList.getPath(this,uri1));
+                    Log.d("abc",Navigation.getPath(this,uri1));
                     if(task.getImage()==null)
                         Log.d("abc","nullbava");
 

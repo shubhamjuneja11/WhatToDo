@@ -1,6 +1,6 @@
 package probeginners.whattodo;
 
-import android.Manifest;
+import android.*;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,24 +16,28 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.MenuItem;
 import android.view.View;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -51,8 +55,8 @@ import tasklist.TaskAdapter;
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;
 
-
-public class MyList extends AppCompatActivity {
+public class Navigation extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
     private static final int CAMERA_REQUEST = 1;
     private static final int PICK_FROM_GALLERY = 2;
     private static final int NEW_LIST = 11;
@@ -210,18 +214,32 @@ public class MyList extends AppCompatActivity {
         preparedata();
     }
 
-    //Function to display options of 3 dots in list
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_task_list);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setContentView(R.layout.activity_navigation);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.app_name);
-        //toolbar.setTitle(R.string.app_name);
 
-        fb = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Navigation.this, NewList.class);
+                startActivityForResult(intent, 11);
+            }
+        });
+
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
 
         //database connection and result
@@ -242,17 +260,6 @@ public class MyList extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
 
-        //listeners
-        fb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MyList.this, NewList.class);
-                startActivityForResult(intent, 11);
-
-            }
-        });
-
-
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
@@ -265,7 +272,66 @@ public class MyList extends AppCompatActivity {
 
             }
         }));
+
     }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.navigation, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_camera) {
+            // Handle the camera action
+        } else if (id == R.id.nav_gallery) {
+
+        } else if (id == R.id.nav_slideshow) {
+
+        } else if (id == R.id.nav_manage) {
+
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_send) {
+
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -274,8 +340,8 @@ public class MyList extends AppCompatActivity {
             case NEW_LIST:
                 if (data != null)
                     name = data.getStringExtra("name").trim();
-                if(data!=null&&name!=null)//some stupid stuff happening
-                addTask(name, 0, 0, "");
+                if (data != null && name != null)//some stupid stuff happening
+                    addTask(name, 0, 0, "");
                 break;
 
 
@@ -326,7 +392,6 @@ public class MyList extends AppCompatActivity {
     }
 
 
-
     private void preparedata() {
         taskDataList.clear();
         cursor = readdatabase.rawQuery(query, null);
@@ -365,7 +430,7 @@ public class MyList extends AppCompatActivity {
     }
 
     public void funoptions(View view) {
-        PopupMenu popup = new PopupMenu(MyList.this, view);
+        PopupMenu popup = new PopupMenu(Navigation.this, view);
         //Inflating the Popup using xml file
         popup.getMenuInflater().inflate(R.menu.mylistoptions, popup.getMenu());
 
@@ -381,9 +446,9 @@ public class MyList extends AppCompatActivity {
                         changeicon();
                         break;
                     case R.id.changename:
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(MyList.this);
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(Navigation.this);
                         builder.setTitle("Enter new name");
-                        final EditText editText = new EditText(MyList.this);
+                        final EditText editText = new EditText(Navigation.this);
                         editText.setInputType(InputType.TYPE_CLASS_TEXT);
                         builder.setView(editText);
                         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -405,7 +470,7 @@ public class MyList extends AppCompatActivity {
                                     list.putlistname(input);
                                     adapter.notifyDataSetChanged();
                                 } else
-                                    Toast.makeText(MyList.this, "Try a different name", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Navigation.this, "Try a different name", Toast.LENGTH_SHORT).show();
                             }
                         });
                         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -429,7 +494,7 @@ public class MyList extends AppCompatActivity {
     // to open tasklist
     public void funopen(View view) {
         List taskData = taskDataList.get(positiontoopen);
-        Intent intent = new Intent(MyList.this, NewTaskActivity.class);
+        Intent intent = new Intent(Navigation.this, NewTaskActivity.class);
         intent.putExtra("listname", taskData.getlistname());
         intent.putExtra("taskdone", taskData.getTaskdone());
         startActivity(intent);
@@ -463,8 +528,8 @@ public class MyList extends AppCompatActivity {
     }
 
     public void useCamera() {
-        int result = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
-        int result2 = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int result = ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA);
+        int result2 = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
         boolean flag = false;
         //If permission is granted returning true
         Log.e("abc", "1");
@@ -474,7 +539,7 @@ public class MyList extends AppCompatActivity {
             Log.e("abc", "2");
 
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.CAMERA)) {
+                    android.Manifest.permission.CAMERA)) {
                 Log.e("abc", "3");
 
                 // Show an explanation to the user *asynchronously* -- don't block
@@ -487,7 +552,7 @@ public class MyList extends AppCompatActivity {
                 // No explanation needed, we can request the permission.
 
                 ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, CAMERA_REQUEST);
+                        new String[]{android.Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, CAMERA_REQUEST);
 
                 // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
                 // app-defined int constant. The callback method gets the
@@ -552,14 +617,14 @@ public class MyList extends AppCompatActivity {
         intent.setAction(Intent.ACTION_GET_CONTENT);
         intent.putExtra("crop", "true");
         //intent.putExtra("return-data", true);
-        int result = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        int result = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE);
         if (result == PackageManager.PERMISSION_GRANTED) {
             startActivityForResult(
                     Intent.createChooser(intent, "Complete action using"),
                     PICK_FROM_GALLERY);
         } else {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
                 Log.e("abc", "3");
 
                 // Show an explanation to the user *asynchronously* -- don't block
@@ -572,7 +637,7 @@ public class MyList extends AppCompatActivity {
                 // No explanation needed, we can request the permission.
 
                 ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PICK_FROM_GALLERY);
+                        new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, PICK_FROM_GALLERY);
 
                 // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
                 // app-defined int constant. The callback method gets the
@@ -630,5 +695,3 @@ public class MyList extends AppCompatActivity {
         }
     }
 }
-
-
