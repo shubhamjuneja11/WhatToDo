@@ -32,7 +32,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="navigation.Favourite"></activity>
+        <activity android:name="navigation.Favourite" />
+        <activity android:name="navigation.Inbox"></activity>
     </application>
 
 </manifest>

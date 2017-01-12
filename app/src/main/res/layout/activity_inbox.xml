@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+
+    tools:context=".NewTaskActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:id="@+id/appbarlayout">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            android:weightSum="1">
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/appbarlayout"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:id="@+id/relativelayout"
+        android:background="@color/white"
+
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:id="@+id/newtaskenter"
+            android:weightSum="20"
+            android:background="@color/white"
+            android:layout_marginRight="5dp"
+            android:focusable="true" android:focusableInTouchMode="true"
+            >
+            <EditText
+                android:layout_width="0dp"
+                android:layout_weight="18"
+                android:layout_height="match_parent"
+                android:textSize="20dp"
+                android:hint="Add new task..."
+                android:id="@+id/newtaskname"
+                android:singleLine="true"
+                android:textColor="#0d47a1"
+                android:background="@color/white"
+                android:textAlignment="center"
+                android:textColorHint="@color/hintcolor"
+
+                />
+
+            <ImageButton
+                android:layout_width="6dp"
+                android:layout_weight="2"
+                android:layout_height="40dp"
+                android:src="@drawable/favourite"
+                android:background="@color/white"
+                android:scaleType="fitCenter"
+                android:id="@+id/fav"
+                android:onClick="favourite"
+                android:adjustViewBounds="true"
+
+                />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/recycler_view"
+        android:layout_below="@+id/relativelayout"
+
+
+        />
+
+</RelativeLayout>
+
+

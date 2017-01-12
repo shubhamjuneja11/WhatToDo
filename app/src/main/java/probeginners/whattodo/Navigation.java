@@ -49,6 +49,7 @@ import java.util.Locale;
 import classes.List;
 import db.DatabaseHandler;
 import interfaces.ClickListener;
+import navigation.Inbox;
 import tasklist.RecyclerTouchListener;
 import tasklist.TaskAdapter;
 
@@ -222,11 +223,12 @@ public class Navigation extends AppCompatActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.app_name);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        fb = (FloatingActionButton) findViewById(R.id.fab);
+        fb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent=new Intent(Navigation.this, Inbox.class);
+                startActivity(intent);
             }
         });
 
