@@ -240,8 +240,8 @@ addimage.setOnClickListener(new View.OnClickListener() {
             Toast.makeText(TaskDetailsActivity.this, "Alarm off", Toast.LENGTH_SHORT).show();
 
             Intent intent = new Intent(this, AlarmReciever.class);
-            /*intent.putExtra("listname",listname);
-            intent.putExtra("taskname",taskname);*/
+            intent.putExtra("listname",listname);
+            /*intent.putExtra("taskname",taskname);*/
             intent.putExtra("taskid",taskey);
             int i;
             i=sharedPreferences.getInt(String.valueOf(taskey),0);

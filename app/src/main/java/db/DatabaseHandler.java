@@ -236,6 +236,6 @@ public void turnalarmoff(int id){
         db=this.getWritableDatabase();
     ContentValues contentValues=new ContentValues();
     contentValues.put(alarmstatus,0);
-    db.update(Details_Task,contentValues,"id=?",new String[]{String.valueOf(Integer.valueOf(id))});
+    db.update(Details_Task,contentValues,"taskkey=?",new String[]{String.valueOf(Integer.valueOf(id))});
 }
 }

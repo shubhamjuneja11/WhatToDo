@@ -161,7 +161,7 @@ public class InboxTask extends AppCompatActivity {
         }
     }
     public void adddata(String name,boolean f,boolean flag){
-        Task task = new Task("Inbox",name,f, flag);
+       /* Task task = new Task("Inbox",name,f, flag);
 
 
         handler.addTask(task);
@@ -174,7 +174,7 @@ public class InboxTask extends AppCompatActivity {
         taskDetails.putalarmtime(datetime.getText().toString());
         handler.updateTaskDetails(taskDetails);
         }
-        finish();
+        finish();*/
 
     }
     public void setalarm(View view){

@@ -25,13 +25,14 @@ public class AlarmReciever extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
        //PendingIntent pendingIntent=PendingIntent.getBroadcast(context,0,intent,0);
         String listname,taskname;
+        int taskkey;
         Uri uri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        listname=intent.getStringExtra("listname");
+        /*listname=intent.getStringExtra("listname");*/
         taskname=intent.getStringExtra("taskname");
-        Log.d("listname",listname);
-        Log.d("taskname",taskname);
+
+        taskkey=intent.getIntExtra("taskkey",0);
         DatabaseHandler handler=new DatabaseHandler(context);
-        handler.turnalarmoff(listname,taskname);
+        handler.turnalarmoff(taskkey);
         Notification.Builder builder=new Notification.Builder(context)
                 .setContentTitle(taskname)
                 .setSmallIcon(R.drawable.icon)
@@ -43,7 +44,7 @@ public class AlarmReciever extends BroadcastReceiver {
 
         // Creates an explicit intent for an Activity in your app
         Intent resultIntent = new Intent(context, TaskDetailsActivity.class);
-        resultIntent.putExtra("listname",listname);
+        //resultIntent.putExtra("listname",listname);
         resultIntent.putExtra("taskname",taskname);
 
 // The stack builder object will contain an artificial back stack for the
