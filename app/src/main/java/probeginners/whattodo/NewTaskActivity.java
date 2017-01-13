@@ -234,7 +234,7 @@ public class NewTaskActivity extends AppCompatActivity {
             list.add(0, task);
             adapter.notifyDataSetChanged();
             handler.addTask(task);
-            handler.changeListTotalTask(i, adapter.getItemCount());
+            handler.changeListTotalTask(listkey, adapter.getItemCount());
             handler.addTaskDetails(i,listkey,d,listname,task.getTaskname());
         /*}
         else Toast.makeText(this, "Try a different name", Toast.LENGTH_SHORT).show();*/
