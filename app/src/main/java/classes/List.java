@@ -16,10 +16,12 @@ public class List {
     public int totaltasks;
     public int taskdone;
     public String  icon;
+    public int primary;
     Bitmap bitmap;
 
 
-    public List(String listname,int taskdone,int totaltasks,String icon){
+    public List(int primary,String listname,int taskdone,int totaltasks,String icon){
+        this.primary=primary;
         this.listname=listname;
         this.taskdone=taskdone;
         this.totaltasks=totaltasks;
@@ -33,6 +35,7 @@ public class List {
     }
     public void puttaskdone(int taskdone){this.taskdone=taskdone;}
     public void puticon(String icon){this.icon=icon;}
+    public void putprimary(int primary){this.primary=primary;}
 
     public String getlistname(){
         return listname;
@@ -42,6 +45,7 @@ public class List {
     }
     public int getTaskdone(){return taskdone;}
     public String getIcon(){return icon;}
+    public int getPrimary(){return primary;}
     public Bitmap getImage() {
 
         bitmap = BitmapFactory.decodeFile(icon);

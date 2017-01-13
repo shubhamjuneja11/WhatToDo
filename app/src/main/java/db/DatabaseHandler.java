@@ -23,7 +23,7 @@ import classes.TaskDetails;
 public class DatabaseHandler extends SQLiteOpenHelper {
 
 
-    private static final int DB_VERSION=30;
+    private static final int DB_VERSION=32;
     private static final String DB_NAME="Database";
     public static final String Task_Table="TaskTable";
     public static final String List_Table="ListTable";
@@ -60,12 +60,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 +listname+" text,"+taskname+" text unique,"+completed+
                 " integer,"+favourite+" integer)";
         db.execSQL(query);
-        query="create table "+List_Table+"("+id+" integer primary key,"
-                +listname+" text unique,"+taskcount+" integer,"+totaltask+" integer,"
+        query="create table "+List_Table+"("+id+" integer primary key autoincrement,"
+                +listname+" text ,"+taskcount+" integer,"+totaltask+" integer,"
                 +listimage+" string"
                 +")";
         db.execSQL(query);
-        query="create table "+Details_Task+"("+id+" integer primary key,"
+        query="create table "+Details_Task+"("+id+" integer primary key autoincrement,"
                 +listname+" text,"+taskname+" text,"+alarmtime+
                 " text,"+note+" text,"+imagename+" string,"+alarmstatus+" integer"+")";
         db.execSQL(query);

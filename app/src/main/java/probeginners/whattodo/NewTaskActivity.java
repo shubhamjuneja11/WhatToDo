@@ -211,11 +211,11 @@ public class NewTaskActivity extends AppCompatActivity {
 
     private void adddata(String name, boolean flag, boolean fav) {
         boolean decide=true;
-        for(int i=0;i<list.size();i++)
+        /*for(int i=0;i<list.size();i++)
         {
             if(list.get(i).getTaskname().equals(name))
                 decide=false;break;
-        }
+        }*/
         if(decide) {
             Task task = new Task(listname, name, flag, fav);
             list.add(0, task);

@@ -5,6 +5,7 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -62,6 +63,8 @@ public class Navigation extends AppCompatActivity
     private static final int CAMERA_REQUEST = 1;
     private static final int PICK_FROM_GALLERY = 2;
     private static final int NEW_LIST = 11;
+    public static final int INBOX_TASK = 3;
+
     private static final String IMAGE_DIRECTORY_NAME = "WhatToDo";
     public Uri uri;
     Toolbar toolbar;
@@ -229,7 +232,7 @@ public class Navigation extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(Navigation.this, InboxTask.class);
-                startActivity(intent);
+                startActivityForResult(intent,INBOX_TASK);
             }
         });
 
@@ -345,7 +348,16 @@ public class Navigation extends AppCompatActivity
                 if (data != null)
                     name = data.getStringExtra("name").trim();
                 if (data != null && name != null)//some stupid stuff happening
-                    addTask(name, 0, 0, "");
+                {
+                    SharedPreferences sharedPreferences;
+                    sharedPreferences=getSharedPreferences("list",Context.MODE_PRIVATE);
+                    int i;
+                    i=sharedPreferences.getInt("list",0);
+                    SharedPreferences.Editor editor=sharedPreferences.edit();
+                    editor.putInt("list",i+1);
+                    editor.commit();
+                    addTask(i,name, 0, 0, "");
+                }
                 break;
 
 
@@ -402,7 +414,7 @@ public class Navigation extends AppCompatActivity
         if (cursor.moveToFirst()) {
             do {
 
-                taskDataList.add(new List(cursor.getString(1), cursor.getInt(2), cursor.getInt(3), cursor.getString(4)));
+                taskDataList.add(new List(cursor.getInt(0),cursor.getString(1), cursor.getInt(2), cursor.getInt(3), cursor.getString(4)));
 
             } while (cursor.moveToNext());
         }
@@ -418,8 +430,8 @@ public class Navigation extends AppCompatActivity
      * function  to  add task
      *******************/
 
-    public void addTask(String name, int done, int total, String icon) {
-        List taskData = new List(name, done, total, icon);
+    public void addTask(int prim,String name, int done, int total, String icon) {
+        List taskData = new List(prim,name, done, total, icon);
         taskDataList.add(taskData);
         adapter.notifyDataSetChanged();
         handler.addList(taskData);

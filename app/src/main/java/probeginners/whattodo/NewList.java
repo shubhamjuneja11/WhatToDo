@@ -44,12 +44,12 @@ Toolbar toolbar;
                 if(s.length()==0){
                     flag=false;
                     done.setEnabled(false);
-                    done.getIcon().setAlpha(50);
+                    //done.getIcon().setAlpha(50);
                 }
                 else if(!flag){
                     flag=true;
                     done.setEnabled(true);
-                    done.getIcon().setAlpha(200);
+                    //done.getIcon().setAlpha(200);
                 }
             }
 
@@ -69,7 +69,7 @@ Toolbar toolbar;
 
         done=menu.findItem(R.id.done);
         done.setEnabled(false);
-        done.getIcon().setAlpha(50);
+
         flag=false;
         return true;
     }

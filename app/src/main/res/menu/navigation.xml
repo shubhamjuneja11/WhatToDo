@@ -4,6 +4,6 @@
     <item
         android:id="@+id/addlist"
         android:orderInCategory="100"
-        android:title="Create List"
+        android:title="Add  List"
         app:showAsAction="always" />
 </menu>
