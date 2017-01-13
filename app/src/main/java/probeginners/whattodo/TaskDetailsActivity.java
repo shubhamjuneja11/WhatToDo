@@ -63,7 +63,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
     Uri uri;
     TaskDetails task;
     private String listname,taskname;
-    private int status;
+    private int status,listkey,taskey;
 
     @Override
     protected void onResume() {
@@ -79,7 +79,8 @@ public class TaskDetailsActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         Intent intent = getIntent();
         setSupportActionBar(toolbar);
-
+        listkey=intent.getIntExtra("listkey",0);
+        taskey=intent.getIntExtra("taskkey",0);
         reminder = (RelativeLayout) findViewById(R.id.relativelayout1);
         note = (RelativeLayout) findViewById(R.id.relativelayout2);
         addimage=(RelativeLayout)findViewById(R.id.relativelayout3);
@@ -201,12 +202,14 @@ addimage.setOnClickListener(new View.OnClickListener() {
     }
 
     private void preparedata() {
-        String query = "select * from "+DatabaseHandler.Details_Task+" where "+DatabaseHandler.listname
-                +"= ? and "+DatabaseHandler.taskname+"=?";
-        Cursor cursor = readdatabase.rawQuery(query, new String[]{listname,taskname});
+        String query = "select * from "+DatabaseHandler.Details_Task+" where "+DatabaseHandler.taskkey
+                +"= ?";
+        Cursor cursor = readdatabase.rawQuery(query, new String[]{String.valueOf(taskey)});
         if (cursor.moveToFirst()) {
             do {
-                task = new TaskDetails(cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getInt(6));
+                task = new TaskDetails(cursor.getInt(0),cursor.getInt(1), cursor.getInt(2),
+                        cursor.getString(3), cursor.getString(4), cursor.getString(5),
+                        cursor.getString(6),cursor.getString(7),cursor.getInt(8));
             } while (cursor.moveToNext());
             cursor.close();
             modifyview();
@@ -237,8 +240,9 @@ addimage.setOnClickListener(new View.OnClickListener() {
             Toast.makeText(TaskDetailsActivity.this, "Alarm off", Toast.LENGTH_SHORT).show();
 
             Intent intent = new Intent(this, AlarmReciever.class);
-            intent.putExtra("listname",listname);
-            intent.putExtra("taskname",taskname);
+            /*intent.putExtra("listname",listname);
+            intent.putExtra("taskname",taskname);*/
+            intent.putExtra("taskid",taskey);
             int i;
             i=sharedPreferences.getInt(listname+taskname,0);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(),i, intent, 0);

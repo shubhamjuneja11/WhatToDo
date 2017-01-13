@@ -515,6 +515,7 @@ public class Navigation extends AppCompatActivity
         Intent intent = new Intent(Navigation.this, NewTaskActivity.class);
         intent.putExtra("listname", taskData.getlistname());
         intent.putExtra("taskdone", taskData.getTaskdone());
+        intent.putExtra("listkey",taskData.getPrimary());
         startActivity(intent);
     }
 

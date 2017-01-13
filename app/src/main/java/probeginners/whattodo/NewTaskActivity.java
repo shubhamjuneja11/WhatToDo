@@ -1,8 +1,10 @@
 package probeginners.whattodo;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -54,7 +56,7 @@ public class NewTaskActivity extends AppCompatActivity {
     DatabaseHandler handler;
     String query, listname;
     Cursor cursor;
-    int taskdone;
+    int taskdone,listkey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,12 +70,13 @@ public class NewTaskActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         listname = getIntent().getStringExtra("listname");
         taskdone=getIntent().getIntExtra("taskdone",0);
+        listkey=getIntent().getIntExtra("listkey",0);
         getSupportActionBar().setTitle(listname);
-        query = "select * from " + DatabaseHandler.Task_Table + " where listname = ?";
+        query = "select * from " + DatabaseHandler.Task_Table + " where listkey= ?";
         handler = new DatabaseHandler(this);
         readdatabase = handler.getReadableDatabase();
         try {
-            cursor = readdatabase.rawQuery(query, new String[]{listname});
+            cursor = readdatabase.rawQuery(query, new String[]{String.valueOf(listkey)});
             if (cursor != null)
                 preparedata();
             else Log.e("null", "babu");
@@ -114,7 +117,7 @@ public class NewTaskActivity extends AppCompatActivity {
                         .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                handler.deleteTask(list.get(position));
+                                handler.deleteTask(list.get(position).primary);
                                 list.remove(position);
                                 adapter.notifyDataSetChanged();
                                 dialog.dismiss();
@@ -199,7 +202,7 @@ public class NewTaskActivity extends AppCompatActivity {
 
     private void preparedata() {Task task;
         if (cursor.moveToFirst()) {
-            do {task=new Task(cursor.getString(1), cursor.getString(2), cursor.getInt(3) == 1, cursor.getInt(4) == 1);
+            do {task=new Task(cursor.getInt(0),cursor.getInt(1),cursor.getString(2), cursor.getString(3), cursor.getInt(4) == 1, cursor.getInt(5) == 1);
                 if(!task.completed)
                 list.add(0,task);
                 else list.add(list.size(),task);
@@ -217,12 +220,22 @@ public class NewTaskActivity extends AppCompatActivity {
                 decide=false;break;
         }*/
         //if(decide) {
-            Task task = new Task(listname, name, flag, fav);
+
+        SharedPreferences sharedPreferences;
+        sharedPreferences=getSharedPreferences("list", Context.MODE_PRIVATE);
+        int i,d;
+        i=sharedPreferences.getInt("task",0);
+        d=sharedPreferences.getInt("detail",0);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putInt("task",i+1);
+        editor.putInt("detail",i+1);
+        editor.commit();
+            Task task = new Task(i,listkey,listname, name, flag, fav);
             list.add(0, task);
             adapter.notifyDataSetChanged();
             handler.addTask(task);
-            handler.changeListTotalTask(listname, adapter.getItemCount());
-            handler.addTaskDetails(listname,task.getTaskname());
+            handler.changeListTotalTask(i, adapter.getItemCount());
+            handler.addTaskDetails(i,listkey,d,listname,task.getTaskname());
         /*}
         else Toast.makeText(this, "Try a different name", Toast.LENGTH_SHORT).show();*/
     }
@@ -323,6 +336,9 @@ public class NewTaskActivity extends AppCompatActivity {
                         Intent intent = new Intent(NewTaskActivity.this, TaskDetailsActivity.class);
                         intent.putExtra("listname", list.get(positiontoopen).getlistname());
                         intent.putExtra("taskname",list.get(positiontoopen).getTaskname());
+                        intent.putExtra("listkey",listkey);
+                        intent.putExtra("taskkey",list.get(positiontoopen).getPrimary());
+
                         startActivity(intent);
                         break;
 
@@ -352,7 +368,7 @@ public class NewTaskActivity extends AppCompatActivity {
                         else taskdone--;
                         //if(check.isChecked())
                         //handler.changeListTaskDone(listname,list.get(positiontoopen).getTaskname(),true);
-                        handler.changeListTaskDone(listname,taskdone);
+                        handler.changeListTaskDone(listkey,taskdone);
                         break;
 
                     case R.id.favourite2:

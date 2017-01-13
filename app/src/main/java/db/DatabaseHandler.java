@@ -24,7 +24,7 @@ import classes.TaskDetails;
 public class DatabaseHandler extends SQLiteOpenHelper {
 
 
-    private static final int DB_VERSION=35;
+    private static final int DB_VERSION=36;
     private static final String DB_NAME="Database";
     public static final String Task_Table="TaskTable";
     public static final String List_Table="ListTable";
@@ -43,7 +43,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String imagename="imagename";
     private static final String alarmstatus="alarmstatus";
     private static final String listkey="listkey";
-    private static final String taskkey="taskkey";
+    public static final String taskkey="taskkey";
 
 
 
@@ -61,7 +61,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         query="create table "+Task_Table+"("+id+" integer primary key,"
                 +listkey+" integer ,"
-                +listname+" text,"+taskname+" text unique,"+completed+
+                +listname+" text,"+taskname+" text ,"+completed+
                 " integer,"+favourite+" integer)";
         db.execSQL(query);
         query="create table "+List_Table+"("+id+" integer primary key ,"
