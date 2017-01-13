@@ -472,21 +472,23 @@ public class Navigation extends AppCompatActivity
                             public void onClick(DialogInterface dialog, int which) {
                                 String input = editText.getText().toString();
                                 List list = taskDataList.get(positiontoopen);
-                                String oldname = list.getlistname();
-                                boolean change = true;
+                               // int primary=list.getPrimary();
+                                //String oldname = list.getlistname();
+                                /*boolean change = true;
                                 for (int i = 0; i < taskDataList.size(); i++) {
                                     if (i == positiontoopen) continue;
                                     if (taskDataList.get(i).getlistname().equals(input)) {
                                         change = false;
                                         break;
                                     }
-                                }
-                                if (change) {
-                                    handler.changeListname(oldname, list.getlistname());
+                                }*/
+                                //if (change) {
+                                    handler.changeListname(list.getPrimary(),input);
                                     list.putlistname(input);
                                     adapter.notifyDataSetChanged();
-                                } else
-                                    Toast.makeText(Navigation.this, "Try a different name", Toast.LENGTH_SHORT).show();
+                                //}
+                            //else
+                                    //Toast.makeText(Navigation.this, "Try a different name", Toast.LENGTH_SHORT).show();
                             }
                         });
                         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

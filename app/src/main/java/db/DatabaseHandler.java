@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.support.annotation.BoolRes;
+import android.support.annotation.IntegerRes;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -23,13 +24,13 @@ import classes.TaskDetails;
 public class DatabaseHandler extends SQLiteOpenHelper {
 
 
-    private static final int DB_VERSION=32;
+    private static final int DB_VERSION=34;
     private static final String DB_NAME="Database";
     public static final String Task_Table="TaskTable";
     public static final String List_Table="ListTable";
     public static final String Details_Task="TaskDetails";
 
-    private static final String id="_id";
+    private static final String id="id";
     public static final String listname="listname";
     public static final String taskname="taskname";
     private static final String completed="completed";
@@ -41,6 +42,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String taskcount="taskcount";
     private static final String imagename="imagename";
     private static final String alarmstatus="alarmstatus";
+    //private static final String primarykey=""
 
 
 
@@ -60,12 +62,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 +listname+" text,"+taskname+" text unique,"+completed+
                 " integer,"+favourite+" integer)";
         db.execSQL(query);
-        query="create table "+List_Table+"("+id+" integer primary key autoincrement,"
+        query="create table "+List_Table+"("+id+" integer primary key ,"
                 +listname+" text ,"+taskcount+" integer,"+totaltask+" integer,"
                 +listimage+" string"
                 +")";
         db.execSQL(query);
-        query="create table "+Details_Task+"("+id+" integer primary key autoincrement,"
+        query="create table "+Details_Task+"("+id+" integer primary key ,"
                 +listname+" text,"+taskname+" text,"+alarmtime+
                 " text,"+note+" text,"+imagename+" string,"+alarmstatus+" integer"+")";
         db.execSQL(query);
@@ -92,6 +94,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if(db==null)
             db=this.getWritableDatabase();
         ContentValues values=new ContentValues();
+        values.put(id,list.getPrimary());
         values.put(listname,list.getlistname());
         values.put(totaltask,list.getTotaltasks());
         values.put(listimage,list.getIcon());
@@ -106,36 +109,37 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             db=this.getWritableDatabase();
 Log.e("ji","ji");
         ContentValues values=new ContentValues();
+
         values.put(listname,list.getlistname());
         values.put(totaltask,list.getTotaltasks());
         values.put(listimage,list.getIcon());
-        db.update(List_Table,values,"listname=?",new String[]{list.getlistname()});
+        db.update(List_Table,values,"id=?",new String[]{String.valueOf(list.getPrimary())});
     }
 
-    public  void changeListname(String oldname,String newname){
+    public  void changeListname(int primary,String newname){
         if(db==null)
             db=this.getWritableDatabase();
         ContentValues values=new ContentValues();
         values.put(listname,newname);
-        int x=db.update(List_Table, values, "listname=?", new String[]{oldname});
+        int x=db.update(List_Table, values, "id=?", new String[]{String.valueOf(primary)});
         Log.e("value",x+"");
-        db.update(Task_Table, values, "listname=?", new String[]{oldname});
+        //db.update(Task_Table, values, "listname=?", new String[]{oldname});
 
 
     }
 
 
-    public void changeListTaskDone(String name,int task){
+    public void changeListTaskDone(int primary,int task){
         if(db==null)
             db=this.getWritableDatabase();
         ContentValues values=new ContentValues();
         values.put(taskcount,task);
-        db.update(List_Table,values,"listname=?",new String[]{name});
+        db.update(List_Table,values,"listname=?",new String[]{String.valueOf(primary)});
     }
- public void changeListTotalTask(String name,int task){
+ public void changeListTotalTask(int primary,int task){
      ContentValues values=new ContentValues();
      values.put(totaltask,task);
-     db.update(List_Table,values,"listname=?",new String[]{name});
+     db.update(List_Table,values,"listname=?",new String[]{String.valueOf(primary)});
  }
 
 
@@ -143,9 +147,9 @@ Log.e("ji","ji");
       if(db==null)
           db=this.getWritableDatabase();
 Log.e("abc","delete");
-      db.delete(List_Table,"listname=?",new String[]{list.getlistname()});
-      db.delete(Task_Table,"listname=?",new String[]{list.getlistname()});
-      db.delete(Details_Task,"listname=?",new String[]{list.getlistname()});
+      db.delete(List_Table,"id=?",new String[]{String.valueOf(Integer.valueOf(list.getPrimary()))});
+     // db.delete(Task_Table,"listname=?",new String[]{list.getlistname()});
+      //db.delete(Details_Task,"listname=?",new String[]{list.getlistname()});
 
   }
 
