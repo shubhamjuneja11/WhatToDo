@@ -244,7 +244,7 @@ addimage.setOnClickListener(new View.OnClickListener() {
             intent.putExtra("taskname",taskname);*/
             intent.putExtra("taskid",taskey);
             int i;
-            i=sharedPreferences.getInt(listname+taskname,0);
+            i=sharedPreferences.getInt(String.valueOf(taskey),0);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(),i, intent, 0);
             SharedPreferences.Editor editor=sharedPreferences.edit();
             editor.remove(listname+taskname);
@@ -267,7 +267,8 @@ addimage.setOnClickListener(new View.OnClickListener() {
                 int i;
                 i=sharedPreferences.getInt("alarmnumber",0);
                 SharedPreferences.Editor editor=sharedPreferences.edit();
-                editor.putInt(listname+taskname,i);
+                //editor.putInt(listname+taskname,i);
+                editor.putInt(String.valueOf(taskey),i);
                 editor.putInt("alarmnumber",i+1);
                 editor.commit();
                 alarmset = true;
@@ -277,8 +278,9 @@ addimage.setOnClickListener(new View.OnClickListener() {
                 Toast.makeText(TaskDetailsActivity.this, "Alarm on", Toast.LENGTH_SHORT).show();
                 image.setImageResource(R.drawable.alarmon);
                 Intent intent = new Intent(this, AlarmReciever.class);
-                intent.putExtra("listname",listname);
-                intent.putExtra("taskname",taskname);
+                intent.putExtra("taskid",taskey);
+                /*intent.putExtra("listname",listname);
+                intent.putExtra("taskname",taskname);*/
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), i, intent, 0);
 
                 AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
