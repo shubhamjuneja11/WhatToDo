@@ -50,6 +50,7 @@ import classes.List;
 import db.DatabaseHandler;
 import interfaces.ClickListener;
 import navigation.Inbox;
+import navigation.InboxTask;
 import tasklist.RecyclerTouchListener;
 import tasklist.TaskAdapter;
 
@@ -227,7 +228,7 @@ public class Navigation extends AppCompatActivity
         fb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(Navigation.this, Inbox.class);
+                Intent intent=new Intent(Navigation.this, InboxTask.class);
                 startActivity(intent);
             }
         });

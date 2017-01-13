@@ -33,7 +33,8 @@
             </intent-filter>
         </activity>
         <activity android:name="navigation.Favourite" />
-        <activity android:name="navigation.Inbox"></activity>
+        <activity android:name="navigation.Inbox" />
+        <activity android:name="navigation.InboxTask"></activity>
     </application>
 
 </manifest>
