@@ -10,6 +10,9 @@ import probeginners.whattodo.TaskDetailsActivity;
  */
 
 public class TaskDetails {
+    public int primary;
+    public int listkey;
+    public int taskkey;
     public String listname;
     public String taskname;
     public String alarmtime;
@@ -19,13 +22,16 @@ public class TaskDetails {
     Bitmap bitmap;
 
 
-    public TaskDetails(String listname,String taskname,String alarmtime,String note,String imagename,int alarmstatus){
+    public TaskDetails(int primary,int listkey,int taskkey,String listname,String taskname,String alarmtime,String note,String imagename,int alarmstatus){
         this.listname=listname;
         this.taskname=taskname;
         this.alarmtime=alarmtime;
         this.note=note;
         this.imagename=imagename;
         this.alarmstatus=alarmstatus;
+        this.listkey=listkey;
+        this.primary=primary;
+        this.taskkey=taskkey;
 
     }
     public void putlistname(String listname){

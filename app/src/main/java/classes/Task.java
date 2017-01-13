@@ -5,18 +5,23 @@ package classes;
  */
 
 public class Task {
+    public int primary;
+    public int listkey;
     public String listname;
     public String taskname;
     public boolean completed;
     public boolean favourite;
 
-    public Task(String listname,String taskname,boolean completed,boolean favourite){
+    public Task(int primary,int listkey,String listname,String taskname,boolean completed,boolean favourite){
+        this.primary=primary;
         this.listname=listname;
         this.taskname=taskname;
         this.completed=completed;
         this.favourite=favourite;
+        this.listkey=listkey;
     }
 
+    public void putprimary(int primary){this.primary=primary;}
     public void putlistname(String listname){
         this.listname=listname;
     }
@@ -42,4 +47,5 @@ public class Task {
     public boolean getfavourite(){
         return favourite;
     }
+    public int getPrimary(){return primary;}
 }

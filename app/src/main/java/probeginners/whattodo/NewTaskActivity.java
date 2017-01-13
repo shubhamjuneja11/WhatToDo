@@ -216,15 +216,15 @@ public class NewTaskActivity extends AppCompatActivity {
             if(list.get(i).getTaskname().equals(name))
                 decide=false;break;
         }*/
-        if(decide) {
+        //if(decide) {
             Task task = new Task(listname, name, flag, fav);
             list.add(0, task);
             adapter.notifyDataSetChanged();
             handler.addTask(task);
             handler.changeListTotalTask(listname, adapter.getItemCount());
             handler.addTaskDetails(listname,task.getTaskname());
-        }
-        else Toast.makeText(this, "Try a different name", Toast.LENGTH_SHORT).show();
+        /*}
+        else Toast.makeText(this, "Try a different name", Toast.LENGTH_SHORT).show();*/
     }
 
     /**

@@ -24,7 +24,7 @@ import classes.TaskDetails;
 public class DatabaseHandler extends SQLiteOpenHelper {
 
 
-    private static final int DB_VERSION=34;
+    private static final int DB_VERSION=35;
     private static final String DB_NAME="Database";
     public static final String Task_Table="TaskTable";
     public static final String List_Table="ListTable";
@@ -42,7 +42,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String taskcount="taskcount";
     private static final String imagename="imagename";
     private static final String alarmstatus="alarmstatus";
-    //private static final String primarykey=""
+    private static final String listkey="listkey";
+    private static final String taskkey="taskkey";
 
 
 
@@ -59,6 +60,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         query="create table "+Task_Table+"("+id+" integer primary key,"
+                +listkey+" integer ,"
                 +listname+" text,"+taskname+" text unique,"+completed+
                 " integer,"+favourite+" integer)";
         db.execSQL(query);
@@ -68,6 +70,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 +")";
         db.execSQL(query);
         query="create table "+Details_Task+"("+id+" integer primary key ,"
+                +listkey+" integer,"
+                +taskkey+" integer,"
                 +listname+" text,"+taskname+" text,"+alarmtime+
                 " text,"+note+" text,"+imagename+" string,"+alarmstatus+" integer"+")";
         db.execSQL(query);
@@ -134,12 +138,12 @@ Log.e("ji","ji");
             db=this.getWritableDatabase();
         ContentValues values=new ContentValues();
         values.put(taskcount,task);
-        db.update(List_Table,values,"listname=?",new String[]{String.valueOf(primary)});
+        db.update(List_Table,values,"id=?",new String[]{String.valueOf(primary)});
     }
  public void changeListTotalTask(int primary,int task){
      ContentValues values=new ContentValues();
      values.put(totaltask,task);
-     db.update(List_Table,values,"listname=?",new String[]{String.valueOf(primary)});
+     db.update(List_Table,values,"id=?",new String[]{String.valueOf(primary)});
  }
 
 
@@ -147,9 +151,10 @@ Log.e("ji","ji");
       if(db==null)
           db=this.getWritableDatabase();
 Log.e("abc","delete");
-      db.delete(List_Table,"id=?",new String[]{String.valueOf(Integer.valueOf(list.getPrimary()))});
-     // db.delete(Task_Table,"listname=?",new String[]{list.getlistname()});
-      //db.delete(Details_Task,"listname=?",new String[]{list.getlistname()});
+      String i=String.valueOf(Integer.valueOf(list.getPrimary()));
+      db.delete(List_Table,"id=?",new String[]{i});
+      db.delete(Task_Table,"listkey=?",new String[]{i});
+      db.delete(Details_Task,"listkey=?",new String[]{i});
 
   }
 
@@ -162,6 +167,8 @@ Log.e("abc","delete");
          db=this.getWritableDatabase();
 Log.e("abc","add");
         ContentValues values=new ContentValues();
+        values.put(id,task.getPrimary());
+        values.put(listkey,task.listkey);
         values.put(taskname,task.getTaskname());
         values.put(listname,task.getlistname());
         values.put(favourite,task.getfavourite()?1:0);
@@ -179,26 +186,30 @@ Log.e("abc","updated");
         values.put(taskname,task.getTaskname());
         values.put(favourite,task.getfavourite()?1:0);
         values.put(completed,task.getcompleted()?1:0);
-        db.update(Task_Table,values,"taskname=?",new String[]{task.getTaskname()});
+        db.update(Task_Table,values,"id=?",new String[]{String.valueOf(Integer.valueOf(task.getPrimary()))});
 
     }
 
-    public void deleteTask(Task task){
+    public void deleteTask(int primary){
         if(db==null)
             db=this.getWritableDatabase();
         Log.e("abc","delete");
-        db.delete(Task_Table,"listname=? and taskname=?",new String[]{task.getlistname(),task.getTaskname()});
+        db.delete(Task_Table,"id=?",new String[]{String.valueOf(primary)});
+        db.delete(Details_Task,"taskkey=?",new String[]{String.valueOf(primary)});
 
     }
 
     /*----------TASK  DETAILS------------*/
 
 
-    public void addTaskDetails(String listname,String taskname){
+    public void addTaskDetails(int primary,int listke,int taskke,String listname,String taskname){
         if(db==null)
             db=this.getWritableDatabase();
 
         ContentValues values=new ContentValues();
+        values.put(this.id,primary);
+        values.put(listkey,listke);
+        values.put(taskkey,taskke);
         values.put(this.listname,listname);
         values.put(this.taskname,taskname);
         db.insert(Details_Task,null,values);
@@ -215,17 +226,16 @@ Log.e("abc","updated");
         values.put(imagename,taskDetails.getImagename());
         values.put(alarmstatus,taskDetails.getAlarmstatus());
 
-        db.update(Details_Task,values,"listname=? and taskname=?"
-        ,new String[]{taskDetails.getlistname(),taskDetails.getTaskname()
+        db.update(Details_Task,values,"id=?"
+        ,new String[]{String.valueOf(Integer.valueOf(taskDetails.primary))
                 });
     }
-public void turnalarmoff(String list,String task){
+
+public void turnalarmoff(int id){
     if(db==null)
         db=this.getWritableDatabase();
-    Log.d(list,task);
     ContentValues contentValues=new ContentValues();
     contentValues.put(alarmstatus,0);
-    int x=db.update(Details_Task,contentValues,"listname=? and taskname=?",new String[]{list,task});
-    Log.d("alarm abcdef",x+"");
+    db.update(Details_Task,contentValues,"id=?",new String[]{String.valueOf(Integer.valueOf(id))});
 }
 }
