@@ -147,6 +147,21 @@ Log.e("ji","ji");
  }
 
 
+    public void ChangeTaskCount(int p,boolean f){
+        String a,b;
+
+        a=String.valueOf(1);
+        b=String.valueOf(p);
+        if(db==null)
+            db=this.getWritableDatabase();
+        if(f)
+         db.execSQL("UPDATE "+List_Table+" SET "+taskcount+" = "+taskcount+" + 1 WHERE "+id+" = ?",new String[]{b});
+        else
+            db.execSQL("update "+List_Table+" set "+taskcount+" = "+taskcount+" - ?"+" where "+id+" = ?",new String[]{a,b});
+
+    }
+
+
   public void deleteList(List list){
       if(db==null)
           db=this.getWritableDatabase();

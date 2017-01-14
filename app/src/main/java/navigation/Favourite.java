@@ -43,7 +43,7 @@ public class Favourite extends AppCompatActivity {
     RecyclerView recyclerView;
     DatabaseHandler handler;
     MyAdapter adapter;
-    int positiontoopen;
+    int positiontoopen,listkey;
 
     ArrayList<Task> list = new ArrayList<>();
 
@@ -68,6 +68,7 @@ public class Favourite extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        readdatabase.close();
         adapter = new MyAdapter(list);
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
@@ -222,6 +223,7 @@ public class Favourite extends AppCompatActivity {
                         boolean f = list.get(positiontoopen).getcompleted();
                         list.get(positiontoopen).putcompleted(!f);
                         Task task = list.get(positiontoopen);
+                        listkey=task.listkey;
                         //handler.deleteTask(task);
                         list.remove(positiontoopen);
                         if (f) {
@@ -237,18 +239,22 @@ public class Favourite extends AppCompatActivity {
                         handler.updateTask(task);
 
 
-                        /*if (!f)
-                            taskdone++;
-                        else taskdone--;
+                        if (!f)
+                           // taskdone++;
+
+                           handler.ChangeTaskCount(listkey,true);
+
+                        else //taskdone--;
+                            handler.ChangeTaskCount(listkey,false);
                         //if(check.isChecked())
                         //handler.changeListTaskDone(listname,list.get(positiontoopen).getTaskname(),true);
-                        handler.changeListTaskDone(listkey, taskdone);*/
+                       // handler.changeListTaskDone(listkey, taskdone);
                         break;
 
                     case R.id.favourite2:
-                        //list.get(positiontoopen).putfavourite(!list.get(positiontoopen).getfavourite());
+                        list.get(positiontoopen).putfavourite(!list.get(positiontoopen).getfavourite());
                         handler.updateTask(list.get(positiontoopen));
-                        list.remove(positiontoopen);
+                        //list.remove(positiontoopen);
 
                         break;
                 }
