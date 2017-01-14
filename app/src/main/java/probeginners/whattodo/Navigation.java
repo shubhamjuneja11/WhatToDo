@@ -75,7 +75,7 @@ public class Navigation extends AppCompatActivity
     Cursor cursor;
     SQLiteDatabase readdatabase;
     DatabaseHandler handler;
-    int positiontoopen;
+    int positiontoopen,total;
     private String name;
     private String query;
 
@@ -320,8 +320,16 @@ public class Navigation extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
+        if (id == R.id.inbox) {
+            SharedPreferences sharedPreferences;
+            sharedPreferences=getSharedPreferences("list", Context.MODE_PRIVATE);
+            int done;
+            done=sharedPreferences.getInt("done",0);
+            Intent intent = new Intent(Navigation.this, NewTaskActivity.class);
+            intent.putExtra("listname", "Inbox");
+            intent.putExtra("taskdone",done);
+            intent.putExtra("listkey",-1);
+            startActivity(intent);
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {

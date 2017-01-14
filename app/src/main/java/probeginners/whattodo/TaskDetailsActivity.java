@@ -52,6 +52,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
     boolean alarmset;
     Toolbar toolbar;
     Calendar alarmcalendar;
+    ImageView image;
     CustomDateTimePicker custom;
     SharedPreferences sharedPreferences;
     private static final String IMAGE_DIRECTORY_NAME = "WhatToDo";
@@ -115,15 +116,24 @@ Log.d("chikni","chameli");
                                       int hour24, int hour12, int min, int sec,
                                       String AM_PM) {
                         alarmcalendar = calendarSelected;
-
+                        if(min/10==0&&min!=0)
                         datetime.setText(calendarSelected
                                 .get(Calendar.DAY_OF_MONTH)
                                 + "/" + (monthNumber + 1) + "/" + year
-                                + ", " + hour12 + ":" + min
+                                + ", " + hour12 + ":0" + min
                                 + " " + AM_PM);
+
+                        else
+                            datetime.setText(calendarSelected
+                                    .get(Calendar.DAY_OF_MONTH)
+                                    + "/" + (monthNumber + 1) + "/" + year
+                                    + ", " + hour12 + ":" + min
+                                    + " " + AM_PM);
                         task.putalarmtime(datetime.getText().toString());
                         handler.updateTaskDetails(task);
-                       // handler.updateTaskDetails(new TaskDetails(listname,taskname,datetime.getText().toString(),notetext.getText().toString(),uri.getPath(),status));
+                        alarmsetup(alarmcalendar,image);
+
+                        // handler.updateTaskDetails(new TaskDetails(listname,taskname,datetime.getText().toString(),notetext.getText().toString(),uri.getPath(),status));
 
                     }
 
@@ -132,7 +142,10 @@ Log.d("chikni","chameli");
 
                     }
                 });
+
+
         /**
+         *
          * Pass Directly current time format it will return AM and PM if you set
          * false
          */
@@ -233,7 +246,7 @@ addimage.setOnClickListener(new View.OnClickListener() {
     //set  alarm on/off
 
     public  void setalarm(View view){
-        ImageView image=(ImageView)view;
+      image=(ImageView)view;
         if(alarmset){
 
             alarmset=false;
@@ -264,38 +277,44 @@ addimage.setOnClickListener(new View.OnClickListener() {
         else{
             Calendar calendar=alarmcalendar;
             if(calendar!=null) {
-                int i;
-                i=sharedPreferences.getInt("alarmnumber",0);
-                SharedPreferences.Editor editor=sharedPreferences.edit();
-                //editor.putInt(listname+taskname,i);
-                editor.putInt(String.valueOf(taskey),i);
-                editor.putInt("alarmnumber",i+1);
-                editor.commit();
-                alarmset = true;
-                //Calendar calendar = Calendar.getInstance();
-                //calendar.set(Calendar.MINUTE, 23);
-                status=1;
-                Toast.makeText(TaskDetailsActivity.this, "Alarm on", Toast.LENGTH_SHORT).show();
-                image.setImageResource(R.drawable.alarmon);
-                Intent intent = new Intent(this, AlarmReciever.class);
-                intent.putExtra("taskid",taskey);
-                /*intent.putExtra("listname",listname);
-                intent.putExtra("taskname",taskname);*/
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), i, intent, 0);
-
-                AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-                task.putalarmstatus(status);
-                handler.updateTaskDetails(task);
-               // handler.updateTaskDetails(new TaskDetails(listname,taskname,datetime.getText().toString(),notetext.getText().toString(),uri.getPath(),status));
-
-                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+                alarmsetup(calendar,image);
             }
             else{
                 custom.showDialog();
+
+                /**********************put condition of time*************/
+
             }
         }
     }
 
+
+    public void alarmsetup(Calendar calendar,ImageView image){
+        int i;
+        i=sharedPreferences.getInt("alarmnumber",0);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        //editor.putInt(listname+taskname,i);
+        editor.putInt(String.valueOf(taskey),i);
+        editor.putInt("alarmnumber",i+1);
+        editor.commit();
+        alarmset = true;
+        //Calendar calendar = Calendar.getInstance();
+        //calendar.set(Calendar.MINUTE, 23);
+        status=1;
+        Toast.makeText(TaskDetailsActivity.this, "Alarm on", Toast.LENGTH_SHORT).show();
+        image.setImageResource(R.drawable.alarmon);
+        Intent intent = new Intent(this, AlarmReciever.class);
+        intent.putExtra("taskid",taskey);
+                /*intent.putExtra("listname",listname);
+                intent.putExtra("taskname",taskname);*/
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), i, intent, 0);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        task.putalarmstatus(status);
+        handler.updateTaskDetails(task);
+        // handler.updateTaskDetails(new TaskDetails(listname,taskname,datetime.getText().toString(),notetext.getText().toString(),uri.getPath(),status));
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+    }
 
     /*************** function to change image**************/
 
