@@ -232,7 +232,7 @@ addimage.setOnClickListener(new View.OnClickListener() {
 
     //set  alarm on/off
 
-    public void setalarm(View view){
+    public  void setalarm(View view){
         ImageView image=(ImageView)view;
         if(alarmset){
 
@@ -241,13 +241,13 @@ addimage.setOnClickListener(new View.OnClickListener() {
 
             Intent intent = new Intent(this, AlarmReciever.class);
             intent.putExtra("listname",listname);
-            /*intent.putExtra("taskname",taskname);*/
+            intent.putExtra("taskname",taskname);
             intent.putExtra("taskid",taskey);
             int i;
             i=sharedPreferences.getInt(String.valueOf(taskey),0);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(),i, intent, 0);
             SharedPreferences.Editor editor=sharedPreferences.edit();
-            editor.remove(listname+taskname);
+            editor.remove(String.valueOf(taskey));
             editor.commit();
             AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
               alarmManager.cancel(pendingIntent);

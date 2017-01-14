@@ -1,9 +1,12 @@
 package navigation;
 
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -19,6 +22,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.util.Calendar;
@@ -27,6 +31,7 @@ import java.util.Date;
 import classes.Task;
 import classes.TaskDetails;
 import db.DatabaseHandler;
+import probeginners.whattodo.AlarmReciever;
 import probeginners.whattodo.CustomDateTimePicker;
 import probeginners.whattodo.Navigation;
 import probeginners.whattodo.R;
@@ -41,11 +46,11 @@ public class InboxTask extends AppCompatActivity {
     Calendar alarmcalendar;
     CustomDateTimePicker custom;
     TextView datetime;
-    boolean alarmon=false;
-    String alarmtime;
     RelativeLayout reminder;
-
-
+    ImageView alarm;
+    boolean alarmset=false;
+    int taskey;
+    TaskDetails taskd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +63,7 @@ public class InboxTask extends AppCompatActivity {
         handler = new DatabaseHandler(this);
         datetime = (TextView) findViewById(R.id.reminder);
         reminder=(RelativeLayout)findViewById(R.id.relativelayout1);
+        alarm = (ImageView) findViewById(R.id.alarm);
 
 
         custom = new CustomDateTimePicker(InboxTask.this,
@@ -156,7 +162,7 @@ public class InboxTask extends AppCompatActivity {
             case R.id.add: {
                 String task = taskname.getText().toString();
                 adddata(task, false, favflag);
-                favflag = false;
+                finish();
                 return true;
             }
         }
@@ -180,6 +186,7 @@ public class InboxTask extends AppCompatActivity {
         sharedPreferences=getSharedPreferences("list", Context.MODE_PRIVATE);
         int i,d,total;
         i=sharedPreferences.getInt("task",0);
+        taskey=i;
         d=sharedPreferences.getInt("detail",0);
         total=sharedPreferences.getInt("total",0);
         SharedPreferences.Editor editor=sharedPreferences.edit();
@@ -191,14 +198,78 @@ public class InboxTask extends AppCompatActivity {
         handler.addTask(task);
         handler.changeListTotalTask(-1,total);
         handler.addTaskDetails(d,-1,i,"Inbox",task.getTaskname());
+        taskd=new TaskDetails(d,-1,i,"Inbox",name,"","","",0);
+    }
 
-    }
-    public void setalarm(View view){
-        ToggleButton toggleButton=(ToggleButton)view;
-        if(toggleButton.isChecked()){
-            alarmon=true;
+
+
+
+    //set  alarm on/off
+
+    public  void setalarm(View view){
+        SharedPreferences sharedPreferences;
+        sharedPreferences = getSharedPreferences("alarm", Context.MODE_PRIVATE);
+        ImageView image=(ImageView)view;
+        if(alarmset){
+
+            alarmset=false;
+            Toast.makeText(InboxTask.this, "Alarm off", Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(this, AlarmReciever.class);
+            intent.putExtra("listname","Inbox");
+            intent.putExtra("taskname",taskname.getText().toString());
+            intent.putExtra("taskid",taskey);/***************************************************************/
+            int i;
+            i=sharedPreferences.getInt(String.valueOf(taskey),0);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(),i, intent, 0);
+            SharedPreferences.Editor editor=sharedPreferences.edit();
+            editor.remove(String.valueOf(taskey));
+            editor.commit();
+            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+            alarmManager.cancel(pendingIntent);
+            image.setImageResource(R.drawable.alarmoff);
+
+            handler.updateTaskDetails(taskd);
+            //handler.updateTaskDetails(new TaskDetails(listname,taskname,datetime.getText().toString(),notetext.getText().toString(),uri.getPath(),status));
+
+
+
         }
-        else alarmon=false;
+        else{
+            Calendar calendar=alarmcalendar;
+            if(calendar!=null) {
+                int i;
+                i=sharedPreferences.getInt("alarmnumber",0);
+                SharedPreferences.Editor editor=sharedPreferences.edit();
+                //editor.putInt(listname+taskname,i);
+                editor.putInt(String.valueOf(taskey),i);
+                editor.putInt("alarmnumber",i+1);
+                editor.commit();
+                alarmset = true;
+                //Calendar calendar = Calendar.getInstance();
+                //calendar.set(Calendar.MINUTE, 23);
+
+                Toast.makeText(InboxTask.this, "Alarm on", Toast.LENGTH_SHORT).show();
+                image.setImageResource(R.drawable.alarmon);
+                Intent intent = new Intent(this, AlarmReciever.class);
+                intent.putExtra("taskid",taskey);
+                /*intent.putExtra("listname",listname);
+                intent.putExtra("taskname",taskname);*/
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), i, intent, 0);
+
+                AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                taskd.putalarmstatus(1);
+                handler.updateTaskDetails(taskd);
+                // handler.updateTaskDetails(new TaskDetails(listname,taskname,datetime.getText().toString(),notetext.getText().toString(),uri.getPath(),status));
+
+                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            }
+            else{
+                custom.showDialog();
+            }
+        }
     }
+
+
 
 }
