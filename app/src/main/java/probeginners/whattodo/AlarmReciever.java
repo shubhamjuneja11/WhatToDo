@@ -35,7 +35,7 @@ public class AlarmReciever extends BroadcastReceiver {
         handler.turnalarmoff(taskkey);
         Notification.Builder builder=new Notification.Builder(context)
                 .setContentTitle(taskname)
-                .setSmallIcon(R.drawable.icon)
+                .setSmallIcon(R.drawable.logo)
 
                 //.setSound(Uri.parse("android.resource://" + context.getPackageName() + "/" + R.raw.sanam))
                 .setAutoCancel(true);

@@ -1,7 +1,9 @@
 package navigation;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -40,6 +43,9 @@ public class InboxTask extends AppCompatActivity {
     TextView datetime;
     boolean alarmon=false;
     String alarmtime;
+    RelativeLayout reminder;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +57,7 @@ public class InboxTask extends AppCompatActivity {
         fav = (ImageButton) findViewById(R.id.fav);
         handler = new DatabaseHandler(this);
         datetime = (TextView) findViewById(R.id.reminder);
-
+        reminder=(RelativeLayout)findViewById(R.id.relativelayout1);
 
 
         custom = new CustomDateTimePicker(InboxTask.this,
@@ -92,6 +98,15 @@ public class InboxTask extends AppCompatActivity {
         custom.setDate(Calendar.getInstance());
 
 
+
+        reminder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                custom.showDialog();
+
+            }
+
+        });
 
         //menu listener
 
@@ -160,21 +175,22 @@ public class InboxTask extends AppCompatActivity {
 
         }
     }
-    public void adddata(String name,boolean f,boolean flag){
-       /* Task task = new Task("Inbox",name,f, flag);
-
-
+    public void adddata(String name,boolean flag,boolean fav){
+        SharedPreferences sharedPreferences;
+        sharedPreferences=getSharedPreferences("list", Context.MODE_PRIVATE);
+        int i,d,total;
+        i=sharedPreferences.getInt("task",0);
+        d=sharedPreferences.getInt("detail",0);
+        total=sharedPreferences.getInt("total",0);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putInt("task",i+1);
+        editor.putInt("detail",d+1);
+        editor.putInt("total",total+1);
+        editor.commit();
+        Task task = new Task(i,-1,"Inbox", name, flag, fav);
         handler.addTask(task);
-        Intent intent=new Intent();
-        intent.putExtra("result",true);
-        setResult(Navigation.INBOX_TASK);
-        if(alarmon){
-            alarmtime=datetime.getText().toString();
-            TaskDetails taskDetails=new TaskDetails("Inbox",name,alarmtime,"","",1);
-        taskDetails.putalarmtime(datetime.getText().toString());
-        handler.updateTaskDetails(taskDetails);
-        }
-        finish();*/
+        handler.changeListTotalTask(-1,total);
+        handler.addTaskDetails(d,-1,i,"Inbox",task.getTaskname());
 
     }
     public void setalarm(View view){

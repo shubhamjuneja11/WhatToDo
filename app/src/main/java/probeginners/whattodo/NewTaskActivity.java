@@ -228,14 +228,17 @@ public class NewTaskActivity extends AppCompatActivity {
         d=sharedPreferences.getInt("detail",0);
         SharedPreferences.Editor editor=sharedPreferences.edit();
         editor.putInt("task",i+1);
-        editor.putInt("detail",i+1);
+        editor.putInt("detail",d+1);
         editor.commit();
             Task task = new Task(i,listkey,listname, name, flag, fav);
             list.add(0, task);
             adapter.notifyDataSetChanged();
             handler.addTask(task);
             handler.changeListTotalTask(listkey, adapter.getItemCount());
-            handler.addTaskDetails(i,listkey,d,listname,task.getTaskname());
+
+        handler.addTaskDetails(d,listkey,i,listname,task.getTaskname());
+
+        //handler.addTaskDetails(i,listkey,d,listname,task.getTaskname());
         /*}
         else Toast.makeText(this, "Try a different name", Toast.LENGTH_SHORT).show();*/
     }
