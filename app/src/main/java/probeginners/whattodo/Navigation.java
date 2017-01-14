@@ -50,6 +50,7 @@ import java.util.Locale;
 import classes.List;
 import db.DatabaseHandler;
 import interfaces.ClickListener;
+import navigation.Favourite;
 import navigation.Inbox;
 import navigation.InboxTask;
 import tasklist.RecyclerTouchListener;
@@ -330,7 +331,9 @@ public class Navigation extends AppCompatActivity
             intent.putExtra("taskdone",done);
             intent.putExtra("listkey",-1);
             startActivity(intent);
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.myfavourites) {
+            Intent intent=new Intent(Navigation.this, Favourite.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_slideshow) {
 

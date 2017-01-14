@@ -264,7 +264,7 @@ public class NewTaskActivity extends AppCompatActivity {
         }
     }
 
-    public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+    public  class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         List<Task> list;
 
 
