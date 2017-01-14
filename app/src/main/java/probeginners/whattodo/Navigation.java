@@ -333,9 +333,13 @@ public class Navigation extends AppCompatActivity
             startActivity(intent);
         } else if (id == R.id.myfavourites) {
             Intent intent=new Intent(Navigation.this, Favourite.class);
+            intent.putExtra("decide",0);
             startActivity(intent);
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.scheduledtasks) {
+            Intent intent=new Intent(Navigation.this, Favourite.class);
+            intent.putExtra("decide",1);
+            startActivity(intent);
 
         } else if (id == R.id.nav_manage) {
 

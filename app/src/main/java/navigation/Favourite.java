@@ -43,7 +43,7 @@ public class Favourite extends AppCompatActivity {
     RecyclerView recyclerView;
     DatabaseHandler handler;
     MyAdapter adapter;
-    int positiontoopen,listkey;
+    int positiontoopen,listkey,decide;
 
     ArrayList<Task> list = new ArrayList<>();
 
@@ -55,9 +55,18 @@ public class Favourite extends AppCompatActivity {
         setContentView(R.layout.activity_favourite);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Favourites");
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        query = "select * from " + DatabaseHandler.Task_Table + " where favourite= ?";
+        decide=getIntent().getIntExtra("decide",0);
+        if(decide==0)
+        {query = "select * from " + DatabaseHandler.Task_Table + " where favourite= ?";
+            getSupportActionBar().setTitle("Favourites");
+
+        }
+        else
+        {query = "SELECT * FROM TaskTable a INNER JOIN TaskDetails b ON a.id=b.taskkey WHERE b.alarmstatus= ?";
+            getSupportActionBar().setTitle("Scheduled Tasks");
+
+        }
         handler = new DatabaseHandler(this);
         readdatabase = handler.getReadableDatabase();
         try {

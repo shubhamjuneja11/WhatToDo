@@ -93,7 +93,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
         listname=getIntent().getStringExtra("listname");
         taskname=getIntent().getStringExtra("taskname");
         getSupportActionBar().setTitle(taskname);
-
+        image=(ImageView)findViewById(R.id.alarm);
         //listeners
 
         handler = new DatabaseHandler(this);
@@ -302,6 +302,8 @@ addimage.setOnClickListener(new View.OnClickListener() {
         //calendar.set(Calendar.MINUTE, 23);
         status=1;
         Toast.makeText(TaskDetailsActivity.this, "Alarm on", Toast.LENGTH_SHORT).show();
+        if(image==null)
+            image=(ImageView)findViewById(R.id.alarm);
         image.setImageResource(R.drawable.alarmon);
         Intent intent = new Intent(this, AlarmReciever.class);
         intent.putExtra("taskid",taskey);
