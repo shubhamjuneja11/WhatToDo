@@ -79,5 +79,11 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
-    <!--<string name="default_web_client_ids"> 637473864215-6qu5onukflcpv6fk0lj1dao2jsed169u.apps.googleusercontent.com </string>-->
+
+    <!--Feedback-->
+    <string name="feedbacktype1">Praise</string>
+    <string name="feedbacktype2">Gripe</string>
+    <string name="feedbacktype3">Suggestion</string>
+    <string name="feedbacktype4">Bug</string>
+    <string name="feedbacktype">Select your Feedback type</string>
 </resources>

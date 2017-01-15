@@ -51,6 +51,7 @@ import classes.List;
 import db.DatabaseHandler;
 import interfaces.ClickListener;
 import navigation.Favourite;
+import navigation.FeedbackActivity;
 import navigation.Inbox;
 import navigation.InboxTask;
 import tasklist.RecyclerTouchListener;
@@ -345,7 +346,9 @@ public class Navigation extends AppCompatActivity
             /*Intent intent=new Intent(Navigation.this,SettingsActivity.class);
             startActivity(intent);*/
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.feedback) {
+            Intent intent=new Intent(Navigation.this, FeedbackActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_send) {
 

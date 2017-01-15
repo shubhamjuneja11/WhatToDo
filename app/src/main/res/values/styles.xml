@@ -28,4 +28,12 @@
         <item name="colorControlActivated">@color/black</item>
     </style>
 
+
+
+    <style name="layoutmargin">
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:layout_marginLeft">20dp</item>
+        <item name="android:layout_marginRight">20dp</item>
+    </style>
 </resources>
