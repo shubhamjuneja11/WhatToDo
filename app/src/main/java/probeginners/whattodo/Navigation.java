@@ -341,7 +341,9 @@ public class Navigation extends AppCompatActivity
             intent.putExtra("decide",1);
             startActivity(intent);
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.settings) {
+            /*Intent intent=new Intent(Navigation.this,SettingsActivity.class);
+            startActivity(intent);*/
 
         } else if (id == R.id.nav_share) {
 

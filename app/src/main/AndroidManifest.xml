@@ -34,7 +34,10 @@
         </activity>
         <activity android:name="navigation.Favourite" />
         <activity android:name="navigation.Inbox" />
-        <activity android:name="navigation.InboxTask"></activity>
+        <activity android:name="navigation.InboxTask" />
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"></activity>
     </application>
 
 </manifest>
