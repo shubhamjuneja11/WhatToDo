@@ -15,6 +15,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import db.DatabaseHandler;
+import navigation.SettingsActivity;
 
 /**
  * Created by junejaspc on 30/11/16.
@@ -26,7 +27,7 @@ public class AlarmReciever extends BroadcastReceiver {
        //PendingIntent pendingIntent=PendingIntent.getBroadcast(context,0,intent,0);
         String listname,taskname;
         int taskkey;
-        Uri uri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Uri uri;//= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         /*listname=intent.getStringExtra("listname");*/
         taskname=intent.getStringExtra("taskname");
 
@@ -39,7 +40,11 @@ public class AlarmReciever extends BroadcastReceiver {
 
                 //.setSound(Uri.parse("android.resource://" + context.getPackageName() + "/" + R.raw.sanam))
                 .setAutoCancel(true);
-        builder.setSound(uri);
+        String tone=SettingsActivity.chosenRingtone;
+        if(!tone.equals("None"))
+        builder.setSound(Uri.parse(tone));
+        if(SettingsActivity.vibrate)
+            builder.setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 });
 
 
         // Creates an explicit intent for an Activity in your app
