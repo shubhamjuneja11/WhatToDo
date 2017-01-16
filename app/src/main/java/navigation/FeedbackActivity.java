@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -22,11 +23,14 @@ public class FeedbackActivity extends AppCompatActivity {
     String a, b, c, d;
     boolean f;
     String developeremailid = "shubhamjuneja11@gmail.com";
-
+    Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
+        toolbar=(Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Feedback Form");
         name = (EditText) findViewById(R.id.name);
         email = (EditText) findViewById(R.id.email);
         feedback = (EditText) findViewById(R.id.feedbacktext);

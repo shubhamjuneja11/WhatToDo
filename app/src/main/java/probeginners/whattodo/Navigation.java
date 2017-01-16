@@ -1,6 +1,5 @@
 package probeginners.whattodo;
 
-import android.*;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,7 +16,6 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -39,7 +37,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -52,8 +49,8 @@ import db.DatabaseHandler;
 import interfaces.ClickListener;
 import navigation.Favourite;
 import navigation.FeedbackActivity;
-import navigation.Inbox;
 import navigation.InboxTask;
+import navigation.SettingsActivity;
 import tasklist.RecyclerTouchListener;
 import tasklist.TaskAdapter;
 
@@ -343,8 +340,8 @@ public class Navigation extends AppCompatActivity
             startActivity(intent);
 
         } else if (id == R.id.settings) {
-            /*Intent intent=new Intent(Navigation.this,SettingsActivity.class);
-            startActivity(intent);*/
+            Intent intent=new Intent(Navigation.this, SettingsActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.feedback) {
             Intent intent=new Intent(Navigation.this, FeedbackActivity.class);
