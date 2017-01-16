@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_settings"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -29,95 +30,39 @@
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
     android:layout_below="@+id/appbarlayout">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Notification"
-        android:textSize="20dp"
-        android:textColor="@color/black"
-        />
-    <LinearLayout
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:layout_height="wrap_content"
-        android:weightSum="20"
-        android:layout_marginLeft="40dp"
-        android:id="@+id/notificationsound"
-        >
-<TextView
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:text="Notification Sound"
-    android:layout_weight="10"
-    android:textColor="@color/black"
-
-    />
-<TextView
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_weight="10"
-    android:text="notification sound"
-    android:background="@color/grey"
-
-    />
-    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="20dp"
         android:weightSum="20"
-        >
-        <TextView
+        android:orientation="horizontal">
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        app:srcCompat="@drawable/ic_notifications_black_24dp"/>
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:layout_weight="10"
-            android:text="Vibrate"
-            />
-        <CheckBox
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"/>
-
+            android:orientation="vertical"
+            android:layout_weight="15">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Notification tone"
+                android:textSize="20dp"
+                android:textColor="@color/black"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Default ringtone"/>
+        </LinearLayout>
     </LinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="@color/black"
-        android:layout_marginTop="25dp"
-        ></View>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        >
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Clear Data"
-        android:textSize="20dp"
-        android:layout_marginTop="20dp"
-        android:textColor="@color/black"
-        android:id="@+id/clea"
-        />
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:src="@drawable/delete"
-            android:layout_toRightOf="@id/clea"
-            android:layout_alignBottom="@id/clea"
-             />
-    </RelativeLayout>
-
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/black"
-        android:layout_marginTop="25dp"
+        android:background="@color/grey"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
         ></View>
 
 </LinearLayout>
