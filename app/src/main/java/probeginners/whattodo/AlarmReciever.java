@@ -7,6 +7,7 @@ import android.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -26,24 +27,32 @@ public class AlarmReciever extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
        //PendingIntent pendingIntent=PendingIntent.getBroadcast(context,0,intent,0);
         String listname,taskname;
-        int taskkey;
-        Uri uri;//= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        int taskkey,listkey;
+
         /*listname=intent.getStringExtra("listname");*/
         taskname=intent.getStringExtra("taskname");
-
+        listname=intent.getStringExtra("listname");
         taskkey=intent.getIntExtra("taskkey",0);
+        listkey=intent.getIntExtra("listkey",0);
         DatabaseHandler handler=new DatabaseHandler(context);
         handler.turnalarmoff(taskkey);
         Notification.Builder builder=new Notification.Builder(context)
-                .setContentTitle(taskname)
+                .setContentTitle(listname)
+                .setContentText(taskname)
                 .setSmallIcon(R.drawable.logo)
 
                 //.setSound(Uri.parse("android.resource://" + context.getPackageName() + "/" + R.raw.sanam))
                 .setAutoCancel(true);
-        String tone=SettingsActivity.chosenRingtone;
-        if(!tone.equals("None"))
-        builder.setSound(Uri.parse(tone));
-        if(SettingsActivity.vibrate)
+
+
+        SharedPreferences sharedPreferences=context.getSharedPreferences("settings", Context.MODE_PRIVATE);
+        String chosenRingtone=sharedPreferences.getString("ringtone","");
+        boolean vibrate=sharedPreferences.getBoolean("vibrate",false);
+
+
+        if(!chosenRingtone.equals("None"))
+        builder.setSound(Uri.parse(chosenRingtone));
+        if(vibrate)
             builder.setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 });
 
 
@@ -51,6 +60,8 @@ public class AlarmReciever extends BroadcastReceiver {
         Intent resultIntent = new Intent(context, TaskDetailsActivity.class);
         //resultIntent.putExtra("listname",listname);
         resultIntent.putExtra("taskname",taskname);
+        resultIntent.putExtra("listkey",listkey);
+        resultIntent.putExtra("taskkey",taskkey);
 
 // The stack builder object will contain an artificial back stack for the
 // started Activity.

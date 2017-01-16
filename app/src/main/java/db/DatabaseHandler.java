@@ -24,7 +24,7 @@ import classes.TaskDetails;
 public class DatabaseHandler extends SQLiteOpenHelper {
 
 
-    private static final int DB_VERSION=36;
+    private static final int DB_VERSION=37;
     private static final String DB_NAME="Database";
     public static final String Task_Table="TaskTable";
     public static final String List_Table="ListTable";
@@ -277,5 +277,14 @@ public void turnalarmoff(int id){
         values.put(listkey,l);
         values.put(taskkey,k);
         db.insert(Alarm_Table,null,values);
+    }
+    public int getAlarmId(int t){
+        int k=-1;
+        query="select id from "+Alarm_Table+" where a=?";
+        Cursor cursor=db.rawQuery(query,new String[]{String.valueOf(t)});
+        if(cursor.moveToFirst()){
+            k= cursor.getInt(0);
+        }
+        return k;
     }
 }

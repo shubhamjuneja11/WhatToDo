@@ -257,11 +257,13 @@ addimage.setOnClickListener(new View.OnClickListener() {
             intent.putExtra("taskname",taskname);
             intent.putExtra("taskid",taskey);
             int i;
-            i=sharedPreferences.getInt(String.valueOf(taskey),0);
+            //i=sharedPreferences.getInt(String.valueOf(taskey),0);
+            i=handler.getAlarmId(taskey);
+            handler.deleteAlarm(taskey,false);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(),i, intent, 0);
-            SharedPreferences.Editor editor=sharedPreferences.edit();
+            /*SharedPreferences.Editor editor=sharedPreferences.edit();
             editor.remove(String.valueOf(taskey));
-            editor.commit();
+            editor.commit();*/
             AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
               alarmManager.cancel(pendingIntent);
             status=0;
@@ -294,9 +296,10 @@ addimage.setOnClickListener(new View.OnClickListener() {
         i=sharedPreferences.getInt("alarmnumber",0);
         SharedPreferences.Editor editor=sharedPreferences.edit();
         //editor.putInt(listname+taskname,i);
-        editor.putInt(String.valueOf(taskey),i);
+        //editor.putInt(String.valueOf(taskey),i);
         editor.putInt("alarmnumber",i+1);
         editor.commit();
+        handler.addAlarm(i,listkey,taskey);
         alarmset = true;
         //Calendar calendar = Calendar.getInstance();
         //calendar.set(Calendar.MINUTE, 23);
@@ -307,8 +310,11 @@ addimage.setOnClickListener(new View.OnClickListener() {
         image.setImageResource(R.drawable.alarmon);
         Intent intent = new Intent(this, AlarmReciever.class);
         intent.putExtra("taskid",taskey);
-                /*intent.putExtra("listname",listname);
-                intent.putExtra("taskname",taskname);*/
+                intent.putExtra("listname",listname);
+                intent.putExtra("taskname",taskname);
+                intent.putExtra("listkey",listkey);
+                intent.putExtra("taskkey",taskey);
+
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), i, intent, 0);
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
