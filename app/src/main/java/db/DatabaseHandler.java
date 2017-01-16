@@ -29,6 +29,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public static final String Task_Table="TaskTable";
     public static final String List_Table="ListTable";
     public static final String Details_Task="TaskDetails";
+    public static final String Alarm_Table="AlarmTable";
+
 
     private static final String id="id";
     public static final String listname="listname";
@@ -75,9 +77,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 +listname+" text,"+taskname+" text,"+alarmtime+
                 " text,"+note+" text,"+imagename+" string,"+alarmstatus+" integer"+")";
         db.execSQL(query);
+        query="create table "+Alarm_Table+"("+id+" integer primary key ,"
+                +listkey+" integer,"
+                +taskkey+" integer )";
 
-
-
+        db.execSQL(query);
 
 
     }
@@ -171,6 +175,8 @@ Log.e("abc","delete");
       db.delete(Task_Table,"listkey=?",new String[]{i});
       db.delete(Details_Task,"listkey=?",new String[]{i});
 
+      deleteAlarm(Integer.valueOf(i),true);
+
   }
 
 
@@ -212,6 +218,7 @@ Log.e("abc","updated");
         db.delete(Task_Table,"id=?",new String[]{String.valueOf(primary)});
         db.delete(Details_Task,"taskkey=?",new String[]{String.valueOf(primary)});
 
+        deleteAlarm(primary,false);
     }
 
     /*----------TASK  DETAILS------------*/
@@ -253,4 +260,22 @@ public void turnalarmoff(int id){
     contentValues.put(alarmstatus,0);
     db.update(Details_Task,contentValues,"taskkey=?",new String[]{String.valueOf(Integer.valueOf(id))});
 }
+    public void deleteAlarm(int key,boolean f){
+        if(db==null)
+            db=this.getWritableDatabase();
+        if(f){
+            //listkey
+            db.delete(Alarm_Table,"listkey=?",new String[]{String.valueOf(key)});
+        }
+        else db.delete(Alarm_Table,"taskkey=?",new String[]{String.valueOf(key)});
+    }
+    public void addAlarm(int k,int l,int t){
+        if(db==null)
+            db=this.getWritableDatabase();
+        ContentValues values=new ContentValues();
+        values.put(id,k);
+        values.put(listkey,l);
+        values.put(taskkey,k);
+        db.insert(Alarm_Table,null,values);
+    }
 }
