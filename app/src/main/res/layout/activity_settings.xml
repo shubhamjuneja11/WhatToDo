@@ -33,6 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Notification"
+        android:textSize="20dp"
         android:textColor="@color/black"
         />
     <LinearLayout
@@ -57,14 +58,67 @@
     android:layout_height="wrap_content"
     android:layout_weight="10"
     android:text="notification sound"
+    android:background="@color/grey"
 
     />
     </LinearLayout>
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="20dp"
+        android:weightSum="20"
+        >
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:layout_weight="10"
+            android:text="Vibrate"
+            />
+        <CheckBox
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"/>
+
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/black"
+        android:layout_marginTop="25dp"
+        ></View>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Clear Data"
+        android:textSize="20dp"
+        android:layout_marginTop="20dp"
         android:textColor="@color/black"
+        android:id="@+id/clea"
         />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:src="@drawable/delete"
+            android:layout_toRightOf="@id/clea"
+            android:layout_alignBottom="@id/clea"
+             />
+    </RelativeLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/black"
+        android:layout_marginTop="25dp"
+        ></View>
+
 </LinearLayout>
 </RelativeLayout>

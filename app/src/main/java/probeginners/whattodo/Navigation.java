@@ -24,6 +24,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -63,6 +64,7 @@ public class Navigation extends AppCompatActivity
     private static final int PICK_FROM_GALLERY = 2;
     private static final int NEW_LIST = 11;
     public static final int INBOX_TASK = 3;
+
 
     private static final String IMAGE_DIRECTORY_NAME = "WhatToDo";
     public Uri uri;
@@ -225,7 +227,7 @@ public class Navigation extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.app_name);
-
+        //fun();
         fb = (FloatingActionButton) findViewById(R.id.fab);
         fb.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -257,11 +259,12 @@ public class Navigation extends AppCompatActivity
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
 
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this,2);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
+
 
 
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
@@ -730,4 +733,11 @@ public class Navigation extends AppCompatActivity
                 // permissions this app might request
         }
     }
+    /*public void fun(){
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        SettingsActivity.height = displaymetrics.heightPixels;
+        SettingsActivity.width = displaymetrics.widthPixels;
+    }*/
+
 }

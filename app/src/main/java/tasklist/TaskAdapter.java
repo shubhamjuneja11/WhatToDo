@@ -2,6 +2,8 @@ package tasklist;
 
 
 import android.graphics.Bitmap;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,11 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.io.FileNotFoundException;
 import java.util.List;
 
+import navigation.SettingsActivity;
+import probeginners.whattodo.Navigation;
 import probeginners.whattodo.R;
 
 /**
@@ -43,7 +48,12 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     View itemView= LayoutInflater.from(parent.getContext())
             .inflate(R.layout.mytask_card,parent,false);
-
+       // RelativeLayout relativeLayout=(RelativeLayout)itemView;
+       // GridLayoutManager.LayoutParams params=(GridLayoutManager.LayoutParams)relativeLayout.getLayoutParams();
+        //params.width= SettingsActivity.width;
+        //params.height=SettingsActivity.height;
+        /*params.width= SettingsActivity.width-2*50;
+        params.height=params.width;*/
         return new MyViewHolder(itemView);
     }
 
