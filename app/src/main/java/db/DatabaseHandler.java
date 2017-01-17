@@ -177,12 +177,12 @@ Log.e("ji","ji");
       if(db==null)
           db=this.getWritableDatabase();
 Log.e("abc","delete");
+      deleteAlarm(context,list.getPrimary(),true);
       String i=String.valueOf(Integer.valueOf(list.getPrimary()));
-      db.delete(List_Table,"id=?",new String[]{i});
-      db.delete(Task_Table,"listkey=?",new String[]{i});
       db.delete(Details_Task,"listkey=?",new String[]{i});
+      db.delete(Task_Table,"listkey=?",new String[]{i});
+      db.delete(List_Table,"id=?",new String[]{i});
 
-      deleteAlarm(context,Integer.valueOf(i),true);
 
   }
 
@@ -222,10 +222,10 @@ Log.e("abc","updated");
         if(db==null)
             db=this.getWritableDatabase();
         Log.e("abc","delete");
-        db.delete(Task_Table,"id=?",new String[]{String.valueOf(primary)});
-        db.delete(Details_Task,"taskkey=?",new String[]{String.valueOf(primary)});
-
         deleteAlarm(context,primary,false);
+        db.delete(Details_Task,"taskkey=?",new String[]{String.valueOf(primary)});
+        db.delete(Task_Table,"id=?",new String[]{String.valueOf(primary)});
+
     }
 
     /*----------TASK  DETAILS------------*/
@@ -288,7 +288,7 @@ public void turnalarmoff(Context context,int id){
                 /*intent.putExtra("listname",listname);
                 intent.putExtra("taskname",taskname);
                 intent.putExtra("taskid",taskey);*/
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(context, j, intent, 0);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(context,a[j], intent, 0);
                 AlarmManager alarmManager = (AlarmManager)context.getSystemService(ALARM_SERVICE);
                 alarmManager.cancel(pendingIntent);
             }
@@ -297,6 +297,7 @@ public void turnalarmoff(Context context,int id){
 
             Cursor cursor=db.rawQuery("Select id from "+Alarm_Table+" where taskkey=?",new String[]{String.valueOf(key)});
             a=new int[cursor.getCount()];i=0;
+            Log.e("alarm",cursor.getCount()+"");
             do{
                 if(cursor.moveToFirst()){
                     a[i++]=cursor.getInt(0);
@@ -308,7 +309,7 @@ public void turnalarmoff(Context context,int id){
                 /*intent.putExtra("listname",listname);
                 intent.putExtra("taskname",taskname);
                 intent.putExtra("taskid",taskey);*/
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(context, j, intent, 0);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(context,a[j], intent, 0);
                 AlarmManager alarmManager = (AlarmManager)context.getSystemService(ALARM_SERVICE);
                 alarmManager.cancel(pendingIntent);
             }
@@ -322,7 +323,7 @@ public void turnalarmoff(Context context,int id){
         ContentValues values=new ContentValues();
         values.put(id,k);
         values.put(listkey,l);
-        values.put(taskkey,k);
+        values.put(taskkey,t);
         db.insert(Alarm_Table,null,values);
     }
     public int getAlarmId(int t){

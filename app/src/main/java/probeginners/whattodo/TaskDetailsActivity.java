@@ -272,6 +272,7 @@ addimage.setOnClickListener(new View.OnClickListener() {
 
             task.putalarmstatus(status);
             handler.updateTaskDetails(task);
+            handler.deleteAlarm(this,taskey,false);
             //handler.updateTaskDetails(new TaskDetails(listname,taskname,datetime.getText().toString(),notetext.getText().toString(),uri.getPath(),status));
 
 
