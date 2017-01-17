@@ -49,15 +49,7 @@
                 android:background="@color/white"
 
                 />
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Email-Id"
-                android:id="@+id/email"
-                android:inputType="textEmailAddress"
-                style="@style/layoutmargin"
 
-                />
             <LinearLayout
 
                 android:layout_width="match_parent"
@@ -81,6 +73,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
+                    android:onClick="open"
                     android:src="@drawable/drop_arrow" />
 
             </LinearLayout>
@@ -119,7 +112,7 @@
                 android:layout_height="wrap_content"
                 style="@style/layoutmargin"
                 android:onClick="submit"
-                android:background="@color/background"
+                android:background="@color/colorAccent"
                 android:text="Send Feedback"/>
         </LinearLayout>
 </RelativeLayout>
