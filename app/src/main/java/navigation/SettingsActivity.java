@@ -17,7 +17,9 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import db.DatabaseHandler;
 import probeginners.whattodo.R;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -137,6 +139,8 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void deleteall(View view){
-
+        DatabaseHandler handler=new DatabaseHandler(this);
+        handler.deleteall();
+        Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
     }
 }

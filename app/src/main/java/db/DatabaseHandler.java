@@ -99,6 +99,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             db.execSQL("drop table if exists "+Task_Table);
         db.execSQL("drop table if exists "+List_Table);
         db.execSQL("drop table if exists "+Details_Task);
+        db.execSQL("drop table if exists "+Alarm_Table);
         Log.e("calling","oncreate");
         onCreate(db);
         Log.e("back","again");
@@ -307,13 +308,11 @@ public void turnalarmoff(Context context,int id){
 
             Cursor cursor=db.rawQuery("Select id from "+Alarm_Table+" where taskkey=?",new String[]{String.valueOf(key)});
             a=new int[cursor.getCount()];i=0;
-            Log.e("alarm",cursor.getCount()+"");
             do{
                 if(cursor.moveToFirst()){
                     a[i++]=cursor.getInt(0);
                 }
             }while (cursor.moveToNext());
-            db.delete(Alarm_Table, "taskkey=?", new String[]{String.valueOf(key)});
             for(j=0;j<i;j++) {
                 Intent intent = new Intent(context, AlarmReciever.class);
                 /*intent.putExtra("listname",listname);
@@ -345,4 +344,33 @@ public void turnalarmoff(Context context,int id){
         }
         return k;
     }
+    public void deleteall(){
+        int a[],i,j;
+        if(db==null)
+            db=this.getWritableDatabase();
+        query="select id from "+Alarm_Table;
+        Cursor cursor=db.rawQuery(query,null);
+        a=new int[cursor.getCount()];i=0;
+        do{
+            if(cursor.moveToFirst()){
+                a[i++]=cursor.getInt(0);
+            }
+        }while (cursor.moveToNext());
+        for(j=0;j<i;j++) {
+            Intent intent = new Intent(context, AlarmReciever.class);
+                /*intent.putExtra("listname",listname);
+                intent.putExtra("taskname",taskname);
+                intent.putExtra("taskid",taskey);*/
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context,a[j], intent, 0);
+            AlarmManager alarmManager = (AlarmManager)context.getSystemService(ALARM_SERVICE);
+            alarmManager.cancel(pendingIntent);
+
+        }
+        db.execSQL("drop table if exists "+Task_Table);
+        db.execSQL("drop table if exists "+List_Table);
+        db.execSQL("drop table if exists "+Details_Task);
+        db.execSQL("drop table if exists "+Alarm_Table);
+        onCreate(db);
+    }
+
 }

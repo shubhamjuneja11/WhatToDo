@@ -138,13 +138,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
         ></View>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/grey"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="10dp"
-        ></View>
+
 
 </LinearLayout>
 </RelativeLayout>
