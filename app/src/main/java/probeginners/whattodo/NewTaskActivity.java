@@ -111,7 +111,7 @@ public class NewTaskActivity extends AppCompatActivity {
                 AlertDialog dialog=new AlertDialog.Builder(NewTaskActivity.this)
                         //set message, title, and icon
                         .setTitle("Delete")
-                        .setMessage("Delete Task?")
+                        .setMessage("Delete Task "+list.get(position).getTaskname()+"? ")
                         .setIcon(R.drawable.delete)
 
                         .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
@@ -121,6 +121,7 @@ public class NewTaskActivity extends AppCompatActivity {
                                 list.remove(position);
                                 adapter.notifyDataSetChanged();
                                 dialog.dismiss();
+
                             }
 
                         })

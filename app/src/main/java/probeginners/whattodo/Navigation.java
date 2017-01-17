@@ -38,6 +38,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -423,6 +424,11 @@ public class Navigation extends AppCompatActivity
                     e.printStackTrace();
                     Log.e("my", "bad222");
                 }
+                break;
+
+            case INBOX_TASK:Toast.makeText(this, "Task added to Inbox", Toast.LENGTH_SHORT).show();
+                break;
+
 
         }
     }
@@ -541,10 +547,45 @@ public class Navigation extends AppCompatActivity
 
     //to delete a list
     public void deleteList() {
-        handler.deleteList(this,taskDataList.get(positiontoopen));
-        taskDataList.remove(positiontoopen);
-        adapter.notifyDataSetChanged();
+
+
+        android.app.AlertDialog dialog=new android.app.AlertDialog.Builder(Navigation.this)
+                //set message, title, and icon
+                .setTitle("Delete")
+                .setMessage("Delete List "+taskDataList.get(positiontoopen).getlistname()+"? ")
+                .setIcon(R.drawable.delete)
+
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        handler.deleteList(Navigation.this,taskDataList.get(positiontoopen));
+                        taskDataList.remove(positiontoopen);
+                        adapter.notifyDataSetChanged();
+                        dialog.dismiss();
+
+                    }
+
+                })
+
+
+
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+
+                    }
+                })
+                .create();
+        dialog.show();
+
     }
+
+
+
+
+
+
 
     //to change list icon
     public void changeicon() {
