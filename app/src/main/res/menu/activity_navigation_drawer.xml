@@ -4,37 +4,32 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/inbox"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/inbox"
             android:title="Inbox" />
         <item
-            android:id="@+id/yourlog"
-            android:icon="@drawable/ic_menu_camera"
-
-            android:title="Your Log" />
-        <item
             android:id="@+id/myfavourites"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="My Favourites" />
+            android:icon="@drawable/fav"
+            android:title="Favourite Tasks" />
         <item
             android:id="@+id/scheduledtasks"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/schedule"
             android:title="Scheduled Tasks" />
 
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="Other Options">
         <menu>
             <item
                 android:id="@+id/settings"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/settings"
                 android:title="Settings" />
             <item
                 android:id="@+id/aboutus"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/aboutus"
                 android:title="About Us"/>
             <item
                 android:id="@+id/feedback"
-                android:icon="@drawable/ic_menu_manage"
+                android:icon="@drawable/feedback"
                 android:title="Send Feedback" />
         </menu>
     </item>
