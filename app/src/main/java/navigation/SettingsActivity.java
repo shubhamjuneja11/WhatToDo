@@ -135,4 +135,8 @@ public class SettingsActivity extends AppCompatActivity {
         else v.setText("Off");
         Log.e("tone","hi");
     }
+
+    public void deleteall(View view){
+
+    }
 }

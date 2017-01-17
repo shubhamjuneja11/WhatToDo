@@ -158,7 +158,7 @@ public class Favourite extends AppCompatActivity {
         @Override
         public Favourite.MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.newtask_card, parent, false);
+                    .inflate(R.layout.othertask_card, parent, false);
 
             return new Favourite.MyAdapter.ViewHolder(itemView);
         }
@@ -167,7 +167,8 @@ public class Favourite extends AppCompatActivity {
         public void onBindViewHolder(Favourite.MyAdapter.ViewHolder holder, int position) {
             Task data = list.get(position);
 
-            holder.name.setText(data.getTaskname().toString());
+            holder.name.setText(data.getTaskname());
+            holder.listname.setText(data.getlistname());
             //holder.check.setChecked(data.getflag());
             if (data.getfavourite()) {
                 holder.favourite.setImageResource(R.drawable.heart);
@@ -195,7 +196,7 @@ public class Favourite extends AppCompatActivity {
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-            public TextView name;
+            public TextView name,listname;
             public CheckBox check;
             public ImageButton favourite;
             public CardView cardView;
@@ -204,6 +205,7 @@ public class Favourite extends AppCompatActivity {
                 super(itemView);
 
                 name = (TextView) itemView.findViewById(R.id.name);
+                listname=(TextView)itemView.findViewById(R.id.listname);
                 check = (CheckBox) itemView.findViewById(R.id.check);
                 favourite = (ImageButton) itemView.findViewById(R.id.favourite2);
                 cardView = (CardView) itemView;
