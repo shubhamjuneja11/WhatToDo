@@ -62,6 +62,8 @@ public class AlarmReciever extends BroadcastReceiver {
         resultIntent.putExtra("taskname",taskname);
         resultIntent.putExtra("listkey",listkey);
         resultIntent.putExtra("taskkey",taskkey);
+        resultIntent.putExtra("listname",listname);
+        resultIntent.putExtra("path",true);
 
 // The stack builder object will contain an artificial back stack for the
 // started Activity.

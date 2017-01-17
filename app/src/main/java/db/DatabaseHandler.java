@@ -159,16 +159,26 @@ Log.e("ji","ji");
 
 
     public void ChangeTaskCount(int p,boolean f){
-        String a,b;
-
-        a=String.valueOf(1);
+        String b;
+        int x=0;
+        //a=String.valueOf(1);
         b=String.valueOf(p);
         if(db==null)
-            db=this.getWritableDatabase();
-        if(f)
+            db=this.getReadableDatabase();
+        /*if(f)
          db.execSQL("UPDATE "+List_Table+" SET "+taskcount+" = "+taskcount+" + 1 WHERE "+id+" = ?",new String[]{b});
         else
-            db.execSQL("update "+List_Table+" set "+taskcount+" = "+taskcount+" - ?"+" where "+id+" = ?",new String[]{a,b});
+            db.execSQL("update "+List_Table+" set "+taskcount+" = "+taskcount+" - ?"+" where "+id+" = ?",new String[]{a,b});*/
+        Cursor cursor=db.rawQuery("select taskcount from "+List_Table+" where id=?",new String[]{b});
+        if( cursor.moveToFirst()&&cursor!=null)
+        {x=cursor.getInt(0);
+        if(f)x++;
+        else x--;
+        }
+        db=this.getWritableDatabase();
+        ContentValues values=new ContentValues();
+        values.put(taskcount,String.valueOf(x));
+        db.update(List_Table,values,"id=?",new String[]{b});
 
     }
 

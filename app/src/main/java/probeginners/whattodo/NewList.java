@@ -17,21 +17,20 @@ import android.widget.ImageView;
 public class NewList extends AppCompatActivity {
 Toolbar toolbar;
     private String name;
-    private int count;
+
     EditText editText;
     boolean flag;
     MenuItem done;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_list);
         toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
         editText=(EditText)findViewById(R.id.newtaskname);
-
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -66,7 +65,6 @@ Toolbar toolbar;
          super.onCreateOptionsMenu(menu);
         MenuInflater inflater=getMenuInflater();
         inflater.inflate(R.menu.newlistmenu,menu);
-
         done=menu.findItem(R.id.done);
         done.setEnabled(false);
 
