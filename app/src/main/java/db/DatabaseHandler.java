@@ -1,7 +1,10 @@
 package db;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -12,10 +15,14 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 
 import classes.List;
 import classes.Task;
 import classes.TaskDetails;
+import probeginners.whattodo.AlarmReciever;
+
+import static android.content.Context.ALARM_SERVICE;
 
 /**
  * Created by junejaspc on 1/12/16.
@@ -166,7 +173,7 @@ Log.e("ji","ji");
     }
 
 
-  public void deleteList(List list){
+  public void deleteList(Context context,List list){
       if(db==null)
           db=this.getWritableDatabase();
 Log.e("abc","delete");
@@ -175,7 +182,7 @@ Log.e("abc","delete");
       db.delete(Task_Table,"listkey=?",new String[]{i});
       db.delete(Details_Task,"listkey=?",new String[]{i});
 
-      deleteAlarm(Integer.valueOf(i),true);
+      deleteAlarm(context,Integer.valueOf(i),true);
 
   }
 
@@ -211,14 +218,14 @@ Log.e("abc","updated");
 
     }
 
-    public void deleteTask(int primary){
+    public void deleteTask(Context context,int primary){
         if(db==null)
             db=this.getWritableDatabase();
         Log.e("abc","delete");
         db.delete(Task_Table,"id=?",new String[]{String.valueOf(primary)});
         db.delete(Details_Task,"taskkey=?",new String[]{String.valueOf(primary)});
 
-        deleteAlarm(primary,false);
+        deleteAlarm(context,primary,false);
     }
 
     /*----------TASK  DETAILS------------*/
@@ -253,21 +260,61 @@ Log.e("abc","updated");
                 });
     }
 
-public void turnalarmoff(int id){
+public void turnalarmoff(Context context,int id){
     if(db==null)
         db=this.getWritableDatabase();
     ContentValues contentValues=new ContentValues();
     contentValues.put(alarmstatus,0);
     db.update(Details_Task,contentValues,"taskkey=?",new String[]{String.valueOf(Integer.valueOf(id))});
+    deleteAlarm(context,id,false);
 }
-    public void deleteAlarm(int key,boolean f){
+    public void deleteAlarm(Context context,int key,boolean f){
+        int i,a[],j;
         if(db==null)
             db=this.getWritableDatabase();
         if(f){
             //listkey
-            db.delete(Alarm_Table,"listkey=?",new String[]{String.valueOf(key)});
+
+            Cursor cursor=db.rawQuery("Select id from "+Alarm_Table+" where listkey=?",new String[]{String.valueOf(key)});
+            a=new int[cursor.getCount()];i=0;
+            do{
+            if(cursor.moveToFirst()){
+                a[i++]=cursor.getInt(0);
+            }
+            }while (cursor.moveToNext());
+            db.delete(Alarm_Table, "listkey=?", new String[]{String.valueOf(key)});
+            for(j=0;j<i;j++) {
+                Intent intent = new Intent(context, AlarmReciever.class);
+                /*intent.putExtra("listname",listname);
+                intent.putExtra("taskname",taskname);
+                intent.putExtra("taskid",taskey);*/
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(context, j, intent, 0);
+                AlarmManager alarmManager = (AlarmManager)context.getSystemService(ALARM_SERVICE);
+                alarmManager.cancel(pendingIntent);
+            }
         }
-        else db.delete(Alarm_Table,"taskkey=?",new String[]{String.valueOf(key)});
+        else {
+
+            Cursor cursor=db.rawQuery("Select id from "+Alarm_Table+" where taskkey=?",new String[]{String.valueOf(key)});
+            a=new int[cursor.getCount()];i=0;
+            do{
+                if(cursor.moveToFirst()){
+                    a[i++]=cursor.getInt(0);
+                }
+            }while (cursor.moveToNext());
+            db.delete(Alarm_Table, "taskkey=?", new String[]{String.valueOf(key)});
+            for(j=0;j<i;j++) {
+                Intent intent = new Intent(context, AlarmReciever.class);
+                /*intent.putExtra("listname",listname);
+                intent.putExtra("taskname",taskname);
+                intent.putExtra("taskid",taskey);*/
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(context, j, intent, 0);
+                AlarmManager alarmManager = (AlarmManager)context.getSystemService(ALARM_SERVICE);
+                alarmManager.cancel(pendingIntent);
+            }
+
+            db.delete(Alarm_Table,"taskkey=?",new String[]{String.valueOf(key)});
+        }
     }
     public void addAlarm(int k,int l,int t){
         if(db==null)

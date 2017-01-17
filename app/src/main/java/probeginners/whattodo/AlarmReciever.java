@@ -35,7 +35,7 @@ public class AlarmReciever extends BroadcastReceiver {
         taskkey=intent.getIntExtra("taskkey",0);
         listkey=intent.getIntExtra("listkey",0);
         DatabaseHandler handler=new DatabaseHandler(context);
-        handler.turnalarmoff(taskkey);
+        handler.turnalarmoff(context,taskkey);
         Notification.Builder builder=new Notification.Builder(context)
                 .setContentTitle(listname)
                 .setContentText(taskname)

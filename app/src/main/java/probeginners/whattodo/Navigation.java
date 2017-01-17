@@ -541,7 +541,7 @@ public class Navigation extends AppCompatActivity
 
     //to delete a list
     public void deleteList() {
-        handler.deleteList(taskDataList.get(positiontoopen));
+        handler.deleteList(this,taskDataList.get(positiontoopen));
         taskDataList.remove(positiontoopen);
         adapter.notifyDataSetChanged();
     }

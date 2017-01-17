@@ -69,8 +69,11 @@ public class TaskDetailsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        preparedata();
-        alarmset=task.getAlarmstatus()==1;
+        try {
+            preparedata();
+            alarmset = task.getAlarmstatus() == 1;
+        }
+        catch (Exception e){}
     }
 
     @Override
@@ -252,7 +255,7 @@ addimage.setOnClickListener(new View.OnClickListener() {
             alarmset=false;
             Toast.makeText(TaskDetailsActivity.this, "Alarm off", Toast.LENGTH_SHORT).show();
 
-            Intent intent = new Intent(this, AlarmReciever.class);
+            /*Intent intent = new Intent(this, AlarmReciever.class);
             intent.putExtra("listname",listname);
             intent.putExtra("taskname",taskname);
             intent.putExtra("taskid",taskey);
@@ -260,12 +263,10 @@ addimage.setOnClickListener(new View.OnClickListener() {
             //i=sharedPreferences.getInt(String.valueOf(taskey),0);
             i=handler.getAlarmId(taskey);
             handler.deleteAlarm(taskey,false);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(),i, intent, 0);
-            /*SharedPreferences.Editor editor=sharedPreferences.edit();
-            editor.remove(String.valueOf(taskey));
-            editor.commit();*/
+            /*PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(),i, intent, 0);
+
             AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-              alarmManager.cancel(pendingIntent);
+              alarmManager.cancel(pendingIntent);*/
             status=0;
             image.setImageResource(R.drawable.alarmoff);
 

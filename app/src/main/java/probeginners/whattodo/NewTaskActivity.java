@@ -117,7 +117,7 @@ public class NewTaskActivity extends AppCompatActivity {
                         .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                handler.deleteTask(list.get(position).primary);
+                                handler.deleteTask(NewTaskActivity.this,list.get(position).primary);
                                 list.remove(position);
                                 adapter.notifyDataSetChanged();
                                 dialog.dismiss();
