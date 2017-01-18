@@ -265,6 +265,8 @@ Log.e("abc","updated");
         values.put(taskkey,details.taskkey);
         values.put(this.listname,listname);
         values.put(this.taskname,taskname);
+        values.put(alarmtime,details.getAlarmtime());
+        values.put(alarmstatus,details.getAlarmstatus());
         db.insert(Details_Task,null,values);
     }
 
@@ -361,7 +363,8 @@ public void turnalarmoff(Context context,int id){
             db=this.getWritableDatabase();
         query="select id from "+Alarm_Table;
         Cursor cursor=db.rawQuery(query,null);
-        a=new int[cursor.getCount()];i=0;
+        a=new int[cursor.getCount()];
+        i=0;
         do{
             if(cursor.moveToFirst()){
                 a[i++]=cursor.getInt(0);
@@ -369,9 +372,7 @@ public void turnalarmoff(Context context,int id){
         }while (cursor.moveToNext());
         for(j=0;j<i;j++) {
             Intent intent = new Intent(context, AlarmReciever.class);
-                /*intent.putExtra("listname",listname);
-                intent.putExtra("taskname",taskname);
-                intent.putExtra("taskid",taskey);*/
+
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context,a[j], intent, 0);
             AlarmManager alarmManager = (AlarmManager)context.getSystemService(ALARM_SERVICE);
             alarmManager.cancel(pendingIntent);

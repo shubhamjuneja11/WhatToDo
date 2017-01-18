@@ -71,6 +71,7 @@ public class InboxTask extends AppCompatActivity {
         //image=
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle("New Inbox Task");
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -207,9 +208,10 @@ public class InboxTask extends AppCompatActivity {
         SharedPreferences sharedPreferences;
 
         sharedPreferences=getSharedPreferences("list", Context.MODE_PRIVATE);
-        int i,d,b=0;
+        int i,d;
                 //total,done;
         s=datetime.getText().toString();
+        Log.e("time",s);
         i=sharedPreferences.getInt("task",0);
         taskey=i;
         d=sharedPreferences.getInt("detail",0);
@@ -223,8 +225,8 @@ public class InboxTask extends AppCompatActivity {
         Task task = new Task(i,-1,"Inbox", name, flag, fav);
         handler.addTask(task);
         //handler.changeListTotalTask(-1,total);
-        details=new TaskDetails(i,-1,i,"Inbox",name,"","","",0);
-        handler.updateTaskDetails(details);
+        details=new TaskDetails(d,-1,i,"Inbox",name,s,"","",0);
+        handler.addTaskDetails2(details);
         //if(alarmset){details.putalarmstatus(1);details.putalarmtime(s);}
 
        /* handler.addTaskDetails(d,-1,i,"Inbox",task.getTaskname());
