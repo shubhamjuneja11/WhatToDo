@@ -187,13 +187,13 @@ Log.d("chikni","chameli");
             }
 
         });
-addimage.setOnClickListener(new View.OnClickListener() {
+/*addimage.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
         changeicon();
 
     }
-});
+});*/
         note.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -339,11 +339,12 @@ addimage.setOnClickListener(new View.OnClickListener() {
     /*************** function to change image**************/
 
 
-    public void changeicon() {
+    public void changeicon(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item);
         arrayAdapter.add("Select from Camera");
         arrayAdapter.add("Select from Gallery");
+        arrayAdapter.add("Set Default Image");
         builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -351,6 +352,8 @@ addimage.setOnClickListener(new View.OnClickListener() {
                     useCamera();
                 else if (which == 1)
                     useGallery();
+                else if(which==2)
+                    removeimage();
 
             }
         });
@@ -631,5 +634,10 @@ addimage.setOnClickListener(new View.OnClickListener() {
             }
             ((ViewGroup) view).removeAllViews();
         }
+    }
+    public void removeimage(){
+        task.putimagename("");
+        handler.updateTaskDetails(task);
+        reminderimage.setImageResource(R.drawable.remember);
     }
 }
