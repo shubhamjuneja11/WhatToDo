@@ -223,13 +223,7 @@ public class Navigation extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if(getIntent().getBooleanExtra("path",false)){
-            Log.e("alarm","here");
-            Intent intent =getIntent();
-            intent.setClass(Navigation.this,NewTaskActivity.class);
-            startActivity(intent);
 
-        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

@@ -31,7 +31,7 @@ import static android.content.Context.ALARM_SERVICE;
 public class DatabaseHandler extends SQLiteOpenHelper {
 
 
-    private static final int DB_VERSION=37;
+    private static final int DB_VERSION=38;
     private static final String DB_NAME="Database";
     public static final String Task_Table="TaskTable";
     public static final String List_Table="ListTable";
@@ -84,7 +84,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 +listname+" text,"+taskname+" text,"+alarmtime+
                 " text,"+note+" text,"+imagename+" string,"+alarmstatus+" integer"+")";
         db.execSQL(query);
-        query="create table "+Alarm_Table+"("+id+" integer primary key ,"
+        query="create table "+Alarm_Table+"( "+id+" integer primary key ,"
                 +listkey+" integer,"
                 +taskkey+" integer )";
 
@@ -365,11 +365,12 @@ public void turnalarmoff(Context context,int id){
         Cursor cursor=db.rawQuery(query,null);
         a=new int[cursor.getCount()];
         i=0;
-        do{
+        Log.e("count",cursor.getCount()+"");
+        /*do{
             if(cursor.moveToFirst()){
                 a[i++]=cursor.getInt(0);
             }
-        }while (cursor.moveToNext());
+        }while (cursor.moveToNext());*/
         for(j=0;j<i;j++) {
             Intent intent = new Intent(context, AlarmReciever.class);
 

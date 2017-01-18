@@ -42,6 +42,7 @@ import java.util.Locale;
 import classes.List;
 import classes.TaskDetails;
 import db.DatabaseHandler;
+import navigation.Inbox;
 
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;
@@ -103,6 +104,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -475,5 +477,15 @@ addimage.setOnClickListener(new View.OnClickListener() {
         return cursor.getString(column_index);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
 
+           Intent intent=new Intent(TaskDetailsActivity.this,NewTaskActivity.class);
+            intent.putExtra("listname",listname);
+            intent.putExtra("listkey",listkey);
+            startActivity(intent);
+
+
+    }
 }

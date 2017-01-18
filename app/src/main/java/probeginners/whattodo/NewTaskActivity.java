@@ -60,13 +60,7 @@ public class NewTaskActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if(getIntent().getBooleanExtra("path",false)){
-            Log.e("alarm","here1");
-            Intent intent=getIntent();
-            intent.setClass(NewTaskActivity.this,TaskDetailsActivity.class);
 
-            startActivity(intent);
-        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_task);
         getWindow().setBackgroundDrawableResource(R.drawable.back9);
@@ -405,6 +399,14 @@ public class NewTaskActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
 
+        Intent intent=new Intent(NewTaskActivity.this,Navigation.class);
+        startActivity(intent);
+
+
+    }
 
 }

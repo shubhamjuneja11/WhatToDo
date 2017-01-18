@@ -17,8 +17,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".NewList" />
-        <activity android:name=".NewTaskActivity" />
-        <activity android:name=".TaskDetailsActivity" />
+        <activity android:name=".NewTaskActivity"
+            android:parentActivityName=".Navigation"/>
+        <activity android:name=".TaskDetailsActivity"
+            android:parentActivityName=".NewTaskActivity">
+
+        </activity>
 
         <receiver android:name=".AlarmReciever" />
 

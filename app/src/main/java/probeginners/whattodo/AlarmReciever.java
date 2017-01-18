@@ -57,13 +57,12 @@ public class AlarmReciever extends BroadcastReceiver {
 
 
         // Creates an explicit intent for an Activity in your app
-        Intent resultIntent = new Intent(context, Navigation.class);
+        Intent resultIntent = new Intent(context, TaskDetailsActivity.class);
         //resultIntent.putExtra("listname",listname);
         resultIntent.putExtra("taskname",taskname);
         resultIntent.putExtra("listkey",listkey);
         resultIntent.putExtra("taskkey",taskkey);
         resultIntent.putExtra("listname",listname);
-        resultIntent.putExtra("path",true);
 
 // The stack builder object will contain an artificial back stack for the
 // started Activity.
@@ -72,6 +71,7 @@ public class AlarmReciever extends BroadcastReceiver {
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
 // Adds the back stack for the Intent (but not the Intent itself)
         stackBuilder.addParentStack(TaskDetailsActivity.class);
+
 // Adds the Intent that starts the Activity to the top of the stack
         stackBuilder.addNextIntent(resultIntent);
         PendingIntent resultPendingIntent =
@@ -80,7 +80,6 @@ public class AlarmReciever extends BroadcastReceiver {
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
         builder.setContentIntent(resultPendingIntent);
-
 
 
         //builder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
