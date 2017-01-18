@@ -23,6 +23,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -104,12 +105,13 @@ public class TaskDetailsActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        toolbar.setNavigationIcon(R.drawable.home);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onBackPressed();
+                Intent intent=new Intent(TaskDetailsActivity.this,Navigation.class);
+                startActivity(intent);
             }
         });
 
@@ -488,4 +490,6 @@ addimage.setOnClickListener(new View.OnClickListener() {
 
 
     }
+
+
 }

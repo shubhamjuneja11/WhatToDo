@@ -190,9 +190,9 @@ public class NewTaskActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         MenuInflater inflater = getMenuInflater();
-        if (!flag)
-            inflater.inflate(R.menu.newtaskmenu2, menu);
-        else inflater.inflate(R.menu.newtaskmenu, menu);
+        if (flag)
+            inflater.inflate(R.menu.newtaskmenu, menu);
+       // else inflater.inflate(R.menu.newtaskmenu, menu);
         return true;
     }
 

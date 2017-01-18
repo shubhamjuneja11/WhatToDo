@@ -40,8 +40,6 @@ public class AlarmReciever extends BroadcastReceiver {
                 .setContentTitle(listname)
                 .setContentText(taskname)
                 .setSmallIcon(R.drawable.logo)
-
-                //.setSound(Uri.parse("android.resource://" + context.getPackageName() + "/" + R.raw.sanam))
                 .setAutoCancel(true);
 
 

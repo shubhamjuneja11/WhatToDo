@@ -301,10 +301,10 @@ public void turnalarmoff(Context context,int id){
 
             Cursor cursor=db.rawQuery("Select id from "+Alarm_Table+" where listkey=?",new String[]{String.valueOf(key)});
             a=new int[cursor.getCount()];i=0;
-            do{
-            if(cursor.moveToFirst()){
+
+            if(cursor.moveToFirst())
+                do{
                 a[i++]=cursor.getInt(0);
-            }
             }while (cursor.moveToNext());
             db.delete(Alarm_Table, "listkey=?", new String[]{String.valueOf(key)});
             for(j=0;j<i;j++) {
