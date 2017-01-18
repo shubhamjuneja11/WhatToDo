@@ -37,6 +37,16 @@ public class FeedbackActivity extends AppCompatActivity {
         checkBox = (CheckBox) findViewById(R.id.feedbackcheckbox);
         spinner = (Spinner) findViewById(R.id.spinner);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
     }
 
     public void submit(View view) {

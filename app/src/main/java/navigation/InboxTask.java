@@ -69,8 +69,17 @@ public class InboxTask extends AppCompatActivity {
         reminder=(RelativeLayout)findViewById(R.id.relativelayout1);
         image = (ImageView) findViewById(R.id.alarm);
         //image=
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-                sharedPreferences = getSharedPreferences("list", Context.MODE_PRIVATE);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
+        sharedPreferences = getSharedPreferences("list", Context.MODE_PRIVATE);
         custom = new CustomDateTimePicker(InboxTask.this,
                 new CustomDateTimePicker.ICustomDateTimeListener() {
 

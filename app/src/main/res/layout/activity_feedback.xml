@@ -111,6 +111,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/layoutmargin"
+                android:textColor="@color/white"
                 android:onClick="submit"
                 android:background="@color/colorAccent"
                 android:text="Send Feedback"/>

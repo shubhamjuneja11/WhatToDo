@@ -223,7 +223,13 @@ public class Navigation extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if(getIntent().getBooleanExtra("path",false)){
+            Log.e("alarm","here");
+            Intent intent =getIntent();
+            intent.setClass(Navigation.this,NewTaskActivity.class);
+            startActivity(intent);
 
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -267,13 +273,7 @@ public class Navigation extends AppCompatActivity
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
-        if(getIntent().getBooleanExtra("path",false)){
-            Log.e("alarm","here");
-            Intent intent =getIntent();
-            intent.setClass(Navigation.this,NewTaskActivity.class);
-            startActivity(intent);
 
-        }
 
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
             @Override

@@ -39,6 +39,16 @@ public class SettingsActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Settings");
         v=(TextView)findViewById(R.id.vibrate);
         t=(TextView)findViewById(R.id.tone);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
     }
     public void changetone(View view){
         Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);

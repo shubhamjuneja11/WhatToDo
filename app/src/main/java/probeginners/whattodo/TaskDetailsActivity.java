@@ -101,6 +101,16 @@ public class TaskDetailsActivity extends AppCompatActivity {
         image=(ImageView)findViewById(R.id.alarm);
         //listeners
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
         handler = new DatabaseHandler(this);
         readdatabase = handler.getReadableDatabase();
         preparedata();

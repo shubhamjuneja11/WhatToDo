@@ -60,7 +60,13 @@ public class NewTaskActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if(getIntent().getBooleanExtra("path",false)){
+            Log.e("alarm","here1");
+            Intent intent=getIntent();
+            intent.setClass(NewTaskActivity.this,TaskDetailsActivity.class);
 
+            startActivity(intent);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_task);
         getWindow().setBackgroundDrawableResource(R.drawable.back9);
@@ -69,6 +75,14 @@ public class NewTaskActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
         listname = getIntent().getStringExtra("listname");
         taskdone=getIntent().getIntExtra("taskdone",0);
         listkey=getIntent().getIntExtra("listkey",0);
@@ -98,13 +112,7 @@ public class NewTaskActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
 
-        if(getIntent().getBooleanExtra("path",false)){
-            Log.e("alarm","here1");
-            Intent intent=getIntent();
-            intent.setClass(NewTaskActivity.this,TaskDetailsActivity.class);
 
-            startActivity(intent);
-        }
 
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
             @Override

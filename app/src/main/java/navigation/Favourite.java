@@ -67,6 +67,16 @@ public class Favourite extends AppCompatActivity {
             getSupportActionBar().setTitle("Scheduled Tasks");
 
         }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
         handler = new DatabaseHandler(this);
         readdatabase = handler.getReadableDatabase();
         try {
