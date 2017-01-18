@@ -9,13 +9,16 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -354,12 +357,47 @@ addimage.setOnClickListener(new View.OnClickListener() {
 /*---------Using  Camera---------*/
 
     public void useCamera() {
+        int result = ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA);
+        int result2 = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        boolean flag = false;
+        //If permission is granted returning true
+        Log.e("abc", "1");
+        if (result == PackageManager.PERMISSION_GRANTED && result2 == PackageManager.PERMISSION_GRANTED)
+            flag = true;
+        else {
+            Log.e("abc", "2");
 
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        uri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
-        Log.d("uricamera",uri.toString());
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-        startActivityForResult(cameraIntent, CAMERA_REQUEST);
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    android.Manifest.permission.CAMERA)) {
+                Log.e("abc", "3");
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+                Log.e("abc", "4");
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, CAMERA_REQUEST);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+
+        }
+
+        if (flag) {
+            Log.e("abc", "5");
+
+            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            uri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+            startActivityForResult(cameraIntent, CAMERA_REQUEST);
+        }
 
 
     }
@@ -402,21 +440,42 @@ addimage.setOnClickListener(new View.OnClickListener() {
     }
 
     /*---------Using Gallery----------*/
-    public void useGallery() {
+    public  void useGallery() {
         Intent intent = new Intent();
-        Log.d("abc","gallery");
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         intent.putExtra("crop", "true");
         //intent.putExtra("return-data", true);
-        startActivityForResult(
-                Intent.createChooser(intent, "Complete action using"),
-                PICK_FROM_GALLERY);
+        int result = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE);
+        if (result == PackageManager.PERMISSION_GRANTED) {
+            startActivityForResult(
+                    Intent.createChooser(intent, "Complete action using"),
+                    PICK_FROM_GALLERY);
+        } else {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                Log.e("abc", "3");
 
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
 
+            } else {
+                Log.e("abc", "4");
 
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, PICK_FROM_GALLERY);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
 
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -490,6 +549,52 @@ addimage.setOnClickListener(new View.OnClickListener() {
 
 
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        Log.e("abc", "6");
 
+        switch (requestCode) {
+            case CAMERA_REQUEST: {
+                Log.e("abc", "7");
+
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    uri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                    startActivityForResult(cameraIntent, CAMERA_REQUEST);
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+                    Log.e("abc", "8");
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            case PICK_FROM_GALLERY:
+                Log.e("abc", "11");
+
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.e("abc", "10");
+                    Intent intent = new Intent();
+                    intent.setType("image/*");
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    intent.putExtra("crop", "true");
+                    startActivityForResult(
+                            Intent.createChooser(intent, "Complete action using"),
+                            PICK_FROM_GALLERY);
+                }
+
+                // other 'case' lines to check for other
+                // permissions this app might request
+        }
+    }
 
 }
