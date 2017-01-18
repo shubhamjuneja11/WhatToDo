@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
@@ -47,9 +48,9 @@ public class List {
     public String getIcon(){return icon;}
     public int getPrimary(){return primary;}
     public Bitmap getImage() {
-
-        bitmap = BitmapFactory.decodeFile(icon);
-        return bitmap;
+        if(icon!=null&&!icon.trim().equals(""))
+        return ImageUtils.getInstant().getCompressedBitmap(icon);
+        else return null;
 
     }
 }

@@ -36,6 +36,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -413,6 +414,7 @@ public class Navigation extends AppCompatActivity
                     Uri uri1 = data.getData();
                     List list = taskDataList.get(positiontoopen);
                     list.puticon(getPath(this, uri1));
+                    Log.e("path",getPath(this, uri1));
                     // list.puticon(getRealPathFromURI(uri1));
                     adapter.notifyDataSetChanged();
                     handler.updateList(list);
@@ -765,7 +767,7 @@ public class Navigation extends AppCompatActivity
                     Intent intent = new Intent();
                     intent.setType("image/*");
                     intent.setAction(Intent.ACTION_GET_CONTENT);
-                    intent.putExtra("crop", "true");
+                    //intent.putExtra("crop", "true");
                     startActivityForResult(
                             Intent.createChooser(intent, "Complete action using"),
                             PICK_FROM_GALLERY);
@@ -775,6 +777,26 @@ public class Navigation extends AppCompatActivity
                 // permissions this app might request
         }
     }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        unbindDrawables(findViewById(R.id.drawer_layout));
+        System.gc();
+    }
+
+    private void unbindDrawables(View view) {
+        if (view.getBackground() != null) {
+            view.getBackground().setCallback(null);
+        }
+        if (view instanceof ViewGroup) {
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+                unbindDrawables(((ViewGroup) view).getChildAt(i));
+            }
+            ((ViewGroup) view).removeAllViews();
+        }
+    }
+
     /*public void fun(){
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);

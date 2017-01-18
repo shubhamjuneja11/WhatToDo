@@ -321,10 +321,11 @@ public void turnalarmoff(Context context,int id){
 
             Cursor cursor=db.rawQuery("Select id from "+Alarm_Table+" where taskkey=?",new String[]{String.valueOf(key)});
             a=new int[cursor.getCount()];i=0;
+            if(cursor.moveToFirst())
             do{
-                if(cursor.moveToFirst()){
+
                     a[i++]=cursor.getInt(0);
-                }
+
             }while (cursor.moveToNext());
             for(j=0;j<i;j++) {
                 Intent intent = new Intent(context, AlarmReciever.class);

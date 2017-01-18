@@ -30,6 +30,7 @@ import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -301,38 +302,40 @@ addimage.setOnClickListener(new View.OnClickListener() {
     }
 
 
-    public void alarmsetup(Calendar calendar,ImageView image){
-        int i;
-        i=sharedPreferences.getInt("alarmnumber",0);
-        SharedPreferences.Editor editor=sharedPreferences.edit();
+    public void alarmsetup(Calendar calendar,ImageView image) {
+        if (calendar.getTimeInMillis() >= System.currentTimeMillis()) {
+            int i;
+            i = sharedPreferences.getInt("alarmnumber", 0);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        editor.putInt("alarmnumber",i+1);
-        editor.commit();
-        handler.addAlarm(i,listkey,taskey);
-        alarmset = true;
-        //Calendar calendar = Calendar.getInstance();
-        //calendar.set(Calendar.MINUTE, 23);
-        status=1;
-        Toast.makeText(TaskDetailsActivity.this, "Alarm on", Toast.LENGTH_SHORT).show();
-        if(image==null)
-            image=(ImageView)findViewById(R.id.alarm);
-        image.setImageResource(R.drawable.alarmon);
-        Intent intent = new Intent(this, AlarmReciever.class);
-        intent.putExtra("taskid",taskey);
-                intent.putExtra("listname",listname);
-                intent.putExtra("taskname",taskname);
-                intent.putExtra("listkey",listkey);
-                intent.putExtra("taskkey",taskey);
+            editor.putInt("alarmnumber", i + 1);
+            editor.commit();
+            handler.addAlarm(i, listkey, taskey);
+            alarmset = true;
+            //Calendar calendar = Calendar.getInstance();
+            //calendar.set(Calendar.MINUTE, 23);
+            status = 1;
+            Toast.makeText(TaskDetailsActivity.this, "Alarm on", Toast.LENGTH_SHORT).show();
+            if (image == null)
+                image = (ImageView) findViewById(R.id.alarm);
+            image.setImageResource(R.drawable.alarmon);
+            Intent intent = new Intent(this, AlarmReciever.class);
+            intent.putExtra("taskid", taskey);
+            intent.putExtra("listname", listname);
+            intent.putExtra("taskname", taskname);
+            intent.putExtra("listkey", listkey);
+            intent.putExtra("taskkey", taskey);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), i, intent, 0);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), i, intent, 0);
 
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        task.putalarmstatus(status);
-        handler.updateTaskDetails(task);
-        // handler.updateTaskDetails(new TaskDetails(listname,taskname,datetime.getText().toString(),notetext.getText().toString(),uri.getPath(),status));
-        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+            task.putalarmstatus(status);
+            handler.updateTaskDetails(task);
+            // handler.updateTaskDetails(new TaskDetails(listname,taskname,datetime.getText().toString(),notetext.getText().toString(),uri.getPath(),status));
+            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        }
+        else Toast.makeText(this, "Incorrect time", Toast.LENGTH_SHORT).show();
     }
-
     /*************** function to change image**************/
 
 
@@ -599,7 +602,7 @@ addimage.setOnClickListener(new View.OnClickListener() {
                     Intent intent = new Intent();
                     intent.setType("image/*");
                     intent.setAction(Intent.ACTION_GET_CONTENT);
-                    intent.putExtra("crop", "true");
+                    //intent.putExtra("crop", "true");
                     startActivityForResult(
                             Intent.createChooser(intent, "Complete action using"),
                             PICK_FROM_GALLERY);
@@ -610,5 +613,23 @@ addimage.setOnClickListener(new View.OnClickListener() {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
 
+        unbindDrawables(findViewById(R.id.activity_task_details));
+        System.gc();
+    }
+
+    private void unbindDrawables(View view) {
+        if (view.getBackground() != null) {
+            view.getBackground().setCallback(null);
+        }
+        if (view instanceof ViewGroup) {
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+                unbindDrawables(((ViewGroup) view).getChildAt(i));
+            }
+            ((ViewGroup) view).removeAllViews();
+        }
+    }
 }

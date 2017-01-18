@@ -3,6 +3,9 @@ package classes;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+
 import probeginners.whattodo.TaskDetailsActivity;
 
 /**
@@ -66,8 +69,8 @@ public class TaskDetails {
 
     public Bitmap getImage() {
 
-        bitmap = BitmapFactory.decodeFile(imagename);
-        return bitmap;
-
+        if(imagename!=null&&!imagename.trim().equals(""))
+            return ImageUtils.getInstant().getCompressedBitmap(imagename);
+        else return null;
     }
 }
