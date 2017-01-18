@@ -94,7 +94,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
         notetext = (TextView) findViewById(R.id.note);
         alarm = (ImageView) findViewById(R.id.alarm);
         reminderimage=(ImageView)findViewById(R.id.reminderimage);
-        sharedPreferences = getSharedPreferences("alarm", Context.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("list", Context.MODE_PRIVATE);
         listname=getIntent().getStringExtra("listname");
         taskname=getIntent().getStringExtra("taskname");
         getSupportActionBar().setTitle(taskname);
@@ -257,25 +257,13 @@ addimage.setOnClickListener(new View.OnClickListener() {
             alarmset=false;
             Toast.makeText(TaskDetailsActivity.this, "Alarm off", Toast.LENGTH_SHORT).show();
 
-            /*Intent intent = new Intent(this, AlarmReciever.class);
-            intent.putExtra("listname",listname);
-            intent.putExtra("taskname",taskname);
-            intent.putExtra("taskid",taskey);
-            int i;
-            //i=sharedPreferences.getInt(String.valueOf(taskey),0);
-            i=handler.getAlarmId(taskey);
-            handler.deleteAlarm(taskey,false);
-            /*PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(),i, intent, 0);
 
-            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-              alarmManager.cancel(pendingIntent);*/
             status=0;
             image.setImageResource(R.drawable.alarmoff);
 
             task.putalarmstatus(status);
             handler.updateTaskDetails(task);
             handler.deleteAlarm(this,taskey,false);
-            //handler.updateTaskDetails(new TaskDetails(listname,taskname,datetime.getText().toString(),notetext.getText().toString(),uri.getPath(),status));
 
 
 
@@ -299,8 +287,7 @@ addimage.setOnClickListener(new View.OnClickListener() {
         int i;
         i=sharedPreferences.getInt("alarmnumber",0);
         SharedPreferences.Editor editor=sharedPreferences.edit();
-        //editor.putInt(listname+taskname,i);
-        //editor.putInt(String.valueOf(taskey),i);
+
         editor.putInt("alarmnumber",i+1);
         editor.commit();
         handler.addAlarm(i,listkey,taskey);

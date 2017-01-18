@@ -255,7 +255,18 @@ Log.e("abc","updated");
         db.insert(Details_Task,null,values);
     }
 
+    public void addTaskDetails2(TaskDetails details){
+        if(db==null)
+            db=this.getWritableDatabase();
 
+        ContentValues values=new ContentValues();
+        values.put(this.id,details.primary);
+        values.put(listkey,details.listkey);
+        values.put(taskkey,details.taskkey);
+        values.put(this.listname,listname);
+        values.put(this.taskname,taskname);
+        db.insert(Details_Task,null,values);
+    }
 
     public void updateTaskDetails(TaskDetails taskDetails){
         if(db==null)

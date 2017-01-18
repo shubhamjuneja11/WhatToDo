@@ -433,7 +433,7 @@ public class Navigation extends AppCompatActivity
                 }
                 break;
 
-            case INBOX_TASK:Toast.makeText(this, "Task added to Inbox", Toast.LENGTH_SHORT).show();
+            case INBOX_TASK:
                 break;
 
 
@@ -698,7 +698,7 @@ public class Navigation extends AppCompatActivity
     }
 
     /*---------Using Gallery----------*/
-    public void useGallery() {
+    public  void useGallery() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);

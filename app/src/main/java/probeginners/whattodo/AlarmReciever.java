@@ -57,7 +57,7 @@ public class AlarmReciever extends BroadcastReceiver {
 
 
         // Creates an explicit intent for an Activity in your app
-        Intent resultIntent = new Intent(context, TaskDetailsActivity.class);
+        Intent resultIntent = new Intent(context, Navigation.class);
         //resultIntent.putExtra("listname",listname);
         resultIntent.putExtra("taskname",taskname);
         resultIntent.putExtra("listkey",listkey);
