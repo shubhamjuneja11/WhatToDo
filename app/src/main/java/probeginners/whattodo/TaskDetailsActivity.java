@@ -18,6 +18,8 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -113,8 +115,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(TaskDetailsActivity.this,Navigation.class);
-                startActivity(intent);
+               onBackPressed();
             }
         });
 
@@ -542,10 +543,22 @@ addimage.setOnClickListener(new View.OnClickListener() {
     public void onBackPressed() {
         super.onBackPressed();
 
-           Intent intent=new Intent(TaskDetailsActivity.this,NewTaskActivity.class);
-            intent.putExtra("listname",listname);
-            intent.putExtra("listkey",listkey);
-            startActivity(intent);
+        Intent upIntent = NavUtils.getParentActivityIntent(this);
+        upIntent.putExtra("listname",listname);
+        upIntent.putExtra("listkey",listkey);
+        if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+            // This activity is NOT part of this app's task, so create a new task
+            // when navigating up, with a synthesized back stack.
+            TaskStackBuilder.create(this)
+                    // Add all of this activity's parents to the back stack
+                    .addNextIntentWithParentStack(upIntent)
+                    // Navigate up to the closest parent
+                    .startActivities();
+        } else {
+            // This activity is part of this app's task, so simply
+            // navigate up to the logical parent activity.
+            NavUtils.navigateUpTo(this, upIntent);
+        }
 
 
     }
@@ -596,5 +609,6 @@ addimage.setOnClickListener(new View.OnClickListener() {
                 // permissions this app might request
         }
     }
+
 
 }

@@ -11,6 +11,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -73,6 +75,7 @@ public class NewTaskActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 onBackPressed();
             }
         });
@@ -208,6 +211,8 @@ public class NewTaskActivity extends AppCompatActivity {
                 fav.setImageResource(R.drawable.favourite);
                 return true;
             }
+
+
         }
         return false;
     }
@@ -403,8 +408,20 @@ public class NewTaskActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-        Intent intent=new Intent(NewTaskActivity.this,Navigation.class);
-        startActivity(intent);
+        Intent upIntent = NavUtils.getParentActivityIntent(NewTaskActivity.this);
+        if (NavUtils.shouldUpRecreateTask(NewTaskActivity.this, upIntent)) {
+            // This activity is NOT part of this app's task, so create a new task
+            // when navigating up, with a synthesized back stack.
+            TaskStackBuilder.create(NewTaskActivity.this)
+                    // Add all of this activity's parents to the back stack
+                    .addNextIntentWithParentStack(upIntent)
+                    // Navigate up to the closest parent
+                    .startActivities();
+        } else {
+            // This activity is part of this app's task, so simply
+            // navigate up to the logical parent activity.
+            NavUtils.navigateUpTo(NewTaskActivity.this, upIntent);
+        }
 
 
     }

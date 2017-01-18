@@ -18,6 +18,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".NewList" />
         <activity android:name=".NewTaskActivity"
+            android:parentActivityName=".Navigation"
             />
         <activity android:name=".TaskDetailsActivity"
             android:parentActivityName=".NewTaskActivity">
@@ -29,7 +30,6 @@
         <activity
             android:name=".Navigation"
             android:label="@string/title_activity_navigation"
-            android:noHistory="true"
             android:theme="@style/AppTheme">
             <intent-filter android:label="@string/app_name">
                 <action android:name="android.intent.action.MAIN" />
