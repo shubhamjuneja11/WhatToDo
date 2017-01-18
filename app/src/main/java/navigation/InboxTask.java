@@ -266,22 +266,25 @@ public class InboxTask extends AppCompatActivity {
             }
         }
     }
-    public void alarmsetup(Calendar calendar,ImageView image){
-        int i;
-        i=sharedPreferences.getInt("alarmnumber",0);
-        SharedPreferences.Editor editor=sharedPreferences.edit();
+    public void alarmsetup(Calendar calendar,ImageView image) {
+        if (calendar.getTimeInMillis() >= System.currentTimeMillis()) {
+            int i;
+            i = sharedPreferences.getInt("alarmnumber", 0);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        editor.putInt("alarmnumber",i+1);
-        editor.commit();
-        handler.addAlarm(i,-1,taskey);
-        alarmset = true;
-        click=true;
-        status=1;
-        Toast.makeText(InboxTask.this, "Alarm on", Toast.LENGTH_SHORT).show();
-        if(image==null)
-            image=(ImageView)findViewById(R.id.alarm);
-        image.setImageResource(R.drawable.alarmon);
+            editor.putInt("alarmnumber", i + 1);
+            editor.commit();
+            handler.addAlarm(i, -1, taskey);
+            alarmset = true;
+            click = true;
+            status = 1;
+            Toast.makeText(InboxTask.this, "Alarm on", Toast.LENGTH_SHORT).show();
+            if (image == null)
+                image = (ImageView) findViewById(R.id.alarm);
+            image.setImageResource(R.drawable.alarmon);
 
+        }
+        else Toast.makeText(this, "Invalid time", Toast.LENGTH_SHORT).show();
     }
 /*public void cancelalarm(){
     Intent intent = new Intent(this, AlarmReciever.class);

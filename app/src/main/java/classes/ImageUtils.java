@@ -102,7 +102,7 @@ public class ImageUtils {
             e.printStackTrace();
         }
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 50, out);//85
+        scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 40, out);//85
 
         byte[] byteArray = out.toByteArray();
 

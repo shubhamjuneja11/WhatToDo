@@ -334,7 +334,7 @@ Log.d("chikni","chameli");
             // handler.updateTaskDetails(new TaskDetails(listname,taskname,datetime.getText().toString(),notetext.getText().toString(),uri.getPath(),status));
             alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         }
-        else Toast.makeText(this, "Incorrect time", Toast.LENGTH_SHORT).show();
+        else Toast.makeText(this, "Invalid time", Toast.LENGTH_SHORT).show();
     }
     /*************** function to change image**************/
 
