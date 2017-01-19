@@ -392,11 +392,13 @@ public class Navigation extends AppCompatActivity
 
                     /****************important***************/
 
-                    String x = uri.getPath();
+
                     /******************************/
-                    list.puticon(x);
+
+                    list.puticon(getPath(this,uri));
                     adapter.notifyDataSetChanged();
                     handler.updateList(list);
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -409,13 +411,11 @@ public class Navigation extends AppCompatActivity
                 try {
                     Log.e("abc", "17");
 
-                    Bundle extras = data.getExtras();
+
                     //if (extras != null) {
                     Uri uri1 = data.getData();
                     List list = taskDataList.get(positiontoopen);
                     list.puticon(getPath(this, uri1));
-                    Log.e("path",getPath(this, uri1));
-                    // list.puticon(getRealPathFromURI(uri1));
                     adapter.notifyDataSetChanged();
                     handler.updateList(list);
 

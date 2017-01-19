@@ -286,20 +286,7 @@ public class InboxTask extends AppCompatActivity {
         }
         else Toast.makeText(this, "Invalid time", Toast.LENGTH_SHORT).show();
     }
-/*public void cancelalarm(){
-    Intent intent = new Intent(this, AlarmReciever.class);
-    intent.putExtra("listname","Inbox");
-    intent.putExtra("taskname",taskname.getText().toString());
-    intent.putExtra("taskid",taskey);
 
-    i=sharedPreferences.getInt(String.valueOf(taskey),0);
-    PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(),i, intent, 0);
-    SharedPreferences.Editor editor=sharedPreferences.edit();
-    editor.remove(String.valueOf(taskey));
-    editor.commit();
-    AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-    alarmManager.cancel(pendingIntent);
-}*/
 public void onalarm(Calendar calendar) {
     if (calendar != null) {
         Intent intent = new Intent(this, AlarmReciever.class);

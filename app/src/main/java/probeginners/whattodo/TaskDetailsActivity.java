@@ -403,6 +403,7 @@ Log.d("chikni","chameli");
             Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             uri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
             cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+
             startActivityForResult(cameraIntent, CAMERA_REQUEST);
         }
 
@@ -492,9 +493,10 @@ Log.d("chikni","chameli");
                 try {
                     Log.d("set","image");
                     /****************important***************/
-                    reminderimage.setImageBitmap(BitmapFactory.decodeFile(uri.getPath()));
-                    task.putimagename(uri.getPath());
+                    //reminderimage.setImageBitmap(BitmapFactory.decodeFile(uri.getPath()));
+                    task.putimagename(Navigation.getPath(this,uri));
                     handler.updateTaskDetails(task);
+                    reminderimage.setImageBitmap(task.getImage());
                     /******************************/
 
 
@@ -512,9 +514,9 @@ Log.d("chikni","chameli");
 
                     task.putimagename(Navigation.getPath(this,uri1));
                     handler.updateTaskDetails(task);
-                    reminderimage.setImageBitmap(BitmapFactory.decodeFile(Navigation.getPath(this,uri1)));
-                    //task.putimagename(getRealPathFromURI(uri1));
-                    Log.d("abc",getRealPathFromURI(uri1));
+                    //reminderimage.setImageBitmap(BitmapFactory.decodeFile(Navigation.getPath(this,uri1)));
+                    reminderimage.setImageBitmap(task.getImage());
+
                     Log.d("abc",Navigation.getPath(this,uri1));
                     if(task.getImage()==null)
                         Log.d("abc","nullbava");
@@ -535,7 +537,7 @@ Log.d("chikni","chameli");
     /**************
      * function  to get path of image from gallery
      ***************/
-    public String getRealPathFromURI(Uri uri) {
+    /*public String getRealPathFromURI(Uri uri) {
         String[] projection = {MediaStore.Images.Media.DATA};
         @SuppressWarnings("deprecation")
         Cursor cursor = managedQuery(uri, projection, null, null, null);
@@ -543,7 +545,7 @@ Log.d("chikni","chameli");
                 .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
         cursor.moveToFirst();
         return cursor.getString(column_index);
-    }
+    }*/
 
     @Override
     public void onBackPressed() {
@@ -580,10 +582,17 @@ Log.d("chikni","chameli");
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    /*Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     uri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
                     cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-                    startActivityForResult(cameraIntent, CAMERA_REQUEST);
+                    startActivityForResult(cameraIntent, CAMERA_REQUEST);*/
+                    Intent i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+
+                    File file=getOutputMediaFile(1);
+                    uri = Uri.fromFile(file); // create
+                    i.putExtra(MediaStore.EXTRA_OUTPUT,uri); // set the image file
+
+                    startActivityForResult(i, CAMERA_REQUEST);
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
 
