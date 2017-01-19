@@ -24,7 +24,7 @@
                 android:icon="@drawable/settings"
                 android:title="Settings" />
             <item
-                android:id="@+id/aboutus"
+                android:id="@+id/help"
                 android:icon="@drawable/aboutus"
                 android:title="Help"/>
             <item

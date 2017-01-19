@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
+
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="false"
@@ -17,13 +18,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".NewList" />
-        <activity android:name=".NewTaskActivity"
-            android:parentActivityName=".Navigation"
-            />
-        <activity android:name=".TaskDetailsActivity"
-            android:parentActivityName=".NewTaskActivity">
-
-        </activity>
+        <activity
+            android:name=".NewTaskActivity"
+            android:parentActivityName=".Navigation" />
+        <activity
+            android:name=".TaskDetailsActivity"
+            android:parentActivityName=".NewTaskActivity"></activity>
 
         <receiver android:name=".AlarmReciever" />
 
@@ -44,6 +44,7 @@
             android:name="navigation.SettingsActivity"
             android:label="@string/title_activity_settings" />
         <activity android:name="navigation.FeedbackActivity" />
+        <activity android:name=".Help"></activity>
     </application>
 
 </manifest>

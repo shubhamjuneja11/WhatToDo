@@ -353,8 +353,9 @@ public class Navigation extends AppCompatActivity
             Intent intent=new Intent(Navigation.this, FeedbackActivity.class);
             startActivity(intent);
 
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.help) {
+            Intent intent=new Intent(Navigation.this, Help.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -398,7 +399,6 @@ public class Navigation extends AppCompatActivity
                     list.puticon(getPath(this,uri));
                     adapter.notifyDataSetChanged();
                     handler.updateList(list);
-
 
                 } catch (Exception e) {
                     e.printStackTrace();
