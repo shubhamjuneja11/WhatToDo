@@ -32,7 +32,7 @@ import static android.content.Context.ALARM_SERVICE;
 public class DatabaseHandler extends SQLiteOpenHelper {
 
 
-    private static final int DB_VERSION=40;
+    private static final int DB_VERSION=41;
     private static final String DB_NAME="Database";
     public static final String Task_Table="TaskTable";
     public static final String List_Table="ListTable";
@@ -69,6 +69,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        create(db);
+        setdefaultdb(db,new List(1,"My Tasks", 0, 0, ""));
+
+
+    }
+    public void create(SQLiteDatabase db){
         query="create table "+Task_Table+"("+id+" integer primary key,"
                 +listkey+" integer ,"
                 +listname+" text,"+taskname+" text ,"+completed+
@@ -90,10 +96,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 +taskkey+" integer )";
 
         db.execSQL(query);
-
-        setdefaultdb(db,new List(1,"My Tasks", 0, 0, ""));
-
-
     }
 public void setdefaultdb(SQLiteDatabase db,List list){
     if(db==null)
@@ -396,7 +398,7 @@ public void turnalarmoff(Context context,int id){
         db.execSQL("drop table if exists "+List_Table);
         db.execSQL("drop table if exists "+Details_Task);
         db.execSQL("drop table if exists "+Alarm_Table);
-        onCreate(db);
+        create(db);
     }
 
 }

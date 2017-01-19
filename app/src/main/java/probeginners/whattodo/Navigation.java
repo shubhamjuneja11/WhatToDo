@@ -359,6 +359,10 @@ public class Navigation extends AppCompatActivity
             Intent intent=new Intent(Navigation.this, Help.class);
             startActivity(intent);
         }
+        else if(id==R.id.hel){
+            Intent intent=new Intent(Navigation.this,Info.class);
+            startActivity(intent);
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

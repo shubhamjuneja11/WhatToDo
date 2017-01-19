@@ -151,6 +151,6 @@ public class SettingsActivity extends AppCompatActivity {
     public void deleteall(View view){
         DatabaseHandler handler=new DatabaseHandler(this);
         handler.deleteall();
-        Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Cleared", Toast.LENGTH_SHORT).show();
     }
 }

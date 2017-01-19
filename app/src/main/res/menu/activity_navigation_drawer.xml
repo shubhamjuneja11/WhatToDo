@@ -14,6 +14,10 @@
             android:id="@+id/scheduledtasks"
             android:icon="@drawable/schedule"
             android:title="Scheduled Tasks" />
+        <item
+            android:id="@+id/hel"
+            android:icon="@drawable/help"
+            android:title="Help" />
 
     </group>
 
