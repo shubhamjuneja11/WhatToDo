@@ -1,5 +1,6 @@
 package probeginners.whattodo;
 
+import android.app.ProgressDialog;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -225,7 +226,10 @@ public class Navigation extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_navigation);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.app_name);
@@ -277,10 +281,10 @@ public class Navigation extends AppCompatActivity
 
             @Override
             public void onLongClick(View view, int position) {
-
+                positiontoopen=position;
+                deleteList();
             }
         }));
-
     }
 
     @Override
@@ -790,7 +794,6 @@ public class Navigation extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         unbindDrawables(findViewById(R.id.drawer_layout));
         System.gc();
     }
