@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -31,7 +32,7 @@ import static android.content.Context.ALARM_SERVICE;
 public class DatabaseHandler extends SQLiteOpenHelper {
 
 
-    private static final int DB_VERSION=38;
+    private static final int DB_VERSION=40;
     private static final String DB_NAME="Database";
     public static final String Task_Table="TaskTable";
     public static final String List_Table="ListTable";
@@ -90,9 +91,20 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         db.execSQL(query);
 
+        setdefaultdb(db,new List(1,"My Tasks", 0, 0, ""));
+
 
     }
-
+public void setdefaultdb(SQLiteDatabase db,List list){
+    if(db==null)
+        db=this.getWritableDatabase();
+    ContentValues values=new ContentValues();
+    values.put(id,list.getPrimary());
+    values.put(listname,list.getlistname());
+    values.put(totaltask,list.getTotaltasks());
+    values.put(listimage,list.getIcon());
+    db.insert(List_Table,null,values);
+}
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.e("upgrade","called");

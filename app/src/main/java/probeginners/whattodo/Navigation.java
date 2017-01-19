@@ -218,7 +218,6 @@ public class Navigation extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        Log.e("resuming", "ffff");
         preparedata();
     }
 
@@ -239,7 +238,6 @@ public class Navigation extends AppCompatActivity
                 startActivityForResult(intent,INBOX_TASK);
             }
         });
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -376,7 +374,7 @@ public class Navigation extends AppCompatActivity
                     SharedPreferences sharedPreferences;
                     sharedPreferences=getSharedPreferences("list",Context.MODE_PRIVATE);
                     int i;
-                    i=sharedPreferences.getInt("list",0);
+                    i=sharedPreferences.getInt("list",1);
                     SharedPreferences.Editor editor=sharedPreferences.edit();
                     editor.putInt("list",i+1);
                     editor.commit();

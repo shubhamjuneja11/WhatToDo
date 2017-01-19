@@ -86,4 +86,9 @@
     <string name="feedbacktype3">Suggestion</string>
     <string name="feedbacktype4">Bug</string>
     <string name="feedbacktype">Select your Feedback type</string>
+    <string name="aboutapp">In our day-to-day life we come across lots of tasks concerning different jobs and we cannot remember them because of our busy schedule and suffer later on.
+WhatToDo helps you by providing an easy and efficient medium to categorize these tasks according to their specific jobs.
+It is different from other apps as it provide you lots of features as it help you memorizing by providing a method to set image for different list and their sub-tasks,write a note for them and set alarms to remind you on time.
+It is very easy to use and will definitely help you in making your lifestyle easy.
+</string>
 </resources>
