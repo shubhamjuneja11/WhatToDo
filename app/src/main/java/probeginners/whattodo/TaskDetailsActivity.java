@@ -111,7 +111,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        toolbar.setNavigationIcon(R.drawable.home);
+
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -614,7 +614,12 @@ Log.d("chikni","chameli");
                     Intent intent = new Intent();
                     intent.setType("image/*");
                     intent.setAction(Intent.ACTION_GET_CONTENT);
-                    //intent.putExtra("crop", "true");
+
+                    intent.putExtra("aspectX", 1);
+                    intent.putExtra("aspectY", 1);
+                    intent.putExtra("outputX", 96);
+                    intent.putExtra("outputY", 96);
+                    intent.putExtra("noFaceDetection", true);
                     startActivityForResult(
                             Intent.createChooser(intent, "Complete action using"),
                             PICK_FROM_GALLERY);

@@ -411,9 +411,14 @@ public class Navigation extends AppCompatActivity
 
 
                     //if (extras != null) {
+                    if(data==null)
+                        Log.e("hi12","ss");
                     Uri uri1 = data.getData();
+
+                    if(uri1==null)Log.e("hi12","pp");
                     List list = taskDataList.get(positiontoopen);
                     list.puticon(getPath(this, uri1));
+                    Log.e("hi12",getPath(this, uri1));
                     adapter.notifyDataSetChanged();
                     handler.updateList(list);
 
@@ -696,7 +701,14 @@ public class Navigation extends AppCompatActivity
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        intent.putExtra("crop", "true");
+
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        intent.putExtra("outputX", 96);
+        intent.putExtra("outputY", 96);
+        intent.putExtra("noFaceDetection", true);
+
+
         //intent.putExtra("return-data", true);
         int result = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE);
         if (result == PackageManager.PERMISSION_GRANTED) {
