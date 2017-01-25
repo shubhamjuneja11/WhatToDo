@@ -9,35 +9,22 @@
     tools:context="probeginners.whattodo.NewList"
     android:background="@drawable/back9"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
-<TextView
-    android:layout_width="100dp"
-    android:layout_height="wrap_content"
-    android:text="List Name"
-    android:layout_marginLeft="30dp"
-    android:textColor="@color/black"
-    android:textStyle="bold"
-    android:layout_marginTop="30dp"
-    android:gravity="center"
-    android:textSize="15dp"
-    android:background="@drawable/rounded_corners"
-    android:id="@+id/listnametag"/>
 
 
 
-<EditText
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:layout_below="@id/listnametag"
-    android:id="@+id/newtaskname"
-android:layout_marginRight="30dp"
-    android:layout_marginTop="20dp"
-android:hint="Enter new list name....."
-android:layout_alignLeft="@id/listnametag"
-    android:background="@drawable/rounded_corners"
-    android:textColor="@color/black"
-    android:textStyle="italic"
-    android:textSize="20dp"
-    android:textColorHint="@color/hintcolor"
-    />
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        >
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="User Name"
+            android:id="@+id/newtaskname"
+            />
+    </android.support.design.widget.TextInputLayout>
+
 
     </RelativeLayout>

@@ -30,6 +30,7 @@ Toolbar toolbar;
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle("Add New List");
         editText=(EditText)findViewById(R.id.newtaskname);
         editText.addTextChangedListener(new TextWatcher() {
             @Override
