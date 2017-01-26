@@ -192,11 +192,13 @@ public class Favourite extends AppCompatActivity {
                 holder.name.setPaintFlags(holder.name.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 holder.cardView.setCardBackgroundColor(Color.parseColor("#cccccc"));
                 holder.favourite.setBackgroundColor(Color.parseColor("#cccccc"));
+                holder.view.setAlpha(0.6f);
             } else {
                 holder.check.setChecked(false);
                 holder.name.setPaintFlags(0);
                 holder.cardView.setCardBackgroundColor(getResources().getColor(R.color.white));
                 holder.favourite.setBackgroundColor(getResources().getColor(R.color.white));
+                holder.view.setAlpha(1);
             }
         }
 
@@ -210,10 +212,11 @@ public class Favourite extends AppCompatActivity {
             public CheckBox check;
             public ImageButton favourite;
             public CardView cardView;
+            public View view;
 
             public ViewHolder(View itemView) {
                 super(itemView);
-
+                view=itemView;
                 name = (TextView) itemView.findViewById(R.id.name);
                 listname=(TextView)itemView.findViewById(R.id.listname);
                 check = (CheckBox) itemView.findViewById(R.id.check);

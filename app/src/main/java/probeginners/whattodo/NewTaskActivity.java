@@ -324,6 +324,7 @@ public class NewTaskActivity extends AppCompatActivity {
                 holder.name.setPaintFlags(0);
                 holder.cardView.setCardBackgroundColor(getResources().getColor(R.color.white));
                 holder.favourite.setBackgroundColor(getResources().getColor(R.color.white));
+                holder.view.setAlpha(1);
             }
         }
 

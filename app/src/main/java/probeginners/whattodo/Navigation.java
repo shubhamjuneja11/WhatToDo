@@ -781,7 +781,12 @@ public class Navigation extends AppCompatActivity
                     Log.e("abc", "10");
                     Intent intent = new Intent();
                     intent.setType("image/*");
-                    intent.setAction(Intent.ACTION_GET_CONTENT);
+
+                    intent.putExtra("aspectX", 1);
+                    intent.putExtra("aspectY", 1);
+                    intent.putExtra("outputX", 96);
+                    intent.putExtra("outputY", 96);
+                    intent.putExtra("noFaceDetection", true);
                     //intent.putExtra("crop", "true");
                     startActivityForResult(
                             Intent.createChooser(intent, "Complete action using"),

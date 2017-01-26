@@ -452,7 +452,11 @@ Log.d("chikni","chameli");
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        intent.putExtra("crop", "true");
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        intent.putExtra("outputX", 96);
+        intent.putExtra("outputY", 96);
+        intent.putExtra("noFaceDetection", true);
         //intent.putExtra("return-data", true);
         int result = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE);
         if (result == PackageManager.PERMISSION_GRANTED) {
