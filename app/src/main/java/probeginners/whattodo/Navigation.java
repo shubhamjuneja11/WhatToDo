@@ -278,7 +278,8 @@ public class Navigation extends AppCompatActivity
             @Override
             public void onLongClick(View view, int position) {
                 positiontoopen=position;
-                deleteList();
+                funoptions(view);
+                //deleteList();
             }
         }));
     }
