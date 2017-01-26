@@ -12,6 +12,6 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/abc"/>
+        android:background="@drawable/back9"/>
 <include layout="@layout/recycler" android:id="@+id/include"></include>
 </RelativeLayout>
