@@ -234,7 +234,7 @@ public class Navigation extends AppCompatActivity
             public void onClick(View view) {
                 Intent intent=new Intent(Navigation.this, InboxTask.class);
                 startActivityForResult(intent,INBOX_TASK);
-                overridePendingTransition(R.anim.right_in, R.anim.left_out);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 
             }
         });

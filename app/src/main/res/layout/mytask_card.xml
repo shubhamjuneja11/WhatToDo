@@ -26,7 +26,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/grey"
+            android:background="@drawable/backcolor"
             >
 
             <ImageView
@@ -95,7 +95,7 @@
                 android:layout_width="30dp"
                 android:layout_height="55dp"
                 android:layout_alignParentRight="true"
-                android:background="@color/grey"
+                android:background="#ff0a58"
 
                 android:layout_alignParentBottom="true"
                 android:onClick="funoptions"
@@ -103,7 +103,7 @@
                 <ImageButton
                     android:id="@+id/overflow"
                     android:layout_width="20dp"
-                    android:background="@color/grey"
+                    android:background="#ff0a58"
                     android:scaleType="centerCrop"
                     android:layout_height="20dp"
                     android:src="@drawable/dots"

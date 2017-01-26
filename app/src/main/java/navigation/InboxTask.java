@@ -77,6 +77,8 @@ public class InboxTask extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 onBackPressed();
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+
             }
         });
 
@@ -186,6 +188,7 @@ public class InboxTask extends AppCompatActivity {
                 }
                 else Log.e("alar","no");
                 finish();
+                overridePendingTransition(R.anim.left_out, R.anim.right_in);
                 return true;
             }
         }

@@ -17,13 +17,11 @@ import android.widget.ImageView;
 public class NewList extends AppCompatActivity {
 Toolbar toolbar;
     private String name;
-
     EditText editText;
     boolean flag;
     MenuItem done;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_list);
         toolbar=(Toolbar)findViewById(R.id.toolbar);
@@ -83,6 +81,8 @@ Toolbar toolbar;
             intent.putExtra("name",name);
             setResult(11,intent);
             finish();
+            overridePendingTransition(R.anim.right_in, R.anim.slide_out_right);
+
             return true;
         }
         if (item.getItemId() == android.R.id.home) {
