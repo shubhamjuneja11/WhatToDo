@@ -104,7 +104,7 @@ public class NewTaskActivity extends AppCompatActivity {
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(1, dpToPx(10), true));
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(1, dpToPx(0), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
@@ -312,10 +312,12 @@ public class NewTaskActivity extends AppCompatActivity {
             }
             if(data.getcompleted())
             {
+                holder.view.setAlpha(0.6f);
                 holder.check.setChecked(true);
                holder.name.setPaintFlags(holder.name.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 holder.cardView.setCardBackgroundColor(Color.parseColor("#cccccc"));
                 holder.favourite.setBackgroundColor(Color.parseColor("#cccccc"));
+
             }
             else {
                 holder.check.setChecked(false);
@@ -335,9 +337,10 @@ public class NewTaskActivity extends AppCompatActivity {
             public CheckBox check;
             public ImageButton favourite;
             public CardView cardView;
+            public View view;
             public ViewHolder(View itemView) {
                 super(itemView);
-
+                view=itemView;
                 name = (TextView) itemView.findViewById(R.id.name);
                 check = (CheckBox) itemView.findViewById(R.id.check);
                 favourite = (ImageButton) itemView.findViewById(R.id.favourite2);
