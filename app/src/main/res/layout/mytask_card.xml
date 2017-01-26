@@ -15,7 +15,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:layout_margin="@dimen/card_margin"
 
         app:cardElevation="0dp"
         app:cardMaxElevation="0dp"
@@ -38,7 +37,7 @@
                 android:layout_height="@dimen/album_cover_height"
                 android:background="@drawable/selector"
                 android:clickable="true"
-                android:padding="10dp"
+                android:padding="5dp"
                 android:src="@drawable/grocery"
                 android:scaleType="fitXY"
                 android:onClick="funopen"
