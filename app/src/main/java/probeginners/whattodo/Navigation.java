@@ -16,32 +16,34 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.TypedValue;
-import android.view.View;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+
 import classes.List;
 import db.DatabaseHandler;
 import interfaces.ClickListener;
@@ -51,17 +53,16 @@ import navigation.InboxTask;
 import navigation.SettingsActivity;
 import tasklist.RecyclerTouchListener;
 import tasklist.TaskAdapter;
+
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;
 
 public class Navigation extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    public static final int INBOX_TASK = 3;
     private static final int CAMERA_REQUEST = 1;
     private static final int PICK_FROM_GALLERY = 2;
     private static final int NEW_LIST = 11;
-    public static final int INBOX_TASK = 3;
-
-
     private static final String IMAGE_DIRECTORY_NAME = "WhatToDo";
     public Uri uri;
     TaskAdapter adapter;
@@ -71,7 +72,7 @@ public class Navigation extends AppCompatActivity
     Cursor cursor;
     SQLiteDatabase readdatabase;
     DatabaseHandler handler;
-    int positiontoopen,total;
+    int positiontoopen, total;
     private String name;
     private String query;
 
@@ -142,8 +143,9 @@ public class Navigation extends AppCompatActivity
             }
 
             return null;
+        } catch (Exception e) {
+            return null;
         }
-        catch (Exception e){return null;}
     }
 
     /**
@@ -178,7 +180,9 @@ public class Navigation extends AppCompatActivity
                     cursor.close();
             }
             return null;
-        }catch (Exception e){return null;}
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /**
@@ -226,62 +230,63 @@ public class Navigation extends AppCompatActivity
 
 
         setContentView(R.layout.activity_navigation);
-try {
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-    setSupportActionBar(toolbar);
-    getSupportActionBar().setTitle(R.string.app_name);
-    //fun();
-    fb = (FloatingActionButton) findViewById(R.id.fab);
-    fb.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(Navigation.this, InboxTask.class);
-            startActivityForResult(intent, INBOX_TASK);
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        try {
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setTitle(R.string.app_name);
+            //fun();
+            fb = (FloatingActionButton) findViewById(R.id.fab);
+            fb.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Navigation.this, InboxTask.class);
+                    startActivityForResult(intent, INBOX_TASK);
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 
+                }
+            });
+
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.setDrawerListener(toggle);
+            toggle.syncState();
+
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            navigationView.setNavigationItemSelectedListener(this);
+
+
+            //database connection and result
+            query = "select * from " + DatabaseHandler.List_Table + ";";
+            handler = new DatabaseHandler(this);
+            readdatabase = handler.getReadableDatabase();
+            cursor = readdatabase.rawQuery(query, null);
+            adapter = new TaskAdapter(taskDataList);
+            preparedata();
+            recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+            RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
+            recyclerView.setLayoutManager(mLayoutManager);
+            recyclerView.addItemDecoration(new GridSpacingItemDecoration(1, dpToPx(5), true));
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setAdapter(adapter);
+
+
+            recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
+                @Override
+                public void onClick(View view, int position) {
+                    positiontoopen = position;
+
+                }
+
+                @Override
+                public void onLongClick(View view, int position) {
+                    positiontoopen = position;
+                    deleteList();
+                    //deleteList();
+                }
+            }));
+        } catch (Exception e) {
         }
-    });
-
-    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-    ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-            this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-    drawer.setDrawerListener(toggle);
-    toggle.syncState();
-
-    NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-    navigationView.setNavigationItemSelectedListener(this);
-
-
-    //database connection and result
-    query = "select * from " + DatabaseHandler.List_Table + ";";
-    handler = new DatabaseHandler(this);
-    readdatabase = handler.getReadableDatabase();
-    cursor = readdatabase.rawQuery(query, null);
-    adapter = new TaskAdapter(taskDataList);
-    preparedata();
-    recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-    RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
-    recyclerView.setLayoutManager(mLayoutManager);
-    recyclerView.addItemDecoration(new GridSpacingItemDecoration(1, dpToPx(5), true));
-    recyclerView.setItemAnimator(new DefaultItemAnimator());
-    recyclerView.setAdapter(adapter);
-
-
-    recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
-        @Override
-        public void onClick(View view, int position) {
-            positiontoopen = position;
-
-        }
-
-        @Override
-        public void onLongClick(View view, int position) {
-            positiontoopen = position;
-            deleteList();
-            //deleteList();
-        }
-    }));
-}catch (Exception e){}
     }
 
     @Override
@@ -316,8 +321,8 @@ try {
                 overridePendingTransition(R.anim.push_up_in, R.anim.push_down_out);
                 return true;
             }
+        } catch (Exception e) {
         }
-        catch (Exception e){}
 
         return super.onOptionsItemSelected(item);
     }
@@ -326,57 +331,57 @@ try {
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        try{
-        int id = item.getItemId();
+        try {
+            int id = item.getItemId();
 
-        if (id == R.id.inbox) {
-            SharedPreferences sharedPreferences;
-            sharedPreferences=getSharedPreferences("list", Context.MODE_PRIVATE);
-            int done;
-            done=sharedPreferences.getInt("done",0);
-            Intent intent = new Intent(Navigation.this, NewTaskActivity.class);
-            intent.putExtra("listname", "Inbox");
-            intent.putExtra("taskdone",done);
-            intent.putExtra("listkey",-1);
-            startActivity(intent);
-            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            if (id == R.id.inbox) {
+                SharedPreferences sharedPreferences;
+                sharedPreferences = getSharedPreferences("list", Context.MODE_PRIVATE);
+                int done;
+                done = sharedPreferences.getInt("done", 0);
+                Intent intent = new Intent(Navigation.this, NewTaskActivity.class);
+                intent.putExtra("listname", "Inbox");
+                intent.putExtra("taskdone", done);
+                intent.putExtra("listkey", -1);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
-        } else if (id == R.id.myfavourites) {
-            Intent intent=new Intent(Navigation.this, Favourite.class);
-            startActivity(intent);
-            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            } else if (id == R.id.myfavourites) {
+                Intent intent = new Intent(Navigation.this, Favourite.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
-        } else if (id == R.id.scheduledtasks) {
-            Intent intent=new Intent(Navigation.this,ScheduledTask.class);
-            startActivity(intent);
-            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            } else if (id == R.id.scheduledtasks) {
+                Intent intent = new Intent(Navigation.this, ScheduledTask.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
-        } else if (id == R.id.settings) {
-            Intent intent=new Intent(Navigation.this, SettingsActivity.class);
-            startActivity(intent);
-            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            } else if (id == R.id.settings) {
+                Intent intent = new Intent(Navigation.this, SettingsActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
-        } else if (id == R.id.feedback) {
-            Intent intent=new Intent(Navigation.this, FeedbackActivity.class);
-            startActivity(intent);
-            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            } else if (id == R.id.feedback) {
+                Intent intent = new Intent(Navigation.this, FeedbackActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
-        } else if (id == R.id.help) {
-            Intent intent=new Intent(Navigation.this, Help.class);
-            startActivity(intent);
-            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            } else if (id == R.id.help) {
+                Intent intent = new Intent(Navigation.this, Help.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            } else if (id == R.id.hel) {
+                Intent intent = new Intent(Navigation.this, Info.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            }
+
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
+            return true;
+        } catch (Exception e) {
+            return false;
         }
-        else if(id==R.id.hel){
-            Intent intent=new Intent(Navigation.this,Info.class);
-            startActivity(intent);
-            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-    catch (Exception e){return false;}
     }
 
 
@@ -439,7 +444,8 @@ try {
 
 
             }
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
     }
 
 
@@ -456,7 +462,8 @@ try {
             }
             cursor.close();
             adapter.notifyDataSetChanged();
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
     }
 
     /*---------Using  Camera---------*/
@@ -465,14 +472,15 @@ try {
      * function  to  add task
      *******************/
 
-    public void addTask(int prim,String name, int done, int total, String icon) {
+    public void addTask(int prim, String name, int done, int total, String icon) {
         try {
 
             List taskData = new List(prim, name, done, total, icon);
             taskDataList.add(taskData);
             adapter.notifyDataSetChanged();
             handler.addList(taskData);
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
     }
 
     /**
@@ -485,52 +493,52 @@ try {
 
     public void funoptions(View view) {
         try {
-        PopupMenu popup = new PopupMenu(Navigation.this, view);
-        popup.getMenuInflater().inflate(R.menu.mylistoptions, popup.getMenu());
+            PopupMenu popup = new PopupMenu(Navigation.this, view);
+            popup.getMenuInflater().inflate(R.menu.mylistoptions, popup.getMenu());
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()) {
 
-                    case R.id.deletelist:
-                        deleteList();
-                        break;
-                    case R.id.changeicon:
-                        changeicon();
-                        break;
-                    case R.id.changename:
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(Navigation.this);
-                        builder.setTitle("Enter new name");
-                        final EditText editText = new EditText(Navigation.this);
-                        editText.setInputType(InputType.TYPE_CLASS_TEXT);
-                        builder.setView(editText);
-                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                String input = editText.getText().toString();
-                                List list = taskDataList.get(positiontoopen);
-                                    handler.changeListname(list.getPrimary(),input);
+                        case R.id.deletelist:
+                            deleteList();
+                            break;
+                        case R.id.changeicon:
+                            changeicon();
+                            break;
+                        case R.id.changename:
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(Navigation.this);
+                            builder.setTitle("Enter new name");
+                            final EditText editText = new EditText(Navigation.this);
+                            editText.setInputType(InputType.TYPE_CLASS_TEXT);
+                            builder.setView(editText);
+                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    String input = editText.getText().toString();
+                                    List list = taskDataList.get(positiontoopen);
+                                    handler.changeListname(list.getPrimary(), input);
                                     list.putlistname(input);
                                     adapter.notifyDataSetChanged();
-                            }
-                        });
-                        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        });
-                        builder.show();
+                                }
+                            });
+                            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                }
+                            });
+                            builder.show();
 
-                        break;
+                            break;
+                    }
+
+                    return true;
                 }
+            });
 
-                return true;
-            }
-        });
-
-        popup.show();
-    }
-    catch (Exception e){}
+            popup.show();
+        } catch (Exception e) {
+        }
     }
 
     // to open tasklist
@@ -542,43 +550,44 @@ try {
             intent.putExtra("taskdone", taskData.getTaskdone());
             intent.putExtra("listkey", taskData.getPrimary());
             startActivity(intent);
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
     }
 
     //to delete a list
     public void deleteList() {
 
-try{
-        android.app.AlertDialog dialog=new android.app.AlertDialog.Builder(Navigation.this)
-                //set message, title, and icon
-                .setTitle("Delete")
-                .setMessage("Delete List "+taskDataList.get(positiontoopen).getlistname()+"? ")
-                .setIcon(R.drawable.delete)
+        try {
+            android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(Navigation.this)
+                    //set message, title, and icon
+                    .setTitle("Delete")
+                    .setMessage("Delete List " + taskDataList.get(positiontoopen).getlistname() + "? ")
+                    .setIcon(R.drawable.delete)
 
-                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
 
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        handler.deleteList(Navigation.this,taskDataList.get(positiontoopen));
-                        taskDataList.remove(positiontoopen);
-                        adapter.notifyDataSetChanged();
-                        dialog.dismiss();
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            handler.deleteList(Navigation.this, taskDataList.get(positiontoopen));
+                            taskDataList.remove(positiontoopen);
+                            adapter.notifyDataSetChanged();
+                            dialog.dismiss();
 
-                    }
+                        }
 
-                })
+                    })
 
 
+                    .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
 
-                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
 
-                        dialog.dismiss();
-
-                    }
-                })
-                .create();
-        dialog.show();}
-catch (Exception e){}
+                        }
+                    })
+                    .create();
+            dialog.show();
+        } catch (Exception e) {
+        }
 
     }
 
@@ -601,7 +610,8 @@ catch (Exception e){}
             });
             AlertDialog dialog = builder.create();
             dialog.show();
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
     }
 
     public void useCamera() {
@@ -628,7 +638,8 @@ catch (Exception e){}
                 startActivityForResult(cameraIntent, CAMERA_REQUEST);
             }
 
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
     }
 
     public Uri getOutputMediaFileUri(int type) {
@@ -664,11 +675,13 @@ catch (Exception e){}
             }
             uri = Uri.parse(timeStamp);
             return mediaFile;
-        }catch (Exception e){return null;}
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /*---------Using Gallery----------*/
-    public  void useGallery() {
+    public void useGallery() {
         try {
             Intent intent = new Intent();
             intent.setType("image/*");
@@ -700,48 +713,51 @@ catch (Exception e){}
                     // result of the request.
                 }
             }
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
-try {
-    switch (requestCode) {
-        case CAMERA_REQUEST: {
+        try {
+            switch (requestCode) {
+                case CAMERA_REQUEST: {
 
-            // If request is cancelled, the result arrays are empty.
-            if (grantResults.length > 0
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                uri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
-                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-                startActivityForResult(cameraIntent, CAMERA_REQUEST);
-                // permission was granted, yay! Do the
-                // contacts-related task you need to do.
+                    // If request is cancelled, the result arrays are empty.
+                    if (grantResults.length > 0
+                            && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        uri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+                        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                        startActivityForResult(cameraIntent, CAMERA_REQUEST);
+                        // permission was granted, yay! Do the
+                        // contacts-related task you need to do.
 
+                    }
+                    return;
+                }
+
+                case PICK_FROM_GALLERY:
+                    if (grantResults.length > 0
+                            && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        Intent intent = new Intent();
+                        intent.setType("image/*");
+
+                        intent.putExtra("aspectX", 1);
+                        intent.putExtra("aspectY", 1);
+                        intent.putExtra("outputX", 96);
+                        intent.putExtra("outputY", 96);
+                        intent.putExtra("noFaceDetection", true);
+                        startActivityForResult(
+                                Intent.createChooser(intent, "Complete action using"),
+                                PICK_FROM_GALLERY);
+                    }
             }
-            return;
+        } catch (Exception e) {
         }
-
-        case PICK_FROM_GALLERY:
-            if (grantResults.length > 0
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-
-                intent.putExtra("aspectX", 1);
-                intent.putExtra("aspectY", 1);
-                intent.putExtra("outputX", 96);
-                intent.putExtra("outputY", 96);
-                intent.putExtra("noFaceDetection", true);
-                startActivityForResult(
-                        Intent.createChooser(intent, "Complete action using"),
-                        PICK_FROM_GALLERY);
-            }
     }
-}catch (Exception e){}
-    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -749,8 +765,8 @@ try {
 
             unbindDrawables(findViewById(R.id.drawer_layout));
             System.gc();
+        } catch (Exception e) {
         }
-        catch (Exception e){}
     }
 
     private void unbindDrawables(View view) {
@@ -764,7 +780,8 @@ try {
                 }
                 ((ViewGroup) view).removeAllViews();
             }
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
     }
 
 }
