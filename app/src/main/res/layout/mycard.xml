@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    xmlns:app="http://schemas.android.com/tools"
+    android:layout_marginRight="20dp"
+
+    >
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        app:cardElevation="0dp"
+        app:cardMaxElevation="0dp"
+        card_view:cardUseCompatPadding="true"
+        card_view:cardCornerRadius="@dimen/card_album_radius">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:orientation="horizontal"
+            android:weightSum="20"
+            android:background=""
+            >
+
+            <ImageView
+                android:layout_marginTop="5dp"
+                android:id="@+id/taskimage"
+                android:layout_width="0dp"
+
+                android:layout_weight="7"
+                android:layout_marginLeft="5dp"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:layout_marginBottom="15dp"
+                android:src="@drawable/grocery"
+                android:scaleType="fitXY"
+                android:onClick="funopen"
+                />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="10"
+                android:orientation="vertical"
+                android:weightSum="20"
+                android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="10"
+                android:paddingTop="@dimen/album_title_padding"
+                android:textColor="@color/black"
+                android:text="Task name"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:onClick="funopen"
+
+                />
+
+            <ProgressBar
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_weight="3"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:progressDrawable="@drawable/custom_progrss_bar"
+                android:layout_marginTop="5dp"
+                android:id="@+id/progressBar"
+                android:layout_below="@id/title"
+                android:progress="56"
+                android:onClick="funopen"
+                />
+
+            <TextView
+                android:id="@+id/taskcount"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="7"
+                android:layout_marginLeft="70dp"
+                android:text="12/40"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:textSize="15dp"
+                android:onClick="funopen"
+
+                />
+            </LinearLayout>
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="20dp"
+                android:src="@drawable/dots"
+                android:layout_gravity="center"
+                android:id="@+id/imageView2"
+                android:onClick="funoptions"
+                 />
+
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

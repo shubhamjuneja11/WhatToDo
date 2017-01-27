@@ -47,7 +47,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     View itemView= LayoutInflater.from(parent.getContext())
-            .inflate(R.layout.mytask_card,parent,false);
+            .inflate(R.layout.mycard,parent,false);
        // RelativeLayout relativeLayout=(RelativeLayout)itemView;
        // GridLayoutManager.LayoutParams params=(GridLayoutManager.LayoutParams)relativeLayout.getLayoutParams();
         //params.width= SettingsActivity.width;
