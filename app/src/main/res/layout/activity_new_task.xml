@@ -29,26 +29,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/appbarlayout"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+
         android:id="@+id/relativelayout"
         android:background="@color/white"
 
         >
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:id="@+id/newtaskenter"
             android:weightSum="20"
             android:layout_marginRight="5dp"
             android:focusable="true" android:focusableInTouchMode="true"
             >
-            <EditText
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="0dp"
                 android:layout_weight="18"
-                android:layout_height="match_parent"
-                android:textSize="20dp"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:id="@+id/abcd"
+                >
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
                 android:hint="Add new task..."
                 android:id="@+id/newtaskname"
                 android:singleLine="true"
@@ -58,11 +61,11 @@
                 android:textColorHint="@color/hintcolor"
 
                 />
-
+</android.support.design.widget.TextInputLayout>
             <ImageButton
                 android:layout_width="6dp"
                 android:layout_weight="2"
-                android:layout_height="40dp"
+                android:layout_height="match_parent"
                 android:src="@drawable/favourite"
                 android:background="@color/white"
                 android:scaleType="fitCenter"

@@ -58,32 +58,34 @@
                    >
                    <LinearLayout
                        android:layout_width="match_parent"
-                       android:layout_height="40dp"
+                       android:layout_height="wrap_content"
                        android:id="@+id/newtaskenter"
                        android:weightSum="20"
                        android:background="@color/white"
                        android:layout_marginRight="5dp"
+                       android:orientation="horizontal"
                        android:focusable="true" android:focusableInTouchMode="true"
                        >
-                       <EditText
+                       <android.support.design.widget.TextInputLayout
                            android:layout_width="0dp"
-                           android:layout_weight="18"
-                           android:layout_height="match_parent"
-                           android:textSize="20dp"
-                           android:hint="Add a new task..."
-                           android:id="@+id/newtaskname"
-                           android:singleLine="true"
-                           android:textColor="#0d47a1"
+                           android:layout_height="wrap_content"
                            android:background="@color/white"
-                           android:textAlignment="center"
-                           android:textColorHint="@color/hintcolor"
+                           android:id="@+id/abcd"
+                           android:layout_weight="18"
+                           >
 
-                           />
+                           <EditText
+                               android:layout_width="match_parent"
+                               android:layout_height="50dp"
+                               android:hint="Add a new task"
 
+                               android:id="@+id/newtaskname"
+                               />
+                       </android.support.design.widget.TextInputLayout>
                        <ImageButton
                            android:layout_width="6dp"
                            android:layout_weight="2"
-                           android:layout_height="40dp"
+                           android:layout_height="match_parent"
                            android:src="@drawable/favourite"
                            android:background="@color/white"
                            android:scaleType="fitCenter"

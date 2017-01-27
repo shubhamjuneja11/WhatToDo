@@ -32,10 +32,18 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     >
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button"
+        android:text="Start Tutorial"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
+        android:layout_below="@id/button"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
@@ -50,13 +58,13 @@
                 android:layout_width="0dp"
                 android:layout_weight="5"
                 android:text="Option"
-                android:textColor="@color/cardview_light_background"
+                android:textColor="@color/black"
                 android:layout_height="wrap_content" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="10"
                 android:text="Usage"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textAlignment="center"
                 android:layout_height="wrap_content" />
         </LinearLayout>
@@ -75,12 +83,12 @@
                 android:layout_width="0dp"
                 android:layout_weight="6"
                 android:text="Add List"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:layout_height="wrap_content" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="12"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:text="To create a new list to hold jobs of similar type"
                 android:textAlignment="center"
                 android:layout_height="wrap_content" />
@@ -110,7 +118,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="12"
                 android:layout_marginLeft="70dp"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
 
                 android:text="To add a task in Inbox of any category.It is faster to add through this "
                 android:textAlignment="center"
@@ -138,7 +146,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="12"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
 
                 android:text="Alarm is On. \nClick to turn it Off. "
                 android:textAlignment="center"
@@ -167,7 +175,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="12"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
 
                 android:text="Alarm is Off. \nClick to turn it On. "
                 android:textAlignment="center"
@@ -196,7 +204,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="12"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
 
                 android:text="Click this to mark your task as favourite. "
                 android:textAlignment="center"
@@ -226,7 +234,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="12"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
 
                 android:text="Click this to unmark your task as favourite. "
                 android:textAlignment="center"
@@ -243,7 +251,7 @@
             android:layout_weight="12"
             android:text="**Long press any list/Task to delete them.**\n\n "
             android:textAlignment="center"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
 
             android:layout_height="wrap_content" />
     </LinearLayout>

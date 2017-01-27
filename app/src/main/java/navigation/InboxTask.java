@@ -188,7 +188,7 @@ public class InboxTask extends AppCompatActivity {
                 }
                 else Log.e("alar","no");
                 finish();
-                overridePendingTransition(R.anim.left_out, R.anim.right_in);
+                overridePendingTransition(0, R.anim.slide_out_right);
                 return true;
             }
         }
