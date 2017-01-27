@@ -21,11 +21,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -66,7 +64,6 @@ public class Navigation extends AppCompatActivity
 
     private static final String IMAGE_DIRECTORY_NAME = "WhatToDo";
     public Uri uri;
-    Toolbar toolbar;
     TaskAdapter adapter;
     RecyclerView recyclerView;
     FloatingActionButton fb;
@@ -79,71 +76,74 @@ public class Navigation extends AppCompatActivity
     private String query;
 
     public static String getPath(final Context context, final Uri uri) {
-        Log.e("abc", "13");
+        try {
+            final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
 
-        final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+            // DocumentProvider
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
+                    // ExternalStorageProvider
+                    if (isExternalStorageDocument(uri)) {
+                        final String docId = DocumentsContract.getDocumentId(uri);
+                        final String[] split = docId.split(":");
+                        final String type = split[0];
 
-        // DocumentProvider
-        if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
-            // ExternalStorageProvider
-            if (isExternalStorageDocument(uri)) {
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
+                        if ("primary".equalsIgnoreCase(type)) {
+                            return Environment.getExternalStorageDirectory() + "/" + split[1];
+                        }
 
-                if ("primary".equalsIgnoreCase(type)) {
-                    return Environment.getExternalStorageDirectory() + "/" + split[1];
+                        // TODO handle non-primary volumes
+                    }
+                    // DownloadsProvider
+                    else if (isDownloadsDocument(uri)) {
+
+                        final String id = DocumentsContract.getDocumentId(uri);
+                        final Uri contentUri = ContentUris.withAppendedId(
+                                Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+
+                        return getDataColumn(context, contentUri, null, null);
+                    }
+                    // MediaProvider
+                    else if (isMediaDocument(uri)) {
+                        final String docId = DocumentsContract.getDocumentId(uri);
+                        final String[] split = docId.split(":");
+                        final String type = split[0];
+
+                        Uri contentUri = null;
+                        if ("image".equals(type)) {
+                            contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                        } else if ("video".equals(type)) {
+                            contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                        } else if ("audio".equals(type)) {
+                            contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                        }
+
+                        final String selection = "_id=?";
+                        final String[] selectionArgs = new String[]{
+                                split[1]
+                        };
+
+                        return getDataColumn(context, contentUri, selection, selectionArgs);
+                    }
                 }
+                // MediaStore (and general)
+                else if ("content".equalsIgnoreCase(uri.getScheme())) {
 
-                // TODO handle non-primary volumes
-            }
-            // DownloadsProvider
-            else if (isDownloadsDocument(uri)) {
+                    // Return the remote address
+                    if (isGooglePhotosUri(uri))
+                        return uri.getLastPathSegment();
 
-                final String id = DocumentsContract.getDocumentId(uri);
-                final Uri contentUri = ContentUris.withAppendedId(
-                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
-
-                return getDataColumn(context, contentUri, null, null);
-            }
-            // MediaProvider
-            else if (isMediaDocument(uri)) {
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
-
-                Uri contentUri = null;
-                if ("image".equals(type)) {
-                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                } else if ("video".equals(type)) {
-                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-                } else if ("audio".equals(type)) {
-                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                    return getDataColumn(context, uri, null, null);
                 }
-
-                final String selection = "_id=?";
-                final String[] selectionArgs = new String[]{
-                        split[1]
-                };
-
-                return getDataColumn(context, contentUri, selection, selectionArgs);
+                // File
+                else if ("file".equalsIgnoreCase(uri.getScheme())) {
+                    return uri.getPath();
+                }
             }
-        }
-        // MediaStore (and general)
-        else if ("content".equalsIgnoreCase(uri.getScheme())) {
 
-            // Return the remote address
-            if (isGooglePhotosUri(uri))
-                return uri.getLastPathSegment();
-
-            return getDataColumn(context, uri, null, null);
+            return null;
         }
-        // File
-        else if ("file".equalsIgnoreCase(uri.getScheme())) {
-            return uri.getPath();
-        }
-
-        return null;
+        catch (Exception e){return null;}
     }
 
     /**
@@ -158,25 +158,27 @@ public class Navigation extends AppCompatActivity
      */
     public static String getDataColumn(Context context, Uri uri, String selection,
                                        String[] selectionArgs) {
-
-        Cursor cursor = null;
-        final String column = "_data";
-        final String[] projection = {
-                column
-        };
-
         try {
-            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
-                    null);
-            if (cursor != null && cursor.moveToFirst()) {
-                final int index = cursor.getColumnIndexOrThrow(column);
-                return cursor.getString(index);
+
+            Cursor cursor = null;
+            final String column = "_data";
+            final String[] projection = {
+                    column
+            };
+
+            try {
+                cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
+                        null);
+                if (cursor != null && cursor.moveToFirst()) {
+                    final int index = cursor.getColumnIndexOrThrow(column);
+                    return cursor.getString(index);
+                }
+            } finally {
+                if (cursor != null)
+                    cursor.close();
             }
-        } finally {
-            if (cursor != null)
-                cursor.close();
-        }
-        return null;
+            return null;
+        }catch (Exception e){return null;}
     }
 
     /**
@@ -224,67 +226,62 @@ public class Navigation extends AppCompatActivity
 
 
         setContentView(R.layout.activity_navigation);
+try {
+    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    setSupportActionBar(toolbar);
+    getSupportActionBar().setTitle(R.string.app_name);
+    //fun();
+    fb = (FloatingActionButton) findViewById(R.id.fab);
+    fb.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(Navigation.this, InboxTask.class);
+            startActivityForResult(intent, INBOX_TASK);
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.app_name);
-        //fun();
-        fb = (FloatingActionButton) findViewById(R.id.fab);
-        fb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(Navigation.this, InboxTask.class);
-                startActivityForResult(intent,INBOX_TASK);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        }
+    });
 
-            }
-        });
+    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+    ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+            this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+    drawer.setDrawerListener(toggle);
+    toggle.syncState();
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-
-        //database connection and result
-        query = "select * from " + DatabaseHandler.List_Table + ";";
-        handler = new DatabaseHandler(this);
-        readdatabase = handler.getReadableDatabase();
-        cursor = readdatabase.rawQuery(query, null);
-        adapter = new TaskAdapter(taskDataList);
-        preparedata();
-        //Recyclerview create and setadapter
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-
-        /*RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());*/
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this,1);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(1, dpToPx(5), true));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
+    NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+    navigationView.setNavigationItemSelectedListener(this);
 
 
+    //database connection and result
+    query = "select * from " + DatabaseHandler.List_Table + ";";
+    handler = new DatabaseHandler(this);
+    readdatabase = handler.getReadableDatabase();
+    cursor = readdatabase.rawQuery(query, null);
+    adapter = new TaskAdapter(taskDataList);
+    preparedata();
+    recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+    RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
+    recyclerView.setLayoutManager(mLayoutManager);
+    recyclerView.addItemDecoration(new GridSpacingItemDecoration(1, dpToPx(5), true));
+    recyclerView.setItemAnimator(new DefaultItemAnimator());
+    recyclerView.setAdapter(adapter);
 
-        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                positiontoopen = position;
 
-            }
+    recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
+        @Override
+        public void onClick(View view, int position) {
+            positiontoopen = position;
 
-            @Override
-            public void onLongClick(View view, int position) {
-                positiontoopen=position;
-                deleteList();
-                //deleteList();
-            }
-        }));
+        }
+
+        @Override
+        public void onLongClick(View view, int position) {
+            positiontoopen = position;
+            deleteList();
+            //deleteList();
+        }
+    }));
+}catch (Exception e){}
     }
 
     @Override
@@ -312,12 +309,15 @@ public class Navigation extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.addlist) {
-            Intent intent = new Intent(Navigation.this, NewList.class);
-            startActivityForResult(intent, 11);
-            overridePendingTransition(R.anim.push_up_in,R.anim.push_down_out);
-            return true;
+        try {
+            if (id == R.id.addlist) {
+                Intent intent = new Intent(Navigation.this, NewList.class);
+                startActivityForResult(intent, 11);
+                overridePendingTransition(R.anim.push_up_in, R.anim.push_down_out);
+                return true;
+            }
         }
+        catch (Exception e){}
 
         return super.onOptionsItemSelected(item);
     }
@@ -326,6 +326,7 @@ public class Navigation extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+        try{
         int id = item.getItemId();
 
         if (id == R.id.inbox) {
@@ -375,101 +376,88 @@ public class Navigation extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+    catch (Exception e){return false;}
+    }
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case NEW_LIST:
-                if (data != null)
-                    name = data.getStringExtra("name").trim();
-                if (data != null && name != null)//some stupid stuff happening
-                {
-                    SharedPreferences sharedPreferences;
-                    sharedPreferences=getSharedPreferences("list",Context.MODE_PRIVATE);
-                    int i;
-                    i=sharedPreferences.getInt("list",1);
-                    SharedPreferences.Editor editor=sharedPreferences.edit();
-                    editor.putInt("list",i+1);
-                    editor.commit();
-                    addTask(i,name, 0, 0, "");
-                }
-                break;
+        try {
+            switch (requestCode) {
+                case NEW_LIST:
+                    if (data != null)
+                        name = data.getStringExtra("name").trim();
+                    if (data != null && name != null)//some stupid stuff happening
+                    {
+                        SharedPreferences sharedPreferences;
+                        sharedPreferences = getSharedPreferences("list", Context.MODE_PRIVATE);
+                        int i;
+                        i = sharedPreferences.getInt("list", 1);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putInt("list", i + 1);
+                        editor.commit();
+                        addTask(i, name, 0, 0, "");
+                    }
+                    break;
 
 
-            case CAMERA_REQUEST:
-                try {
+                case CAMERA_REQUEST:
+                    try {
 
-                    List list = taskDataList.get(positiontoopen);
-
-
-                    /****************important***************/
+                        List list = taskDataList.get(positiontoopen);
 
 
-                    /******************************/
-
-                    list.puticon(getPath(this,uri));
-                    adapter.notifyDataSetChanged();
-                    handler.updateList(list);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-
-            case PICK_FROM_GALLERY:
-                Log.e("abc", "16");
-
-                try {
-                    Log.e("abc", "17");
+                        /****************important***************/
 
 
-                    //if (extras != null) {
-                    if(data==null)
-                        Log.e("hi12","ss");
-                    Uri uri1 = data.getData();
+                        /******************************/
 
-                    if(uri1==null)Log.e("hi12","pp");
-                    List list = taskDataList.get(positiontoopen);
-                    list.puticon(getPath(this, uri1));
-                    Log.e("hi12",getPath(this, uri1));
-                    adapter.notifyDataSetChanged();
-                    handler.updateList(list);
+                        list.puticon(getPath(this, uri));
+                        adapter.notifyDataSetChanged();
+                        handler.updateList(list);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    break;
+
+                case PICK_FROM_GALLERY:
+
+                    try {
+                        Uri uri1 = data.getData();
+                        List list = taskDataList.get(positiontoopen);
+                        list.puticon(getPath(this, uri1));
+                        adapter.notifyDataSetChanged();
+                        handler.updateList(list);
+                    } catch (Exception e) {
+                    }
+                    break;
+
+                case INBOX_TASK:
+                    break;
 
 
-                    //}
-                    // else{                    Log.e("abc","20");
-                    //}
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Log.e("my", "bad222");
-                }
-                break;
-
-            case INBOX_TASK:
-                break;
-
-
-        }
+            }
+        }catch (Exception e){}
     }
 
 
     private void preparedata() {
-        taskDataList.clear();
-        cursor = readdatabase.rawQuery(query, null);
-        if (cursor.moveToFirst()) {
-            do {
+        try {
+            taskDataList.clear();
+            cursor = readdatabase.rawQuery(query, null);
+            if (cursor.moveToFirst()) {
+                do {
 
-                taskDataList.add(new List(cursor.getInt(0),cursor.getString(1), cursor.getInt(2), cursor.getInt(3), cursor.getString(4)));
+                    taskDataList.add(new List(cursor.getInt(0), cursor.getString(1), cursor.getInt(2), cursor.getInt(3), cursor.getString(4)));
 
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        adapter.notifyDataSetChanged();
-
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            adapter.notifyDataSetChanged();
+        }catch (Exception e){}
     }
-
 
     /*---------Using  Camera---------*/
 
@@ -478,10 +466,13 @@ public class Navigation extends AppCompatActivity
      *******************/
 
     public void addTask(int prim,String name, int done, int total, String icon) {
-        List taskData = new List(prim,name, done, total, icon);
-        taskDataList.add(taskData);
-        adapter.notifyDataSetChanged();
-        handler.addList(taskData);
+        try {
+
+            List taskData = new List(prim, name, done, total, icon);
+            taskDataList.add(taskData);
+            adapter.notifyDataSetChanged();
+            handler.addList(taskData);
+        }catch (Exception e){}
     }
 
     /**
@@ -493,12 +484,10 @@ public class Navigation extends AppCompatActivity
     }
 
     public void funoptions(View view) {
+        try {
         PopupMenu popup = new PopupMenu(Navigation.this, view);
-        //Inflating the Popup using xml file
         popup.getMenuInflater().inflate(R.menu.mylistoptions, popup.getMenu());
-
-        //registering popup with OnMenuItemClickListener
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
 
@@ -519,23 +508,9 @@ public class Navigation extends AppCompatActivity
                             public void onClick(DialogInterface dialog, int which) {
                                 String input = editText.getText().toString();
                                 List list = taskDataList.get(positiontoopen);
-                               // int primary=list.getPrimary();
-                                //String oldname = list.getlistname();
-                                /*boolean change = true;
-                                for (int i = 0; i < taskDataList.size(); i++) {
-                                    if (i == positiontoopen) continue;
-                                    if (taskDataList.get(i).getlistname().equals(input)) {
-                                        change = false;
-                                        break;
-                                    }
-                                }*/
-                                //if (change) {
                                     handler.changeListname(list.getPrimary(),input);
                                     list.putlistname(input);
                                     adapter.notifyDataSetChanged();
-                                //}
-                            //else
-                                    //Toast.makeText(Navigation.this, "Try a different name", Toast.LENGTH_SHORT).show();
                             }
                         });
                         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -553,23 +528,27 @@ public class Navigation extends AppCompatActivity
             }
         });
 
-        popup.show();//showing popup menu
+        popup.show();
+    }
+    catch (Exception e){}
     }
 
     // to open tasklist
     public void funopen(View view) {
-        List taskData = taskDataList.get(positiontoopen);
-        Intent intent = new Intent(Navigation.this, NewTaskActivity.class);
-        intent.putExtra("listname", taskData.getlistname());
-        intent.putExtra("taskdone", taskData.getTaskdone());
-        intent.putExtra("listkey",taskData.getPrimary());
-        startActivity(intent);
+        try {
+            List taskData = taskDataList.get(positiontoopen);
+            Intent intent = new Intent(Navigation.this, NewTaskActivity.class);
+            intent.putExtra("listname", taskData.getlistname());
+            intent.putExtra("taskdone", taskData.getTaskdone());
+            intent.putExtra("listkey", taskData.getPrimary());
+            startActivity(intent);
+        }catch (Exception e){}
     }
 
     //to delete a list
     public void deleteList() {
 
-
+try{
         android.app.AlertDialog dialog=new android.app.AlertDialog.Builder(Navigation.this)
                 //set message, title, and icon
                 .setTitle("Delete")
@@ -598,80 +577,58 @@ public class Navigation extends AppCompatActivity
                     }
                 })
                 .create();
-        dialog.show();
+        dialog.show();}
+catch (Exception e){}
 
     }
-
-
-
-
-
-
 
     //to change list icon
     public void changeicon() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item);
-        arrayAdapter.add("Select from Camera");
-        arrayAdapter.add("Select from Gallery");
-        builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (which == 0)
-                    useCamera();
-                else if (which == 1)
-                    useGallery();
+        try {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item);
+            arrayAdapter.add("Select from Camera");
+            arrayAdapter.add("Select from Gallery");
+            builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (which == 0)
+                        useCamera();
+                    else if (which == 1)
+                        useGallery();
 
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }catch (Exception e){}
     }
 
     public void useCamera() {
-        int result = ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA);
-        int result2 = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        boolean flag = false;
-        //If permission is granted returning true
-        Log.e("abc", "1");
-        if (result == PackageManager.PERMISSION_GRANTED && result2 == PackageManager.PERMISSION_GRANTED)
-            flag = true;
-        else {
-            Log.e("abc", "2");
+        try {
+            int result = ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA);
+            int result2 = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            boolean flag = false;
+            if (result == PackageManager.PERMISSION_GRANTED && result2 == PackageManager.PERMISSION_GRANTED)
+                flag = true;
+            else {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                        android.Manifest.permission.CAMERA)) {
+                } else {
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{android.Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, CAMERA_REQUEST);
+                }
 
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    android.Manifest.permission.CAMERA)) {
-                Log.e("abc", "3");
-
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
-            } else {
-                Log.e("abc", "4");
-
-                // No explanation needed, we can request the permission.
-
-                ActivityCompat.requestPermissions(this,
-                        new String[]{android.Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, CAMERA_REQUEST);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
             }
 
-        }
+            if (flag) {
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                uri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                startActivityForResult(cameraIntent, CAMERA_REQUEST);
+            }
 
-        if (flag) {
-            Log.e("abc", "5");
-
-            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            uri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
-            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-            startActivityForResult(cameraIntent, CAMERA_REQUEST);
-        }
-
-
+        }catch (Exception e){}
     }
 
     public Uri getOutputMediaFileUri(int type) {
@@ -679,158 +636,135 @@ public class Navigation extends AppCompatActivity
     }
 
     private File getOutputMediaFile(int type) {
+        try {
+            // External sdcard location
+            File mediaStorageDir = new File(
+                    Environment
+                            .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                    IMAGE_DIRECTORY_NAME);
 
-        // External sdcard location
-        File mediaStorageDir = new File(
-                Environment
-                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                IMAGE_DIRECTORY_NAME);
-
-        // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-                Log.d(IMAGE_DIRECTORY_NAME, "Oops! Failed create "
-                        + IMAGE_DIRECTORY_NAME + " directory");
+            // Create the storage directory if it does not exist
+            if (!mediaStorageDir.exists()) {
+                if (!mediaStorageDir.mkdirs()) {
+                    return null;
+                }
+            }
+            // Create a media file name
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
+                    Locale.getDefault()).format(new Date());
+            File mediaFile;
+            if (type == MEDIA_TYPE_IMAGE) {
+                mediaFile = new File(mediaStorageDir.getPath() + File.separator
+                        + "IMG_" + timeStamp + ".jpg");
+            } else if (type == MEDIA_TYPE_VIDEO) {
+                mediaFile = new File(mediaStorageDir.getPath() + File.separator
+                        + "VID_" + timeStamp + ".mp4");
+            } else {
                 return null;
             }
-        }
-        // Create a media file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
-                Locale.getDefault()).format(new Date());
-        File mediaFile;
-        if (type == MEDIA_TYPE_IMAGE) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator
-                    + "IMG_" + timeStamp + ".jpg");
-        } else if (type == MEDIA_TYPE_VIDEO) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator
-                    + "VID_" + timeStamp + ".mp4");
-        } else {
-            return null;
-        }
-        uri = Uri.parse(timeStamp);
-        return mediaFile;
+            uri = Uri.parse(timeStamp);
+            return mediaFile;
+        }catch (Exception e){return null;}
     }
 
     /*---------Using Gallery----------*/
     public  void useGallery() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
+        try {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
 
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-        intent.putExtra("outputX", 96);
-        intent.putExtra("outputY", 96);
-        intent.putExtra("noFaceDetection", true);
+            intent.putExtra("aspectX", 1);
+            intent.putExtra("aspectY", 1);
+            intent.putExtra("outputX", 96);
+            intent.putExtra("outputY", 96);
+            intent.putExtra("noFaceDetection", true);
 
 
-        //intent.putExtra("return-data", true);
-        int result = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE);
-        if (result == PackageManager.PERMISSION_GRANTED) {
-            startActivityForResult(
-                    Intent.createChooser(intent, "Complete action using"),
-                    PICK_FROM_GALLERY);
-        } else {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                Log.e("abc", "3");
-
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
+            //intent.putExtra("return-data", true);
+            int result = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE);
+            if (result == PackageManager.PERMISSION_GRANTED) {
+                startActivityForResult(
+                        Intent.createChooser(intent, "Complete action using"),
+                        PICK_FROM_GALLERY);
             } else {
-                Log.e("abc", "4");
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                        android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                } else {
 
-                // No explanation needed, we can request the permission.
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, PICK_FROM_GALLERY);
 
-                ActivityCompat.requestPermissions(this,
-                        new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, PICK_FROM_GALLERY);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
+                    // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                    // app-defined int constant. The callback method gets the
+                    // result of the request.
+                }
             }
-        }
-
+        }catch (Exception e){}
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
-        Log.e("abc", "6");
+try {
+    switch (requestCode) {
+        case CAMERA_REQUEST: {
 
-        switch (requestCode) {
-            case CAMERA_REQUEST: {
-                Log.e("abc", "7");
+            // If request is cancelled, the result arrays are empty.
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                uri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                startActivityForResult(cameraIntent, CAMERA_REQUEST);
+                // permission was granted, yay! Do the
+                // contacts-related task you need to do.
 
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    uri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
-                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-                    startActivityForResult(cameraIntent, CAMERA_REQUEST);
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-
-                } else {
-                    Log.e("abc", "8");
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
             }
-
-            case PICK_FROM_GALLERY:
-                Log.e("abc", "11");
-
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.e("abc", "10");
-                    Intent intent = new Intent();
-                    intent.setType("image/*");
-
-                    intent.putExtra("aspectX", 1);
-                    intent.putExtra("aspectY", 1);
-                    intent.putExtra("outputX", 96);
-                    intent.putExtra("outputY", 96);
-                    intent.putExtra("noFaceDetection", true);
-                    //intent.putExtra("crop", "true");
-                    startActivityForResult(
-                            Intent.createChooser(intent, "Complete action using"),
-                            PICK_FROM_GALLERY);
-                }
-
-                // other 'case' lines to check for other
-                // permissions this app might request
+            return;
         }
+
+        case PICK_FROM_GALLERY:
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+
+                intent.putExtra("aspectX", 1);
+                intent.putExtra("aspectY", 1);
+                intent.putExtra("outputX", 96);
+                intent.putExtra("outputY", 96);
+                intent.putExtra("noFaceDetection", true);
+                startActivityForResult(
+                        Intent.createChooser(intent, "Complete action using"),
+                        PICK_FROM_GALLERY);
+            }
+    }
+}catch (Exception e){}
     }
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unbindDrawables(findViewById(R.id.drawer_layout));
-        System.gc();
+        try {
+
+            unbindDrawables(findViewById(R.id.drawer_layout));
+            System.gc();
+        }
+        catch (Exception e){}
     }
 
     private void unbindDrawables(View view) {
-        if (view.getBackground() != null) {
-            view.getBackground().setCallback(null);
-        }
-        if (view instanceof ViewGroup) {
-            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
-                unbindDrawables(((ViewGroup) view).getChildAt(i));
+        try {
+            if (view.getBackground() != null) {
+                view.getBackground().setCallback(null);
             }
-            ((ViewGroup) view).removeAllViews();
-        }
+            if (view instanceof ViewGroup) {
+                for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+                    unbindDrawables(((ViewGroup) view).getChildAt(i));
+                }
+                ((ViewGroup) view).removeAllViews();
+            }
+        }catch (Exception e){}
     }
-
-    /*public void fun(){
-        DisplayMetrics displaymetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-        SettingsActivity.height = displaymetrics.heightPixels;
-        SettingsActivity.width = displaymetrics.widthPixels;
-    }*/
 
 }
