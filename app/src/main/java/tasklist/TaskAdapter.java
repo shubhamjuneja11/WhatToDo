@@ -36,11 +36,14 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
         public View view;
         public MyViewHolder(View itemView) {
             super(itemView);
-            view=itemView.findViewById(R.id.card_view);
-            taskname=(TextView)itemView.findViewById(R.id.title);
-            taskcount=(TextView)itemView.findViewById(R.id.taskcount);
-            progressBar=(ProgressBar)itemView.findViewById(R.id.progressBar);
-            taskimage=(ImageView)itemView.findViewById(R.id.taskimage);
+            try {
+                view = itemView.findViewById(R.id.card_view);
+                taskname = (TextView) itemView.findViewById(R.id.title);
+                taskcount = (TextView) itemView.findViewById(R.id.taskcount);
+                progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar);
+                taskimage = (ImageView) itemView.findViewById(R.id.taskimage);
+            }
+            catch (Exception e){}
 
         }
     }
@@ -58,20 +61,22 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        classes.List taskData=taskDataList.get(position);
-        holder.taskname.setText(taskData.getlistname());
-        String s=taskData.getTaskdone()+"/"+taskData.getTotaltasks();
-        holder.taskcount.setText(s);
-        if(taskData.getTotaltasks()!=0)
-        holder.progressBar.setProgress((taskData.getTaskdone()*100)/taskData.getTotaltasks());
-        else holder.progressBar.setProgress(100);
-        Log.e("789","101112");
-        Bitmap bitmap=taskData.getImage();
-        if(bitmap!=null)
-    holder.taskimage.setImageBitmap(bitmap);
-        else
-    holder.taskimage.setImageResource(R.drawable.grocery);
-        holder.view.setBackgroundColor(ColorsHelper.getRandomColor());
+        try {
+            classes.List taskData = taskDataList.get(position);
+            holder.taskname.setText(taskData.getlistname());
+            String s = taskData.getTaskdone() + "/" + taskData.getTotaltasks();
+            holder.taskcount.setText(s);
+            if (taskData.getTotaltasks() != 0)
+                holder.progressBar.setProgress((taskData.getTaskdone() * 100) / taskData.getTotaltasks());
+            else holder.progressBar.setProgress(100);
+            Log.e("789", "101112");
+            Bitmap bitmap = taskData.getImage();
+            if (bitmap != null)
+                holder.taskimage.setImageBitmap(bitmap);
+            else
+                holder.taskimage.setImageResource(R.drawable.grocery);
+            holder.view.setBackgroundColor(ColorsHelper.getRandomColor());
+        }catch (Exception e){}
     }
 
     @Override
