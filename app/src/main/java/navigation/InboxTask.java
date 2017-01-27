@@ -91,12 +91,19 @@ public class InboxTask extends AppCompatActivity {
                                           int hour24, int hour12, int min, int sec,
                                           String AM_PM) {
                             alarmcalendar = calendarSelected;
+                            if (min / 10 == 0 && min != 0)
+                                datetime.setText(calendarSelected
+                                        .get(Calendar.DAY_OF_MONTH)
+                                        + "/" + (monthNumber + 1) + "/" + year
+                                        + ", " + hour12 + ":0" + min
+                                        + " " + AM_PM);
 
-                            datetime.setText(calendarSelected
-                                    .get(Calendar.DAY_OF_MONTH)
-                                    + "/" + (monthNumber + 1) + "/" + year
-                                    + ", " + hour12 + ":" + min
-                                    + " " + AM_PM);
+                            else
+                                datetime.setText(calendarSelected
+                                        .get(Calendar.DAY_OF_MONTH)
+                                        + "/" + (monthNumber + 1) + "/" + year
+                                        + ", " + hour12 + ":" + min
+                                        + " " + AM_PM);
                             alarmsetup(alarmcalendar, image);
                         }
 
@@ -226,7 +233,7 @@ public class InboxTask extends AppCompatActivity {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putInt("task", i + 1);
             editor.putInt("detail", d + 1);
-            editor.commit();
+            editor.apply();
             Task task = new Task(i, -1, "Inbox", name, flag, fav);
             handler.addTask(task);
             details = new TaskDetails(d, -1, i, "Inbox", name, s, "", "", 0);
@@ -271,7 +278,7 @@ public class InboxTask extends AppCompatActivity {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 editor.putInt("alarmnumber", i + 1);
-                editor.commit();
+                editor.apply();
                 handler.addAlarm(i, -1, taskey);
                 alarmset = true;
                 click = true;
@@ -306,7 +313,7 @@ public class InboxTask extends AppCompatActivity {
 
                 i = sharedPreferences.getInt("alarmnumber", 0);
                 editor.putInt("alarmnumber", i + 1);
-                editor.commit();
+                editor.apply();
 
                 editor.commit();
                 TaskDetails task = new TaskDetails(d, -1, taskey, "Inbox", taskname.getText().toString(), s, "", "", 1);

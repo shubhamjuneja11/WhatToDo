@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
@@ -139,9 +140,6 @@ public class TaskDetailsActivity extends AppCompatActivity {
                             task.putalarmtime(datetime.getText().toString());
                             handler.updateTaskDetails(task);
                             alarmsetup(alarmcalendar, image);
-
-                            // handler.updateTaskDetails(new TaskDetails(listname,taskname,datetime.getText().toString(),notetext.getText().toString(),uri.getPath(),status));
-
                         }
 
                         @Override
@@ -275,7 +273,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 editor.putInt("alarmnumber", i + 1);
-                editor.commit();
+                editor.apply();
                 handler.addAlarm(i, listkey, taskey);
                 alarmset = true;
                 status = 1;
@@ -310,7 +308,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
     public void changeicon(View view) {
         try {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item);
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.select_dialog_item);
             arrayAdapter.add("Select from Camera");
             arrayAdapter.add("Select from Gallery");
             arrayAdapter.add("Set Default Image");
@@ -495,7 +493,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+                                           @NonNull String permissions[], @NonNull int[] grantResults) {
         try {
             switch (requestCode) {
                 case CAMERA_REQUEST: {
