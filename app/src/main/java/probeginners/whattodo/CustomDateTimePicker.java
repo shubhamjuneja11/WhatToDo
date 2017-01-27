@@ -40,6 +40,7 @@ public class CustomDateTimePicker implements View.OnClickListener {
 
     public CustomDateTimePicker(Activity a,
                                 ICustomDateTimeListener customDateTimeListener) {
+
         activity = a;
         iCustomDateTimeListener = customDateTimeListener;
 

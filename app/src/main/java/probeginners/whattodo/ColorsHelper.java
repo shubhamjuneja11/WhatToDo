@@ -4,15 +4,10 @@ package probeginners.whattodo;
  * Created by junejaspc on 27/1/17.
  */
 
-import android.content.SharedPreferences;
-
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
-
 public class ColorsHelper {
     static int i=0;
-    //Some randomly picked colors from SDK's color.xml
     public static final List<Integer> COLORS = Arrays.asList(
             0xff00bcd4, 0xff3f51b5, 0xff4285f4, 0xffe91e63, 0xff0f9d58, 0xff8bc34a, 0xffff9800,
             0xffff5722, 0xff9e9e9e, 0xff00796b, 0xff00695c, 0xff3367d6, 0xff2a56c6, 0xff303f9f,
@@ -25,7 +20,6 @@ public class ColorsHelper {
     );
 
     public static Integer getRandomColor() {
-        //return COLORS.get(new Random().nextInt(COLORS.size()));
         i=i%53;
         return COLORS.get(i++);
 
