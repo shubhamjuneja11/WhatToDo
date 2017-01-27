@@ -1,6 +1,7 @@
 package tasklist;
 
 
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
@@ -18,6 +19,7 @@ import java.io.FileNotFoundException;
 import java.util.List;
 
 import navigation.SettingsActivity;
+import probeginners.whattodo.ColorsHelper;
 import probeginners.whattodo.Navigation;
 import probeginners.whattodo.R;
 
@@ -31,8 +33,10 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
         public TextView taskname,taskcount;
         public ProgressBar progressBar;
         public ImageView taskimage;
+        public View view;
         public MyViewHolder(View itemView) {
             super(itemView);
+            view=itemView.findViewById(R.id.card_view);
             taskname=(TextView)itemView.findViewById(R.id.title);
             taskcount=(TextView)itemView.findViewById(R.id.taskcount);
             progressBar=(ProgressBar)itemView.findViewById(R.id.progressBar);
@@ -48,12 +52,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     View itemView= LayoutInflater.from(parent.getContext())
             .inflate(R.layout.mycard,parent,false);
-       // RelativeLayout relativeLayout=(RelativeLayout)itemView;
-       // GridLayoutManager.LayoutParams params=(GridLayoutManager.LayoutParams)relativeLayout.getLayoutParams();
-        //params.width= SettingsActivity.width;
-        //params.height=SettingsActivity.height;
-        /*params.width= SettingsActivity.width-2*50;
-        params.height=params.width;*/
+
         return new MyViewHolder(itemView);
     }
 
@@ -72,6 +71,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
     holder.taskimage.setImageBitmap(bitmap);
         else
     holder.taskimage.setImageResource(R.drawable.grocery);
+        holder.view.setBackgroundColor(ColorsHelper.getRandomColor());
     }
 
     @Override

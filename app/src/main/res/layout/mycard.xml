@@ -23,7 +23,6 @@
             android:layout_height="100dp"
             android:orientation="horizontal"
             android:weightSum="20"
-            android:background=""
             >
 
             <ImageView
@@ -53,7 +52,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="10"
                 android:paddingTop="@dimen/album_title_padding"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:text="Task name"
                 android:gravity="center"
                 android:textSize="20sp"
@@ -84,7 +83,7 @@
                 android:layout_weight="7"
                 android:layout_marginLeft="70dp"
                 android:text="12/40"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:gravity="center"
                 android:textSize="15dp"
                 android:onClick="funopen"
