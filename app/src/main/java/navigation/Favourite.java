@@ -242,7 +242,7 @@ public class Favourite extends AppCompatActivity {
                         intent.putExtra("taskname", list.get(positiontoopen).getTaskname());
                         intent.putExtra("listkey", list.get(positiontoopen).listkey);
                         intent.putExtra("taskkey", list.get(positiontoopen).getPrimary());
-
+                        intent.putExtra("decide","fav");
                         startActivity(intent);
                         break;
 

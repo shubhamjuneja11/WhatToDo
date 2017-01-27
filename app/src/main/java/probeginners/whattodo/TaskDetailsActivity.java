@@ -49,6 +49,7 @@ import java.util.Locale;
 import classes.List;
 import classes.TaskDetails;
 import db.DatabaseHandler;
+import navigation.Favourite;
 import navigation.Inbox;
 
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
@@ -554,10 +555,16 @@ Log.d("chikni","chameli");
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
-        Intent upIntent = NavUtils.getParentActivityIntent(this);
-        upIntent.putExtra("listname",listname);
-        upIntent.putExtra("listkey",listkey);
+        Intent upIntent;
+        String decide=getIntent().getStringExtra("decide");
+        if(decide!=null &&decide.equals("fav")){
+             upIntent=new Intent(this, Favourite.class);
+        }
+        else {
+            upIntent = NavUtils.getParentActivityIntent(this);
+            upIntent.putExtra("listname", listname);
+            upIntent.putExtra("listkey", listkey);
+        }
         if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
             // This activity is NOT part of this app's task, so create a new task
             // when navigating up, with a synthesized back stack.
