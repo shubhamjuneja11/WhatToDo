@@ -1,4 +1,4 @@
-package navigation;
+package probeginners.whattodo;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -31,19 +31,16 @@ import java.util.List;
 import classes.Task;
 import db.DatabaseHandler;
 import interfaces.ClickListener;
-import probeginners.whattodo.GridSpacingItemDecoration;
-import probeginners.whattodo.NewTaskActivity;
-import probeginners.whattodo.R;
-import probeginners.whattodo.TaskDetailsActivity;
 import tasklist.RecyclerTouchListener;
 
-public class Favourite extends AppCompatActivity {
+public class ScheduledTask extends AppCompatActivity {
+
     Toolbar toolbar;
     SQLiteDatabase readdatabase;
     String query;
     RecyclerView recyclerView;
     DatabaseHandler handler;
-    MyAdapter adapter;
+    ScheduledTask.MyAdapter adapter;
     int positiontoopen,listkey;
 
     ArrayList<Task> list = new ArrayList<>();
@@ -53,21 +50,14 @@ public class Favourite extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_favourite);
+        setContentView(R.layout.activity_scheduled_task);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        //decide=getIntent().getIntExtra("decide",0);
-
-        query = "select * from " + DatabaseHandler.Task_Table + " where favourite= ?";
-            getSupportActionBar().setTitle("Favourites");
-
-
-       /* else
-        {query = "SELECT * FROM TaskTable a INNER JOIN TaskDetails b ON a.id=b.taskkey WHERE b.alarmstatus= ?";
+        query = "SELECT * FROM TaskTable a INNER JOIN TaskDetails b ON a.id=b.taskkey WHERE b.alarmstatus= ?";
             getSupportActionBar().setTitle("Scheduled Tasks");
 
-        }*/
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -89,7 +79,7 @@ public class Favourite extends AppCompatActivity {
             e.printStackTrace();
         }
         readdatabase.close();
-        adapter = new MyAdapter(list);
+        adapter = new ScheduledTask.MyAdapter(list);
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -108,7 +98,7 @@ public class Favourite extends AppCompatActivity {
             @Override
             public void onLongClick(View view, final int position) {
 
-                AlertDialog dialog=new AlertDialog.Builder(Favourite.this)
+                AlertDialog dialog=new AlertDialog.Builder(ScheduledTask.this)
                         //set message, title, and icon
                         .setTitle("Delete")
                         .setMessage("Delete Task?")
@@ -117,7 +107,7 @@ public class Favourite extends AppCompatActivity {
                         .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                handler.deleteTask(Favourite.this,list.get(position).primary);
+                                handler.deleteTask(ScheduledTask.this,list.get(position).primary);
                                 list.remove(position);
                                 adapter.notifyDataSetChanged();
                                 dialog.dismiss();
@@ -158,7 +148,7 @@ public class Favourite extends AppCompatActivity {
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
 
-    public  class MyAdapter extends RecyclerView.Adapter<Favourite.MyAdapter.ViewHolder> {
+    public  class MyAdapter extends RecyclerView.Adapter<ScheduledTask.MyAdapter.ViewHolder> {
         List<Task> list;
 
 
@@ -167,27 +157,27 @@ public class Favourite extends AppCompatActivity {
         }
 
         @Override
-        public Favourite.MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public ScheduledTask.MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.othertask_card, parent, false);
 
-            return new Favourite.MyAdapter.ViewHolder(itemView);
+            return new ScheduledTask.MyAdapter.ViewHolder(itemView);
         }
 
         @Override
-        public void onBindViewHolder(Favourite.MyAdapter.ViewHolder holder, int position) {
+        public void onBindViewHolder(ScheduledTask.MyAdapter.ViewHolder holder, int position) {
             Task data = list.get(position);
 
             holder.name.setText(data.getTaskname());
             holder.listname.setText(data.getlistname());
             //holder.check.setChecked(data.getflag());
-            /*if (data.getfavourite()) {
+            if (data.getfavourite()) {
                 holder.favourite.setImageResource(R.drawable.heart);
 
             } else {
                 holder.favourite.setImageResource(R.drawable.favourite);
 
-            }*/
+            }
             if (data.getcompleted()) {
                 holder.check.setChecked(true);
                 holder.name.setPaintFlags(holder.name.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -225,7 +215,7 @@ public class Favourite extends AppCompatActivity {
                 open=(RelativeLayout)itemView.findViewById(R.id.open);
                 cardView = (CardView) itemView;
                 check.setOnClickListener(this);
-                //favourite.setOnClickListener(this);
+                favourite.setOnClickListener(this);
                 open.setOnClickListener(this);
                 //name.setOnClickListener(this);
 
@@ -237,12 +227,12 @@ public class Favourite extends AppCompatActivity {
 
                 switch (v.getId()) {
                     case R.id.open:
-                        Intent intent = new Intent(Favourite.this, TaskDetailsActivity.class);
+                        Intent intent = new Intent(ScheduledTask.this, TaskDetailsActivity.class);
                         intent.putExtra("listname", list.get(positiontoopen).getlistname());
                         intent.putExtra("taskname", list.get(positiontoopen).getTaskname());
                         intent.putExtra("listkey", list.get(positiontoopen).listkey);
                         intent.putExtra("taskkey", list.get(positiontoopen).getPrimary());
-                        intent.putExtra("decide","fav");
+                        intent.putExtra("decide","sch");
                         startActivity(intent);
                         break;
 
@@ -268,28 +258,27 @@ public class Favourite extends AppCompatActivity {
 
 
                         if (!f)
-                           // taskdone++;
+                            // taskdone++;
 
-                           handler.ChangeTaskCount(listkey,true);
+                            handler.ChangeTaskCount(listkey,true);
 
                         else //taskdone--;
                             handler.ChangeTaskCount(listkey,false);
                         //if(check.isChecked())
                         //handler.changeListTaskDone(listname,list.get(positiontoopen).getTaskname(),true);
-                       // handler.changeListTaskDone(listkey, taskdone);
+                        // handler.changeListTaskDone(listkey, taskdone);
                         break;
 
-                  /*  case R.id.favourite2:
+                    case R.id.favourite2:
                         list.get(positiontoopen).putfavourite(!list.get(positiontoopen).getfavourite());
                         handler.updateTask(list.get(positiontoopen));
                         //list.remove(positiontoopen);
 
-                        break;*/
+                        break;
                 }
                 adapter.notifyDataSetChanged();
 
             }
         }
     }
-
 }

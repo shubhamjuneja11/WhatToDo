@@ -555,10 +555,13 @@ Log.d("chikni","chameli");
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent upIntent;
+        Intent upIntent=null;
         String decide=getIntent().getStringExtra("decide");
-        if(decide!=null &&decide.equals("fav")){
-             upIntent=new Intent(this, Favourite.class);
+        if(decide!=null) {
+            if (decide.equals("fav"))
+                upIntent = new Intent(this, Favourite.class);
+            else if (decide.equals("sch"))
+                upIntent = new Intent(this, ScheduledTask.class);
         }
         else {
             upIntent = NavUtils.getParentActivityIntent(this);
