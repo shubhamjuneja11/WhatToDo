@@ -42,12 +42,13 @@ public class Favourite extends AppCompatActivity {
     RecyclerView recyclerView;
     DatabaseHandler handler;
     MyAdapter adapter;
-    int positiontoopen,listkey;
+    int positiontoopen, listkey;
 
     ArrayList<Task> list = new ArrayList<>();
 
 
     Cursor cursor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -121,13 +122,14 @@ public class Favourite extends AppCompatActivity {
                                 })
                                 .create();
                         dialog.show();
+                    } catch (Exception e) {
                     }
-                    catch (Exception e){}
                 }
             }));
+        } catch (Exception e) {
         }
-        catch (Exception e){}
     }
+
     private void preparedata() {
         try {
             Task task;
@@ -139,19 +141,20 @@ public class Favourite extends AppCompatActivity {
                     else list.add(list.size(), task);
                 } while (cursor.moveToNext());
             }
+        } catch (Exception e) {
         }
-        catch (Exception e){}
     }
 
     private int dpToPx(int dp) {
         try {
             Resources r = getResources();
             return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
+        } catch (Exception e) {
+            return 0;
         }
-        catch (Exception e){return 0;}
     }
 
-    public  class MyAdapter extends RecyclerView.Adapter<Favourite.MyAdapter.ViewHolder> {
+    public class MyAdapter extends RecyclerView.Adapter<Favourite.MyAdapter.ViewHolder> {
         List<Task> list;
 
 
@@ -165,8 +168,9 @@ public class Favourite extends AppCompatActivity {
                 View itemView = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.othertask_card, parent, false);
                 return new Favourite.MyAdapter.ViewHolder(itemView);
+            } catch (Exception e) {
+                return null;
             }
-            catch (Exception e){return null;}
 
         }
 
@@ -174,25 +178,25 @@ public class Favourite extends AppCompatActivity {
         public void onBindViewHolder(Favourite.MyAdapter.ViewHolder holder, int position) {
             try {
 
-            Task data = list.get(position);
+                Task data = list.get(position);
 
-            holder.name.setText(data.getTaskname());
-            holder.listname.setText(data.getlistname());
-            if (data.getcompleted()) {
-                holder.check.setChecked(true);
-                holder.name.setPaintFlags(holder.name.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                holder.cardView.setCardBackgroundColor(Color.parseColor("#cccccc"));
-                holder.favourite.setBackgroundColor(Color.parseColor("#cccccc"));
-                holder.view.setAlpha(0.6f);
-            } else {
-                holder.check.setChecked(false);
-                holder.name.setPaintFlags(0);
-                holder.cardView.setCardBackgroundColor(getResources().getColor(R.color.white));
-                holder.favourite.setBackgroundColor(getResources().getColor(R.color.white));
-                holder.view.setAlpha(1);
+                holder.name.setText(data.getTaskname());
+                holder.listname.setText(data.getlistname());
+                if (data.getcompleted()) {
+                    holder.check.setChecked(true);
+                    holder.name.setPaintFlags(holder.name.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    holder.cardView.setCardBackgroundColor(Color.parseColor("#cccccc"));
+                    holder.favourite.setBackgroundColor(Color.parseColor("#cccccc"));
+                    holder.view.setAlpha(0.6f);
+                } else {
+                    holder.check.setChecked(false);
+                    holder.name.setPaintFlags(0);
+                    holder.cardView.setCardBackgroundColor(getResources().getColor(R.color.white));
+                    holder.favourite.setBackgroundColor(getResources().getColor(R.color.white));
+                    holder.view.setAlpha(1);
+                }
+            } catch (Exception e) {
             }
-        }
-            catch (Exception e){}
         }
 
         @Override
@@ -201,12 +205,13 @@ public class Favourite extends AppCompatActivity {
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-            public TextView name,listname;
+            public TextView name, listname;
             public CheckBox check;
             public ImageButton favourite;
             public CardView cardView;
             public View view;
             public RelativeLayout open;
+
             public ViewHolder(View itemView) {
                 super(itemView);
                 try {
@@ -220,7 +225,8 @@ public class Favourite extends AppCompatActivity {
                     cardView = (CardView) itemView;
                     check.setOnClickListener(this);
                     open.setOnClickListener(this);
-                }catch (Exception e){}
+                } catch (Exception e) {
+                }
             }
 
             @Override
@@ -265,8 +271,8 @@ public class Favourite extends AppCompatActivity {
                     }
                     adapter.notifyDataSetChanged();
 
+                } catch (Exception e) {
                 }
-                catch (Exception e){}
             }
 
         }
