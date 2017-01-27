@@ -22,7 +22,6 @@ public class TaskDetails {
     public String note;
     public String imagename;
     private int alarmstatus;
-    Bitmap bitmap;
 
 
     public TaskDetails(int primary,int listkey,int taskkey,String listname,String taskname,String alarmtime,String note,String imagename,int alarmstatus){

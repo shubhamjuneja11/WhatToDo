@@ -42,7 +42,7 @@
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:id="@+id/todo"
-               android:layout_marginTop="30dp">
+               >
 
 
 
@@ -50,8 +50,6 @@
                <RelativeLayout
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
-                   android:layout_marginTop="10dp"
-
                    android:id="@+id/relativelayout"
                    android:background="@color/white"
 

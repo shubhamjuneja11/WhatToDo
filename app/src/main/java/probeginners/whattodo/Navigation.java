@@ -265,7 +265,7 @@ public class Navigation extends AppCompatActivity
         recyclerView.setItemAnimator(new DefaultItemAnimator());*/
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this,1);
         recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(5), true));
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(1, dpToPx(5), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 

@@ -18,7 +18,6 @@ public class List {
     public int taskdone;
     public String  icon;
     public int primary;
-    Bitmap bitmap;
 
 
     public List(int primary,String listname,int taskdone,int totaltasks,String icon){
