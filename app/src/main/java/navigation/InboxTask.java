@@ -77,7 +77,7 @@ public class InboxTask extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 onBackPressed();
-                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                overridePendingTransition(0, R.anim.slide_out_right);
 
             }
         });

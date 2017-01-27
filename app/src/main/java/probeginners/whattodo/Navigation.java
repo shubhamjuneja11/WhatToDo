@@ -312,6 +312,7 @@ public class Navigation extends AppCompatActivity
         if (id == R.id.addlist) {
             Intent intent = new Intent(Navigation.this, NewList.class);
             startActivityForResult(intent, 11);
+            overridePendingTransition(R.anim.push_up_in,R.anim.push_down_out);
             return true;
         }
 
