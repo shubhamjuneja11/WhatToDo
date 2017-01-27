@@ -46,6 +46,8 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 onBackPressed();
+                overridePendingTransition(0, R.anim.slide_out_left);
+
             }
         });
 
@@ -152,5 +154,9 @@ public class SettingsActivity extends AppCompatActivity {
         DatabaseHandler handler=new DatabaseHandler(this);
         handler.deleteall();
         Toast.makeText(this, "Cleared", Toast.LENGTH_SHORT).show();
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

@@ -75,6 +75,7 @@ public class Favourite extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 onBackPressed();
+                overridePendingTransition(0, R.anim.slide_out_left);
             }
         });
 

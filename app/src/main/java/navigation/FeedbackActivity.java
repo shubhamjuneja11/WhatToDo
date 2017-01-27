@@ -44,6 +44,8 @@ public class FeedbackActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 onBackPressed();
+                overridePendingTransition(0, R.anim.slide_out_left);
+
             }
         });
 
@@ -80,7 +82,10 @@ public class FeedbackActivity extends AppCompatActivity {
     }
     public void open(View view){spinner.performClick();}
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
         // validating email id
 
     /*private boolean isValidEmail(String email) {

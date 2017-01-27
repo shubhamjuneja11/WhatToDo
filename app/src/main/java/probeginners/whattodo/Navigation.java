@@ -335,29 +335,37 @@ public class Navigation extends AppCompatActivity
             intent.putExtra("taskdone",done);
             intent.putExtra("listkey",-1);
             startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+
         } else if (id == R.id.myfavourites) {
             Intent intent=new Intent(Navigation.this, Favourite.class);
             startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
         } else if (id == R.id.scheduledtasks) {
             Intent intent=new Intent(Navigation.this,ScheduledTask.class);
             startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
         } else if (id == R.id.settings) {
             Intent intent=new Intent(Navigation.this, SettingsActivity.class);
             startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
         } else if (id == R.id.feedback) {
             Intent intent=new Intent(Navigation.this, FeedbackActivity.class);
             startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
         } else if (id == R.id.help) {
             Intent intent=new Intent(Navigation.this, Help.class);
             startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         }
         else if(id==R.id.hel){
             Intent intent=new Intent(Navigation.this,Info.class);
             startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

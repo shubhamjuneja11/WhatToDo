@@ -50,7 +50,6 @@ import classes.List;
 import classes.TaskDetails;
 import db.DatabaseHandler;
 import navigation.Favourite;
-import navigation.Inbox;
 
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;

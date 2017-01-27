@@ -90,8 +90,7 @@ Toolbar toolbar;
             intent.putExtra("name",name);
             setResult(11,intent);
             finish();
-            overridePendingTransition(R.anim.right_in, R.anim.slide_out_right);
-
+            overridePendingTransition(0,R.anim.push_up_out);
             return true;
         }
         if (item.getItemId() == android.R.id.home) {
@@ -101,6 +100,9 @@ Toolbar toolbar;
         }
         return false;
     }
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 
 }

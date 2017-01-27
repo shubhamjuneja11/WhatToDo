@@ -232,8 +232,7 @@ public class InboxTask extends AppCompatActivity {
         handler.addTaskDetails2(details);
         //if(alarmset){details.putalarmstatus(1);details.putalarmtime(s);}
 
-       /* handler.addTaskDetails(d,-1,i,"Inbox",task.getTaskname());
-        taskd=new TaskDetails(d,-1,i,"Inbox",name,s,"","",b);
+       /*
         taskd.putalarmstatus(status);
         taskd.putalarmtime(datetime.getText().toString());
         handler.updateTaskDetails(taskd);*/
