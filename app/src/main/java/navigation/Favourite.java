@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -213,7 +214,7 @@ public class Favourite extends AppCompatActivity {
             public ImageButton favourite;
             public CardView cardView;
             public View view;
-
+            public RelativeLayout open;
             public ViewHolder(View itemView) {
                 super(itemView);
                 view=itemView;
@@ -221,10 +222,13 @@ public class Favourite extends AppCompatActivity {
                 listname=(TextView)itemView.findViewById(R.id.listname);
                 check = (CheckBox) itemView.findViewById(R.id.check);
                 favourite = (ImageButton) itemView.findViewById(R.id.favourite2);
+                open=(RelativeLayout)itemView.findViewById(R.id.open);
                 cardView = (CardView) itemView;
                 check.setOnClickListener(this);
                 favourite.setOnClickListener(this);
-                name.setOnClickListener(this);
+                open.setOnClickListener(this);
+                //name.setOnClickListener(this);
+
 
             }
 
@@ -232,7 +236,7 @@ public class Favourite extends AppCompatActivity {
             public void onClick(View v) {
 
                 switch (v.getId()) {
-                    case R.id.name:
+                    case R.id.open:
                         Intent intent = new Intent(Favourite.this, TaskDetailsActivity.class);
                         intent.putExtra("listname", list.get(positiontoopen).getlistname());
                         intent.putExtra("taskname", list.get(positiontoopen).getTaskname());
