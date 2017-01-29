@@ -285,8 +285,12 @@ public class NewTaskActivity extends AppCompatActivity {
             TaskStackBuilder.create(NewTaskActivity.this)
                     .addNextIntentWithParentStack(upIntent)
                     .startActivities();
+            overridePendingTransition(0, R.anim.slide_out_left);
+
         } else {
             NavUtils.navigateUpTo(NewTaskActivity.this, upIntent);
+            overridePendingTransition(0, R.anim.slide_out_left);
+
         }
 
 
