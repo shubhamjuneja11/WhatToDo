@@ -324,6 +324,7 @@ tut=0;
                     .setContentText("This will guide you throughout the app")
                     .hideOnTouchOutside()
                     .build();
+            showcaseView.setHideOnTouchOutside(false);
             RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
             params.addRule(RelativeLayout.CENTER_HORIZONTAL);
