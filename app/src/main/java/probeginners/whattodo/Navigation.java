@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,6 +39,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
+
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
+import com.github.amlcurran.showcaseview.targets.Target;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -58,7 +66,7 @@ import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;
 
 public class Navigation extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener {
     public static final int INBOX_TASK = 3;
     private static final int CAMERA_REQUEST = 1;
     private static final int PICK_FROM_GALLERY = 2;
@@ -75,7 +83,10 @@ public class Navigation extends AppCompatActivity
     int positiontoopen, total;
     private String name;
     private String query;
-
+    ShowcaseView showcaseView;
+    Target t1,t2,t3,t4;
+    int tut=0;
+    View add;
     public static String getPath(final Context context, final Uri uri) {
         try {
             final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
@@ -225,13 +236,13 @@ public class Navigation extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+tut=0;
         super.onCreate(savedInstanceState);
 
 
         setContentView(R.layout.activity_navigation);
         try {
-            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle(R.string.app_name);
             //fun();
@@ -285,10 +296,51 @@ public class Navigation extends AppCompatActivity
                     //deleteList();
                 }
             }));
+
+           // t1=new ViewTarget(R.id.button,this);
+            //t1=new ViewTarget((View)toolbar.getMenu().getItem(0));
+            //if(t1==null) Log.e("tb","t1");
+            //t2=new ViewTarget(R.id.addlist,this);
+            /*t1 = new Target() {
+                @Override
+                public Point getPoint() {
+                    // Get approximate position of home icon's center
+                    int actionBarSize = toolbar.getHeight();
+                    int x = actionBarSize / 2;
+                    int y = actionBarSize / 2;
+                    return new Point(x, y);
+                }
+            };*/
+            t1=new ViewTarget(R.id.button,this);
+            t2=new ViewTarget(R.id.fab,this);
+           showcaseView=new ShowcaseView.Builder(this)
+                    .setTarget(Target.NONE)
+                    .setOnClickListener(this)
+                    .setContentTitle("WhatToDo Guide")
+                    .setContentText("This will guide you throughout the app")
+                    .hideOnTouchOutside()
+                    .build();
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
+    @Override
+    public void onClick(View view) {
+        try {
+            switch (tut) {
 
+                case 0:
+                    showcaseView.setShowcase(t1, true);
+                    break;
+                case 1:
+                   showcaseView.setShowcase(t2, true);
+                    break;
+                case 3:
+                   showcaseView.hide();
+                    break;
+            }tut++;
+        }catch (Exception e){e.printStackTrace();}
+    }
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -303,6 +355,12 @@ public class Navigation extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.navigation, menu);
+        add=menu.findItem(R.id.addlist).getActionView();
+        try {
+            t1 = new ViewTarget(add.getId(), this);
+        }
+        catch (Exception e){
+        }
         return true;
     }
 
