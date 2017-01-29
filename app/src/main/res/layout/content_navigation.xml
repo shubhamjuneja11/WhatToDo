@@ -5,13 +5,13 @@
     android:id="@+id/content_navigation"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-   
+
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="probeginners.whattodo.Navigation"
     tools:showIn="@layout/app_bar_navigation">
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/back90"/>
+        android:background="@drawable/back9"/>
 <include layout="@layout/recycler" android:id="@+id/include"></include>
 </RelativeLayout>

@@ -27,6 +27,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -40,6 +41,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
@@ -313,6 +316,7 @@ tut=0;
             };*/
             t1=new ViewTarget(R.id.button,this);
             t2=new ViewTarget(R.id.fab,this);
+            t3=new ViewTarget(R.id.mynav,this);
            showcaseView=new ShowcaseView.Builder(this)
                     .setTarget(Target.NONE)
                     .setOnClickListener(this)
@@ -320,6 +324,11 @@ tut=0;
                     .setContentText("This will guide you throughout the app")
                     .hideOnTouchOutside()
                     .build();
+            RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+            params.setMargins(0,0,0,200);
+            showcaseView.setButtonPosition(params);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -334,6 +343,9 @@ tut=0;
                     break;
                 case 1:
                    showcaseView.setShowcase(t2, true);
+                    break;
+                case 2:
+                    showcaseView.setShowcase(t3,true);
                     break;
                 case 3:
                    showcaseView.hide();
