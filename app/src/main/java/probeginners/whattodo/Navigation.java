@@ -91,11 +91,11 @@ public class Navigation extends AppCompatActivity
     int tut=0;
     View add;
     public static String getPath(final Context context, final Uri uri) {
-        try {
+
             final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
 
             // DocumentProvider
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+             {
                 if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
                     // ExternalStorageProvider
                     if (isExternalStorageDocument(uri)) {
@@ -157,9 +157,7 @@ public class Navigation extends AppCompatActivity
             }
 
             return null;
-        } catch (Exception e) {
-            return null;
-        }
+
     }
 
     /**

@@ -23,6 +23,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -473,11 +474,13 @@ public class TaskDetailsActivity extends AppCompatActivity implements View.OnCli
                     try {
 
                         Uri uri1 = data.getData();
-
+                        if(uri1==null) Log.e("abcd","a");
                         task.putimagename(Navigation.getPath(this, uri1));
                         handler.updateTaskDetails(task);
                         reminderimage.setImageBitmap(task.getImage());
+                        Log.e("abcd",Navigation.getPath(this, uri1));
                     } catch (Exception e) {
+                        e.printStackTrace();Log.e("abcd","ac");
                     }
 
             }

@@ -133,7 +133,7 @@
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="300dp"
         android:layout_below="@id/relativelayout3"
        android:minHeight="180dp"
         android:layout_marginTop="5dp"
@@ -143,8 +143,8 @@
         android:onClick="changeicon"
         >
         <ImageView
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
             android:layout_centerInParent="true"
             android:id="@+id/reminderimage"
             android:src="@drawable/remember"
