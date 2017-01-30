@@ -32,7 +32,6 @@
             android:label="@string/title_activity_navigation"
             android:theme="@style/AppTheme"></activity>
         <activity android:name="navigation.Favourite" />
-        <activity android:name="navigation.Inbox" />
         <activity android:name="navigation.InboxTask" />
         <activity
             android:name="navigation.SettingsActivity"

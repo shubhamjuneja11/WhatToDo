@@ -64,6 +64,7 @@ import navigation.InboxTask;
 import navigation.SettingsActivity;
 import tasklist.RecyclerTouchListener;
 import tasklist.TaskAdapter;
+import welcome.PrefManager;
 
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;
@@ -90,12 +91,14 @@ public class Navigation extends AppCompatActivity
     Target t1,t2,t3;
     int tut=0;
     View add;
+    private PrefManager prefManager;
+    boolean decide=true;
     public static String getPath(final Context context, final Uri uri) {
-        try {
+
             final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
 
             // DocumentProvider
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+             {
                 if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
                     // ExternalStorageProvider
                     if (isExternalStorageDocument(uri)) {
@@ -157,9 +160,7 @@ public class Navigation extends AppCompatActivity
             }
 
             return null;
-        } catch (Exception e) {
-            return null;
-        }
+
     }
 
     /**
@@ -241,8 +242,7 @@ public class Navigation extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
 tut=0;
         super.onCreate(savedInstanceState);
-
-
+        prefManager=new PrefManager(this);
         setContentView(R.layout.activity_navigation);
         try {
             final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -299,37 +299,25 @@ tut=0;
                     //deleteList();
                 }
             }));
-
-           // t1=new ViewTarget(R.id.button,this);
-            //t1=new ViewTarget((View)toolbar.getMenu().getItem(0));
-            //if(t1==null) Log.e("tb","t1");
-            //t2=new ViewTarget(R.id.addlist,this);
-            /*t1 = new Target() {
-                @Override
-                public Point getPoint() {
-                    // Get approximate position of home icon's center
-                    int actionBarSize = toolbar.getHeight();
-                    int x = actionBarSize / 2;
-                    int y = actionBarSize / 2;
-                    return new Point(x, y);
-                }
-            };*/
-            t1=new ViewTarget(R.id.button,this);
-            t2=new ViewTarget(R.id.fab,this);
-            t3=new ViewTarget(R.id.mynav,this);
-           showcaseView=new ShowcaseView.Builder(this)
-                    .setTarget(Target.NONE)
-                    .setOnClickListener(this)
-                    .setContentTitle("WhatToDo Guide")
-                    .setContentText("This will guide you throughout the app")
-                    .hideOnTouchOutside()
-                    .build();
-            showcaseView.setHideOnTouchOutside(true);
-            RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-            params.addRule(RelativeLayout.CENTER_HORIZONTAL);
-            params.setMargins(0,0,0,200);
-            showcaseView.setButtonPosition(params);
+            if(prefManager.tutorial()<1) {
+                t1 = new ViewTarget(R.id.button, this);
+                t2 = new ViewTarget(R.id.fab, this);
+                t3 = new ViewTarget(R.id.mynav, this);
+                showcaseView = new ShowcaseView.Builder(this)
+                        .setTarget(Target.NONE)
+                        .setOnClickListener(this)
+                        .setContentTitle("WhatToDo Guide")
+                        .setContentText("This will guide you throughout the app")
+                        .hideOnTouchOutside()
+                        .build();
+                showcaseView.setHideOnTouchOutside(true);
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                params.setMargins(0, 0, 0, 200);
+                showcaseView.setButtonPosition(params);
+                prefManager.setTutorial(1);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

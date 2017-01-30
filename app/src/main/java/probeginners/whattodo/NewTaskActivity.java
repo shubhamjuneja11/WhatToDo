@@ -11,6 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -41,11 +43,11 @@ import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import classes.Task;
 import db.DatabaseHandler;
 import interfaces.ClickListener;
 import tasklist.RecyclerTouchListener;
+import welcome.PrefManager;
 
 
 public class NewTaskActivity extends AppCompatActivity implements View.OnClickListener{
@@ -65,11 +67,14 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
     int tut=0;
     Target t1,t2,t3,t4;
     ShowcaseView showcaseView;
+    PrefManager prefManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_task);
+        prefManager=new PrefManager(this);
+
         try {
             getWindow().setBackgroundDrawableResource(R.drawable.back9);
             toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -183,7 +188,7 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
 
                 }
             });
-
+            if(prefManager.tutorial()<2)
             {
                showcaseView=new ShowcaseView.Builder(this)
                         .setTarget(Target.NONE)
@@ -192,7 +197,6 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
                         .setContentText("This will guide you throughout the app")
                         .hideOnTouchOutside()
                         .build();
-                showcaseView.setHideOnTouchOutside(true);
                 RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                 params.addRule(RelativeLayout.CENTER_HORIZONTAL);
@@ -201,6 +205,7 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
 
                 t1=new ViewTarget(R.id.abcd,this);
                 t2=new ViewTarget(R.id.fav,this);
+                prefManager.setTutorial(2);
             }
 
         } catch (Exception e) {
@@ -228,10 +233,22 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
                     favflag = false;
                     taskname.setText("");
                     fav.setImageResource(R.drawable.favourite);
-                    t3=new ViewTarget(R.id.check,this);
-                    t4=new ViewTarget(R.id.favourite2,this);
-                    showcaseView.setTarget(t3);
-                    showcaseView.show();
+                    if(prefManager.tutorial()<3) {
+                        Log.e("abcde","1");
+
+                      //  t3 = new ViewTarget(R.id.check, this);
+                       showcaseView=new ShowcaseView.Builder(this)
+                                .setTarget(Target.NONE)
+                                .setOnClickListener(this)
+                                .setContentTitle("WhatToDo Guide")
+                                .setContentText("This will guide you throughout the app")
+                                .hideOnTouchOutside()
+                                .build();
+                        Log.e("abcde","3");
+
+                        tut=3;
+                        prefManager.setTutorial(3);
+                    }
 
                     return true;
                 }
@@ -331,15 +348,22 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View view) {
         switch (tut){
-            case 0:
+            case 0: Log.e("abcde","5");
                 showcaseView.setShowcase(t1, true);
                 break;
-            case 1:
+            case 1: Log.e("abcde","6");
                 showcaseView.setShowcase(t2, true);break;
-            case 2:showcaseView.hide();
+            case 2:showcaseView.hide(); Log.e("abcde","7");
                 break;
-            case 3:showcaseView.setShowcase(t4,true);break;
-            case 5:showcaseView.hide();
+            case 3:t4 = new ViewTarget(R.id.check, NewTaskActivity.this);
+                showcaseView.setShowcase(t4,true);break;
+            case 4:
+                Log.e("abc","hello");
+                t4 = new ViewTarget(R.id.favourite2, NewTaskActivity.this);
+                showcaseView.setShowcase(t4,true);
+                break;
+
+            case 5:showcaseView.hide(); Log.e("abcde","8");
                 break;
         }tut++;
     }
