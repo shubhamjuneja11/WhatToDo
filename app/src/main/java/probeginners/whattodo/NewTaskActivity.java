@@ -32,7 +32,12 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.Target;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +48,7 @@ import interfaces.ClickListener;
 import tasklist.RecyclerTouchListener;
 
 
-public class NewTaskActivity extends AppCompatActivity {
+public class NewTaskActivity extends AppCompatActivity implements View.OnClickListener{
     Toolbar toolbar;
     RecyclerView recyclerView;
     MyAdapter adapter;
@@ -57,7 +62,9 @@ public class NewTaskActivity extends AppCompatActivity {
     String query, listname;
     Cursor cursor;
     int taskdone, listkey;
-
+    int tut=0;
+    Target t1,t2,t3,t4;
+    ShowcaseView showcaseView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -177,6 +184,25 @@ public class NewTaskActivity extends AppCompatActivity {
                 }
             });
 
+            {
+               showcaseView=new ShowcaseView.Builder(this)
+                        .setTarget(Target.NONE)
+                        .setOnClickListener(this)
+                        .setContentTitle("WhatToDo Guide")
+                        .setContentText("This will guide you throughout the app")
+                        .hideOnTouchOutside()
+                        .build();
+                showcaseView.setHideOnTouchOutside(true);
+                RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                params.setMargins(0,0,0,200);
+                showcaseView.setButtonPosition(params);
+
+                t1=new ViewTarget(R.id.abcd,this);
+                t2=new ViewTarget(R.id.fav,this);
+            }
+
         } catch (Exception e) {
         }
     }
@@ -202,6 +228,11 @@ public class NewTaskActivity extends AppCompatActivity {
                     favflag = false;
                     taskname.setText("");
                     fav.setImageResource(R.drawable.favourite);
+                    t3=new ViewTarget(R.id.check,this);
+                    t4=new ViewTarget(R.id.favourite2,this);
+                    showcaseView.setTarget(t3);
+                    showcaseView.show();
+
                     return true;
                 }
 
@@ -247,6 +278,7 @@ public class NewTaskActivity extends AppCompatActivity {
             handler.changeListTotalTask(listkey, adapter.getItemCount());
 
             handler.addTaskDetails(d, listkey, i, listname, task.getTaskname());
+
         } catch (Exception e) {
         }
     }
@@ -295,6 +327,23 @@ public class NewTaskActivity extends AppCompatActivity {
 
 
     }
+
+    @Override
+    public void onClick(View view) {
+        switch (tut){
+            case 0:
+                showcaseView.setShowcase(t1, true);
+                break;
+            case 1:
+                showcaseView.setShowcase(t2, true);break;
+            case 2:showcaseView.hide();
+                break;
+            case 3:showcaseView.setShowcase(t4,true);break;
+            case 5:showcaseView.hide();
+                break;
+        }tut++;
+    }
+
 
     public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         List<Task> list;
