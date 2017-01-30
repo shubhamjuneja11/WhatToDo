@@ -65,7 +65,7 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
     Cursor cursor;
     int taskdone, listkey;
     int tut=0;
-    Target t1,t2,t3,t4;
+    Target t1,t2,t4;
     ShowcaseView showcaseView;
     PrefManager prefManager;
     @Override
@@ -193,8 +193,8 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
                showcaseView=new ShowcaseView.Builder(this)
                         .setTarget(Target.NONE)
                         .setOnClickListener(this)
-                        .setContentTitle("WhatToDo Guide")
-                        .setContentText("This will guide you throughout the app")
+                        .setContentTitle("Tasks List")
+                        .setContentText("It contains various tasks in your List/Inbox.")
                         .hideOnTouchOutside()
                         .build();
                 RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -216,8 +216,12 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.newtaskmenu, menu);
+        MenuItem item=menu.getItem(0);
         if (flag)
-            inflater.inflate(R.menu.newtaskmenu, menu);
+           item.setEnabled(true);
+        else
+        item.setEnabled(false);
         // else inflater.inflate(R.menu.newtaskmenu, menu);
         return true;
     }
@@ -240,13 +244,13 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
                        showcaseView=new ShowcaseView.Builder(this)
                                 .setTarget(Target.NONE)
                                 .setOnClickListener(this)
-                                .setContentTitle("WhatToDo Guide")
-                                .setContentText("This will guide you throughout the app")
+                                .setContentTitle("Hurray!!")
+                                .setContentText("You have added your first task.")
                                 .hideOnTouchOutside()
                                 .build();
                         Log.e("abcde","3");
 
-                        tut=3;
+                        tut=4;
                         prefManager.setTutorial(3);
                     }
 
@@ -348,22 +352,33 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View view) {
         switch (tut){
-            case 0: Log.e("abcde","5");
+            case 0:
                 showcaseView.setShowcase(t1, true);
+                showcaseView.setContentTitle("Add New Task");
+                showcaseView.setContentText("Type the new task name here.");
                 break;
-            case 1: Log.e("abcde","6");
-                showcaseView.setShowcase(t2, true);break;
-            case 2:showcaseView.hide(); Log.e("abcde","7");
+            case 1:
+                showcaseView.setShowcase(t2, true);
+                showcaseView.setContentTitle("Favourite Task");
+                showcaseView.setContentText("Tap this to mark this task as favourite.");break;
+            case 2:t4 = new ViewTarget(R.id.button1,NewTaskActivity.this);
+                showcaseView.setShowcase(t4,true);
+                showcaseView.setContentTitle("Add Task");
+                showcaseView.setContentText("Click this to add a new task in the list.");break;
+            case 3:showcaseView.hide();
                 break;
-            case 3:t4 = new ViewTarget(R.id.check, NewTaskActivity.this);
-                showcaseView.setShowcase(t4,true);break;
-            case 4:
-                Log.e("abc","hello");
+            case 4:t4 = new ViewTarget(R.id.check, NewTaskActivity.this);
+                showcaseView.setShowcase(t4,true);
+                showcaseView.setContentTitle("Task status");
+                showcaseView.setContentText("Click this to change the status of your task as pending/done.");
+                break;
+            case 5:
                 t4 = new ViewTarget(R.id.favourite2, NewTaskActivity.this);
                 showcaseView.setShowcase(t4,true);
-                break;
+                showcaseView.setContentTitle("Favourite Task");
+                showcaseView.setContentText("Tap this to mark this task as favourite.");break;
 
-            case 5:showcaseView.hide(); Log.e("abcde","8");
+            case 6:showcaseView.hide();
                 break;
         }tut++;
     }
