@@ -87,7 +87,7 @@ public class Navigation extends AppCompatActivity
     private String name;
     private String query;
     ShowcaseView showcaseView;
-    Target t1,t2,t3,t4;
+    Target t1,t2,t3;
     int tut=0;
     View add;
     public static String getPath(final Context context, final Uri uri) {

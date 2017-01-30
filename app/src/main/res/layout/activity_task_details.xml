@@ -143,8 +143,8 @@
         android:onClick="changeicon"
         >
         <ImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             android:layout_centerInParent="true"
             android:id="@+id/reminderimage"
             android:src="@drawable/remember"

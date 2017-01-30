@@ -32,6 +32,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.Target;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -45,7 +49,7 @@ import navigation.Favourite;
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;
 
-public class TaskDetailsActivity extends AppCompatActivity {
+public class TaskDetailsActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String IMAGE_DIRECTORY_NAME = "WhatToDo";
     private static final int CAMERA_REQUEST = 1;
     private static final int PICK_FROM_GALLERY = 2;
@@ -64,7 +68,9 @@ public class TaskDetailsActivity extends AppCompatActivity {
     TaskDetails task;
     private String listname, taskname;
     private int status, listkey, taskey;
-
+    ShowcaseView showcaseView;
+    Target t1,t2,t3;
+    int tut=0;
     @Override
     protected void onResume() {
         super.onResume();
@@ -200,6 +206,24 @@ public class TaskDetailsActivity extends AppCompatActivity {
                     dialog.show();
                 }
             });
+            t1=new ViewTarget(R.id.alarm,this);
+            t2=new ViewTarget(R.id.note,this);
+            t3=new ViewTarget(R.id.reminderimage,this);
+            showcaseView=new ShowcaseView.Builder(this)
+                    .setTarget(Target.NONE)
+                    .setOnClickListener(this)
+                    .setContentTitle("WhatToDo Guide")
+                    .setContentText("This will guide you throughout the app")
+                    .hideOnTouchOutside()
+                    .build();
+            showcaseView.setHideOnTouchOutside(true);
+            RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+            params.setMargins(0,0,0,200);
+            showcaseView.setButtonPosition(params);
+
+
         } catch (Exception e) {
         }
     }
@@ -563,5 +587,24 @@ public class TaskDetailsActivity extends AppCompatActivity {
             reminderimage.setImageResource(R.drawable.remember);
         } catch (Exception e) {
         }
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (tut) {
+
+            case 0:
+                showcaseView.setShowcase(t1, true);
+                break;
+            case 1:
+                showcaseView.setShowcase(t2, true);
+                break;
+            case 2:
+                showcaseView.setShowcase(t3,true);
+                break;
+            case 3:
+                showcaseView.hide();
+                break;
+        }tut++;
     }
 }
