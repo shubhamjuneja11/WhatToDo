@@ -236,15 +236,16 @@ public class Navigation extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         preparedata();
-        if(prefManager.tutorial()<1) {
+      //  if(prefManager.tutorial()<1)
+        {
             t1 = new ViewTarget(R.id.button, this);
             t2 = new ViewTarget(R.id.fab, this);
             t3 = new ViewTarget(R.id.mynav, this);
             showcaseView = new ShowcaseView.Builder(this)
                     .setTarget(Target.NONE)
                     .setOnClickListener(this)
-                    .setContentTitle("WhatToDo Guide")
-                    .setContentText("This will guide you throughout the app")
+                    .setContentTitle("WhatToDo Tutorial")
+                    .setContentText("Hello,I'll guide you throughout the app.")
                     .hideOnTouchOutside()
                     .build();
             showcaseView.setHideOnTouchOutside(true);
@@ -330,12 +331,21 @@ tut=0;
 
                 case 0:
                     showcaseView.setShowcase(t1, true);
+                    showcaseView.setContentTitle("ADD LIST");
+                    showcaseView.setContentText("This will create a new list where you can add various tasks of " +
+                            "similar types or as you prefer.");
+
                     break;
                 case 1:
                    showcaseView.setShowcase(t2, true);
+                    showcaseView.setContentTitle("Inbox Task");
+                    showcaseView.setContentText("This will create a new task directly in the Inbox." +
+                            "You can access these tasks via Inbox in the Navigation.");
                     break;
                 case 2:
                     showcaseView.setShowcase(t3,true);
+                    showcaseView.setContentTitle("Navigation");
+                    showcaseView.setContentText("This will show various features provided by WhatToDo.");
                     break;
                 case 3:
                    showcaseView.hide();
