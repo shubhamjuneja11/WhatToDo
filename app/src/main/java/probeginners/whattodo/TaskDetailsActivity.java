@@ -46,6 +46,7 @@ import java.util.Locale;
 import classes.TaskDetails;
 import db.DatabaseHandler;
 import navigation.Favourite;
+import welcome.PrefManager;
 
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;
@@ -71,6 +72,7 @@ public class TaskDetailsActivity extends AppCompatActivity implements View.OnCli
     private int status, listkey, taskey;
     ShowcaseView showcaseView;
     Target t1,t2,t3;
+    PrefManager prefManager;
     int tut=0;
     @Override
     protected void onResume() {
@@ -86,6 +88,7 @@ public class TaskDetailsActivity extends AppCompatActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_details);
+        prefManager=new PrefManager(this);
         try {
             toolbar = (Toolbar) findViewById(R.id.toolbar);
             Intent intent = getIntent();
@@ -207,22 +210,25 @@ public class TaskDetailsActivity extends AppCompatActivity implements View.OnCli
                     dialog.show();
                 }
             });
-            t1=new ViewTarget(R.id.alarm,this);
-            t2=new ViewTarget(R.id.note,this);
-            t3=new ViewTarget(R.id.reminderimage,this);
-            showcaseView=new ShowcaseView.Builder(this)
-                    .setTarget(Target.NONE)
-                    .setOnClickListener(this)
-                    .setContentTitle("WhatToDo Guide")
-                    .setContentText("This will guide you throughout the app")
-                    .hideOnTouchOutside()
-                    .build();
-            showcaseView.setHideOnTouchOutside(true);
-            RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-            params.addRule(RelativeLayout.CENTER_HORIZONTAL);
-            params.setMargins(0,0,0,200);
-            showcaseView.setButtonPosition(params);
+            if(prefManager.tutorial()<4) {
+                t1 = new ViewTarget(R.id.alarm, this);
+                t2 = new ViewTarget(R.id.note, this);
+                t3 = new ViewTarget(R.id.reminderimage, this);
+                showcaseView = new ShowcaseView.Builder(this)
+                        .setTarget(Target.NONE)
+                        .setOnClickListener(this)
+                        .setContentTitle("WhatToDo Guide")
+                        .setContentText("This will guide you throughout the app")
+                        .hideOnTouchOutside()
+                        .build();
+                showcaseView.setHideOnTouchOutside(true);
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                params.setMargins(0, 0, 0, 200);
+                showcaseView.setButtonPosition(params);
+                prefManager.setTutorial(4);
+            }
 
 
         } catch (Exception e) {

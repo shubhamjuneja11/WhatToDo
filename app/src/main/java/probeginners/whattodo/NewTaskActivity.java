@@ -21,6 +21,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -46,6 +47,7 @@ import classes.Task;
 import db.DatabaseHandler;
 import interfaces.ClickListener;
 import tasklist.RecyclerTouchListener;
+import welcome.PrefManager;
 
 
 public class NewTaskActivity extends AppCompatActivity implements View.OnClickListener{
@@ -65,11 +67,13 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
     int tut=0;
     Target t1,t2,t3,t4;
     ShowcaseView showcaseView;
+    PrefManager prefManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_task);
+        prefManager=new PrefManager(this);
         try {
             getWindow().setBackgroundDrawableResource(R.drawable.back9);
             toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -183,7 +187,7 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
 
                 }
             });
-
+            if(prefManager.tutorial()<2)
             {
                showcaseView=new ShowcaseView.Builder(this)
                         .setTarget(Target.NONE)
@@ -192,7 +196,6 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
                         .setContentText("This will guide you throughout the app")
                         .hideOnTouchOutside()
                         .build();
-                showcaseView.setHideOnTouchOutside(true);
                 RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                 params.addRule(RelativeLayout.CENTER_HORIZONTAL);
@@ -201,6 +204,7 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
 
                 t1=new ViewTarget(R.id.abcd,this);
                 t2=new ViewTarget(R.id.fav,this);
+                prefManager.setTutorial(2);
             }
 
         } catch (Exception e) {
@@ -228,10 +232,20 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
                     favflag = false;
                     taskname.setText("");
                     fav.setImageResource(R.drawable.favourite);
-                    t3=new ViewTarget(R.id.check,this);
-                    t4=new ViewTarget(R.id.favourite2,this);
-                    showcaseView.setTarget(t3);
-                    showcaseView.show();
+                    if(prefManager.tutorial()<3) {
+                        Log.e("abcde","1");
+                        t4 = new ViewTarget(R.id.favourite2, this);
+                        t3 = new ViewTarget(R.id.check, this);
+                        Log.e("abcde","2");
+
+                        Log.e("abcde","3");
+                        try {
+                            showcaseView.setTarget(t4);
+                            showcaseView.show();
+                        }
+                        catch (Exception e){e.printStackTrace();}
+                       // prefManager.setTutorial(3);
+                    }
 
                     return true;
                 }
