@@ -236,6 +236,25 @@ public class Navigation extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         preparedata();
+        if(prefManager.tutorial()<1) {
+            t1 = new ViewTarget(R.id.button, this);
+            t2 = new ViewTarget(R.id.fab, this);
+            t3 = new ViewTarget(R.id.mynav, this);
+            showcaseView = new ShowcaseView.Builder(this)
+                    .setTarget(Target.NONE)
+                    .setOnClickListener(this)
+                    .setContentTitle("WhatToDo Guide")
+                    .setContentText("This will guide you throughout the app")
+                    .hideOnTouchOutside()
+                    .build();
+            showcaseView.setHideOnTouchOutside(true);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+            params.setMargins(0, 0, 0, 200);
+            showcaseView.setButtonPosition(params);
+            prefManager.setTutorial(1);
+        }
     }
 
     @Override
@@ -299,25 +318,7 @@ tut=0;
                     //deleteList();
                 }
             }));
-            if(prefManager.tutorial()<1) {
-                t1 = new ViewTarget(R.id.button, this);
-                t2 = new ViewTarget(R.id.fab, this);
-                t3 = new ViewTarget(R.id.mynav, this);
-                showcaseView = new ShowcaseView.Builder(this)
-                        .setTarget(Target.NONE)
-                        .setOnClickListener(this)
-                        .setContentTitle("WhatToDo Guide")
-                        .setContentText("This will guide you throughout the app")
-                        .hideOnTouchOutside()
-                        .build();
-                showcaseView.setHideOnTouchOutside(true);
-                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                params.addRule(RelativeLayout.CENTER_HORIZONTAL);
-                params.setMargins(0, 0, 0, 200);
-                showcaseView.setButtonPosition(params);
-                prefManager.setTutorial(1);
-            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

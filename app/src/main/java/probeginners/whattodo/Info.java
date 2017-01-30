@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import welcome.PrefManager;
+
 public class Info extends AppCompatActivity {
 Toolbar toolbar;
     @Override
@@ -26,6 +28,11 @@ Toolbar toolbar;
             });
         }
         catch (Exception e){}
+    }
+    public void start(View view){
+        PrefManager prefManager=new PrefManager(this);
+        prefManager.setTutorial(0);
+        finish();
     }
     @Override
     public void onBackPressed() {
