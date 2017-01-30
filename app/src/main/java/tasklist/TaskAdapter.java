@@ -2,7 +2,9 @@ package tasklist;
 
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import navigation.SettingsActivity;
 import probeginners.whattodo.ColorsHelper;
 import probeginners.whattodo.R;
 
@@ -20,12 +23,13 @@ import probeginners.whattodo.R;
  */
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> {
     List<classes.List> taskDataList;
-
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView taskname,taskcount;
         public ProgressBar progressBar;
         public ImageView taskimage;
         public View view;
+
+
         public MyViewHolder(View itemView) {
             super(itemView);
             try {
@@ -66,7 +70,15 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
                 holder.taskimage.setImageBitmap(bitmap);
             else
                 holder.taskimage.setImageResource(R.drawable.grocery);
-            holder.view.setBackgroundColor(ColorsHelper.getRandomColor());
+            if(SettingsActivity.color)
+            {holder.view.setBackgroundColor(ColorsHelper.getRandomColor());
+                holder.taskname.setTextColor(Color.WHITE);
+                holder.taskcount.setTextColor(Color.WHITE);
+            }
+            else  {holder.view.setBackgroundColor(Color.WHITE);
+            holder.taskname.setTextColor(Color.BLACK);
+                holder.taskcount.setTextColor(Color.BLACK);
+            }
         }catch (Exception e){}
     }
 

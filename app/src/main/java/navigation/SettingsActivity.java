@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,11 +23,11 @@ import probeginners.whattodo.R;
 
 public class SettingsActivity extends AppCompatActivity {
     public static String chosenRingtone;
-    public static boolean vibrate = false;
+    public static boolean vibrate = false,color=true;
     Toolbar toolbar;
-    boolean decide;
-    TextView v, t;
-    String title;
+    boolean decide,decide2;
+    TextView v, t,co;
+    String title,mycolor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,7 @@ public class SettingsActivity extends AppCompatActivity {
             getSupportActionBar().setTitle("Settings");
             v = (TextView) findViewById(R.id.vibrate);
             t = (TextView) findViewById(R.id.tone);
+            co=(TextView)findViewById(R.id.color);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -142,7 +144,9 @@ public class SettingsActivity extends AppCompatActivity {
             editor.putString("ringtone", chosenRingtone);
             editor.putBoolean("vibrate", vibrate);
             editor.putString("title", title);
-            editor.commit();
+            editor.putBoolean("color",color);
+            Log.e("abcd",color+"hi");
+            editor.apply();
         } catch (Exception e) {
         }
     }
@@ -155,12 +159,20 @@ public class SettingsActivity extends AppCompatActivity {
             chosenRingtone = sharedPreferences.getString("ringtone", "");
             vibrate = sharedPreferences.getBoolean("vibrate", false);
             title = sharedPreferences.getString("title", "");
+            color=sharedPreferences.getBoolean("color",true);
+            Log.e("abcd",color+"start");
+            if(color)
+                co.setText("Colorful");
+            else co.setText("White");
             if (title.equals(""))
                 t.setText("None");
             else
                 t.setText(title);
             if (vibrate) v.setText("On");
             else v.setText("Off");
+            if(mycolor.equals(""))
+                co.setText("White");
+            else co.setText("Colorful");
         } catch (Exception e) {
         }
     }
@@ -173,7 +185,47 @@ public class SettingsActivity extends AppCompatActivity {
         } catch (Exception e) {
         }
     }
+public void changecolor(View view){
+    decide2=true;
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    CharSequence[] array = {"White","Colorful"};
+    builder.setTitle("Set Color")
 
+            .setSingleChoiceItems(array, 1, new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (which == 0)
+                        decide2 = false;
+                    else decide2 = true;
+
+                }
+            })
+            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+Log.e("abcd",decide2+"");
+                    if (decide2) {
+                        color = true;
+                        co.setText("Colorful");
+                        decide2 = false;
+                    } else {
+                        color=false;
+                        co.setText("White");
+                    }
+                    Log.e("abcd",color+"");
+                }
+            })
+            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+
+                }
+            });
+
+    Dialog dialog = builder.create();
+    dialog.show();
+}
     @Override
     public void onBackPressed() {
         super.onBackPressed();
