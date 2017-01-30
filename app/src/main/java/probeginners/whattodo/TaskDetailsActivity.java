@@ -217,15 +217,15 @@ public class TaskDetailsActivity extends AppCompatActivity implements View.OnCli
                 showcaseView = new ShowcaseView.Builder(this)
                         .setTarget(Target.NONE)
                         .setOnClickListener(this)
-                        .setContentTitle("WhatToDo Guide")
-                        .setContentText("This will guide you throughout the app")
+                        .setContentTitle("TaskDetails")
+                        .setContentText("This contains the details of your individual task.")
                         .hideOnTouchOutside()
                         .build();
                 showcaseView.setHideOnTouchOutside(true);
                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                 params.addRule(RelativeLayout.CENTER_HORIZONTAL);
-                params.setMargins(0, 0, 0, 200);
+                params.setMargins(0, 0, 0, 100);
                 showcaseView.setButtonPosition(params);
                 prefManager.setTutorial(4);
             }
@@ -604,12 +604,18 @@ public class TaskDetailsActivity extends AppCompatActivity implements View.OnCli
 
             case 0:
                 showcaseView.setShowcase(t1, true);
+                showcaseView.setContentTitle("Set Alarm");
+                showcaseView.setContentText("Click this to change status of alarm as On/Off.");
                 break;
             case 1:
                 showcaseView.setShowcase(t2, true);
-                break;
+                showcaseView.setContentTitle("Write a note");
+                showcaseView.setContentText("You can write some specifics regarding this task.");break;
+
             case 2:
                 showcaseView.setShowcase(t3,true);
+                showcaseView.setContentTitle("Set Image");
+                showcaseView.setContentText("Click this to set image for this task.");
                 break;
             case 3:
                 showcaseView.hide();

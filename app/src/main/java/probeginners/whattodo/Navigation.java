@@ -236,7 +236,7 @@ public class Navigation extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         preparedata();
-      //  if(prefManager.tutorial()<1)
+        if(prefManager.tutorial()<1)
         {
             t1 = new ViewTarget(R.id.button, this);
             t2 = new ViewTarget(R.id.fab, this);
