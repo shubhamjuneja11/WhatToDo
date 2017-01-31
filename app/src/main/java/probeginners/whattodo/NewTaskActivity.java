@@ -43,6 +43,8 @@ import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 import classes.Task;
 import db.DatabaseHandler;
 import interfaces.ClickListener;
@@ -68,6 +70,22 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
     Target t1,t2,t4;
     ShowcaseView showcaseView;
     PrefManager prefManager;
+    ArrayList<Integer> all=new ArrayList<>();
+    ArrayList<Integer> selected=new ArrayList<>();
+    boolean isselected=false;
+
+
+    public void selection(int a){
+        int b=list.get(a).getPrimary();
+        if(selected.contains(b))
+            selected.remove((Object)b);
+
+        else
+        selected.add(b);
+        invalidateOptionsMenu();
+        adapter.notifyDataSetChanged();
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -86,7 +104,14 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    if(isselected)
+                    {
+                        isselected=false;
+                        selected.clear();
+                        adapter.notifyDataSetChanged();
+                        invalidateOptionsMenu();
+                    }
+                    else
                     onBackPressed();
                 }
             });
@@ -110,7 +135,7 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
             fav = (ImageButton) findViewById(R.id.fav);
 
 
-            adapter = new MyAdapter(list);
+            adapter = new MyAdapter(list,selected);
 
             RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
             recyclerView.setLayoutManager(mLayoutManager);
@@ -123,39 +148,16 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
                 @Override
                 public void onClick(View view, int position) {
                     positiontoopen = position;
+                    if(isselected)selection(position);
                 }
 
                 @Override
                 public void onLongClick(View view, final int position) {
-
-                    AlertDialog dialog = new AlertDialog.Builder(NewTaskActivity.this)
-                            .setTitle("Delete")
-                            .setMessage("Delete Task " + list.get(position).getTaskname() + "? ")
-                            .setIcon(R.drawable.delete)
-
-                            .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    handler.deleteTask(NewTaskActivity.this, list.get(position).primary);
-                                    list.remove(position);
-                                    adapter.notifyDataSetChanged();
-                                    dialog.dismiss();
-
-                                }
-
-                            })
-
-
-                            .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                    dialog.dismiss();
-
-                                }
-                            })
-                            .create();
-                    dialog.show();
-
+                    if(!isselected){
+                        selection(position);
+                        isselected=true;
+                    }
+                    else {selection(position);}
                 }
             }));
 
@@ -216,12 +218,24 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.newtaskmenu, menu);
-        MenuItem item=menu.getItem(0);
-        if (flag)
-           item.setEnabled(true);
-        else
-        item.setEnabled(false);
+        if(!isselected) {
+
+            inflater.inflate(R.menu.newtaskmenu, menu);
+            MenuItem item = menu.getItem(0);
+            if (flag)
+                item.setEnabled(true);
+            else
+                item.setEnabled(false);
+            getSupportActionBar().setTitle(listname);
+        }
+        else{
+            inflater.inflate(R.menu.newtaskmenu2,menu);
+            MenuItem item=menu.getItem(0);
+            item.setTitle(selected.size()+" selected");
+            toolbar.setTitle("");
+
+        }
+
         // else inflater.inflate(R.menu.newtaskmenu, menu);
         return true;
     }
@@ -274,6 +288,7 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
                     if (!task.completed)
                         list.add(0, task);
                     else list.add(list.size(), task);
+        /***/            all.add(task.getPrimary());
                 } while (cursor.moveToNext());
             }
 
@@ -299,7 +314,7 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
             handler.changeListTotalTask(listkey, adapter.getItemCount());
 
             handler.addTaskDetails(d, listkey, i, listname, task.getTaskname());
-
+         /****/   all.add(task.getPrimary());
         } catch (Exception e) {
         }
     }
@@ -386,10 +401,11 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
 
     public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         List<Task> list;
+        ArrayList<Integer> selected;
 
-
-        public MyAdapter(List<Task> list) {
+        public MyAdapter(List<Task> list,ArrayList<Integer> selected) {
             this.list = list;
+            this.selected=selected;
         }
 
         @Override
@@ -414,19 +430,38 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
                     holder.favourite.setImageResource(R.drawable.favourite);
 
                 }
+
+
+
+
                 if (data.getcompleted()) {
                     holder.view.setAlpha(0.6f);
                     holder.check.setChecked(true);
                     holder.name.setPaintFlags(holder.name.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    holder.cardView.setCardBackgroundColor(Color.parseColor("#cccccc"));
-                    holder.favourite.setBackgroundColor(Color.parseColor("#cccccc"));
+                    if(isselected&&selected.contains(data.getPrimary()))
+                    {
+                        holder.cardView.setCardBackgroundColor(getResources().getColor(R.color.selected));
+                        holder.favourite.setBackgroundColor(getResources().getColor(R.color.selected));
+                    }
+                    else {
+                        holder.cardView.setCardBackgroundColor(Color.parseColor("#cccccc"));
+                        holder.favourite.setBackgroundColor(Color.parseColor("#cccccc"));
+                    }
 
                 } else {
+                    holder.view.setAlpha(1);
                     holder.check.setChecked(false);
                     holder.name.setPaintFlags(0);
-                    holder.cardView.setCardBackgroundColor(getResources().getColor(R.color.white));
-                    holder.favourite.setBackgroundColor(getResources().getColor(R.color.white));
-                    holder.view.setAlpha(1);
+                    if(isselected&&selected.contains(data.getPrimary()))
+                    {
+                        holder.cardView.setCardBackgroundColor(getResources().getColor(R.color.selected));
+                        holder.favourite.setBackgroundColor(getResources().getColor(R.color.selected));
+                    }
+                    else {
+                        holder.cardView.setCardBackgroundColor(getResources().getColor(R.color.white));
+                        holder.favourite.setBackgroundColor(getResources().getColor(R.color.white));
+
+                    }
                 }
             } catch (Exception e) {
             }
@@ -443,7 +478,6 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
             public ImageButton favourite;
             public CardView cardView;
             public View view;
-
             public ViewHolder(View itemView) {
                 super(itemView);
                 try {
@@ -463,7 +497,7 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
 
             @Override
             public void onClick(View v) {
-                try {
+                try {if(!isselected)
                     switch (v.getId()) {
                         case R.id.name:
                             Intent intent = new Intent(NewTaskActivity.this, TaskDetailsActivity.class);
