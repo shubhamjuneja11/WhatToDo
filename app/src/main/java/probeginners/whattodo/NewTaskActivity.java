@@ -91,6 +91,13 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
         adapter.notifyDataSetChanged();
         Log.e("hio",selected.size()+"");
     }
+    public void changetask(){
+        done=0;
+        for (int i = 0; i < list.size(); i++)
+            if (list.get(i).completed)
+                done++;
+        handler.deleteTask(listkey, done, list.size());
+    }
     public void dun(View view){
         if(isselected){Log.e("mks","kl");
             {
@@ -308,13 +315,9 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
 
                                             selected.clear();
                                             map.clear();
-                                            Log.e("abcde",selected.size()+"");
                                             dialog.dismiss();
-                                            done = 0;
-                                            for (int i = 0; i < list.size(); i++)
-                                                if (list.get(i).completed)
-                                                    done++;
-                                            handler.deleteTask(listkey, done, list.size());
+                                            changetask();
+
                                         }catch (Exception e){e.printStackTrace();}
                                        /***********************************/
 
@@ -382,7 +385,8 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
             list.add(0, task);
             adapter.notifyDataSetChanged();
             handler.addTask(task);
-            handler.changeListTotalTask(listkey, adapter.getItemCount());
+            changetask();
+           // handler.changeListTotalTask(listkey, adapter.getItemCount());
 
             handler.addTaskDetails(d, listkey, i, listname, task.getTaskname());
          /****/   all.add(task.getPrimary());
@@ -605,10 +609,11 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
                             handler.updateTask(task);
 
 
-                            if (!f)
+                            /*if (!f)
                                 taskdone++;
                             else taskdone--;
-                            handler.changeListTaskDone(listkey, taskdone);
+                            handler.changeListTaskDone(listkey, taskdone);*/
+                            changetask();
                             break;
 
                         case R.id.favourite2:
