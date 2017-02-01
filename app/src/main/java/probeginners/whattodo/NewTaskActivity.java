@@ -34,6 +34,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -42,8 +43,8 @@ import com.github.amlcurran.showcaseview.targets.Target;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 import classes.Task;
 import db.DatabaseHandler;
@@ -58,7 +59,7 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
     MyAdapter adapter;
     EditText taskname;
     int positiontoopen;
-    ArrayList<Task> list = new ArrayList<>();
+    ArrayList<Task> list=new ArrayList<>();;
     ImageButton fav;
     boolean flag = false, favflag = false;
     SQLiteDatabase readdatabase;
@@ -66,25 +67,40 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
     String query, listname;
     Cursor cursor;
     int taskdone, listkey;
-    int tut=0;
+    int tut=0,b,done;
     Target t1,t2,t4;
     ShowcaseView showcaseView;
     PrefManager prefManager;
     ArrayList<Integer> all=new ArrayList<>();
     ArrayList<Integer> selected=new ArrayList<>();
     boolean isselected=false;
-
-
+    HashMap<Integer,Integer>map=new HashMap<>();
+    RelativeLayout relativeLayout;
     public void selection(int a){
+        Log.e("hio","a");
         int b=list.get(a).getPrimary();
         if(selected.contains(b))
-            selected.remove((Object)b);
+        {selected.remove((Object)b);map.remove(b);
+        Log.e("abcde",selected.size()+"");
+        }
 
         else
-        selected.add(b);
+        { selected.add(b);map.put(b,a);  Log.e("abc",b+" : "+a+"");}
+
         invalidateOptionsMenu();
         adapter.notifyDataSetChanged();
-
+        Log.e("hio",selected.size()+"");
+    }
+    public void dun(View view){
+        if(isselected){Log.e("mks","kl");
+            {
+                isselected = false;
+                selected.clear();
+                map.clear();
+                adapter.notifyDataSetChanged();
+                invalidateOptionsMenu();
+            }
+        }
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +108,6 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_task);
         prefManager=new PrefManager(this);
-
         try {
             getWindow().setBackgroundDrawableResource(R.drawable.back9);
             toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -135,7 +150,7 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
             fav = (ImageButton) findViewById(R.id.fav);
 
 
-            adapter = new MyAdapter(list,selected);
+            adapter = new MyAdapter(list/*selected*/);
 
             RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
             recyclerView.setLayoutManager(mLayoutManager);
@@ -154,8 +169,8 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
                 @Override
                 public void onLongClick(View view, final int position) {
                     if(!isselected){
-                        selection(position);
                         isselected=true;
+                        selection(position);
                     }
                     else {selection(position);}
                 }
@@ -227,6 +242,7 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
             else
                 item.setEnabled(false);
             getSupportActionBar().setTitle(listname);
+
         }
         else{
             inflater.inflate(R.menu.newtaskmenu2,menu);
@@ -270,6 +286,56 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
 
                     return true;
                 }
+                case R.id.delete:{
+                    Log.e("hiod",selected.size()+"");
+                    if(isselected&&selected.size()>0) {
+                        android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(NewTaskActivity.this)
+                                .setTitle("Delete")
+                                .setMessage("Delete "+selected.size()+" tasks.")
+                                .setIcon(R.drawable.delete)
+                                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        try {
+                                            for (int i = 0; i < selected.size(); i++) {
+                                                handler.deleteTask(NewTaskActivity.this, selected.get(i));
+                                                b = map.get(selected.get(i));
+                                                list.remove(b);
+                                                adapter.notifyDataSetChanged();
+                                               // Log.e("abc", map.get(selected.get(i)) + "");
+                                                            Log.e("afg","l");
+                                            }
+
+                                            selected.clear();
+                                            map.clear();
+                                            Log.e("abcde",selected.size()+"");
+                                            dialog.dismiss();
+                                            done = 0;
+                                            for (int i = 0; i < list.size(); i++)
+                                                if (list.get(i).completed)
+                                                    done++;
+                                            handler.deleteTask(listkey, done, list.size());
+                                        }catch (Exception e){e.printStackTrace();}
+                                       /***********************************/
+
+                                    }
+
+                                })
+
+
+                                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                        dialog.dismiss();
+
+                                    }
+                                })
+                                .create();
+                        dialog.show();
+                    }isselected=false;invalidateOptionsMenu();
+                    //selected=new ArrayList<>();
+                    return true;
+                }
 
 
             }
@@ -281,6 +347,7 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
 
     private void preparedata() {
         Task task;
+       // list.clear();
         try {
             if (cursor.moveToFirst()) {
                 do {
@@ -292,6 +359,10 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
                 } while (cursor.moveToNext());
             }
 
+           /* if(adapter!=null)
+            {adapter.notifyDataSetChanged();Log.e("hello","ssss");
+                Log.e("hello",list.size()+"");
+            }*/
         } catch (Exception e) {
         }
     }
@@ -339,6 +410,7 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
                 imageView.setImageResource(R.drawable.heart);
 
             }
+            dun(view);
         } catch (Exception e) {
         }
     }
@@ -401,11 +473,18 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
 
     public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         List<Task> list;
-        ArrayList<Integer> selected;
+        //ArrayList<Integer> selected;
 
-        public MyAdapter(List<Task> list,ArrayList<Integer> selected) {
+        @Override
+        public void registerAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
+            super.registerAdapterDataObserver(observer);
+            Log.e("abc","changed");
+        }
+
+        public MyAdapter(List<Task> list/*ArrayList<Integer> selected*/) {
+
             this.list = list;
-            this.selected=selected;
+            //this.selected=selected;
         }
 
         @Override

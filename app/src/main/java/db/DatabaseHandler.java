@@ -8,6 +8,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import java.util.ArrayList;
 
 import classes.List;
 import classes.Task;
@@ -182,7 +185,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 
     }
-
+    public void deleteTask(int key,int done,int total){
+        if(db==null)
+            db=this.getWritableDatabase();
+        ContentValues values=new ContentValues();
+        values.put(taskcount,done);
+        values.put(totaltask,total);
+        db.update(List_Table,values,"id=?",new String[]{String.valueOf(key)});
+    }
 
     /*-------TASK--------*/
     public void addTask(Task task) {
@@ -214,7 +224,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             db = this.getWritableDatabase();
         deleteAlarm(context, primary, false);
         db.delete(Details_Task, "taskkey=?", new String[]{String.valueOf(primary)});
-        db.delete(Task_Table, "id=?", new String[]{String.valueOf(primary)});
+        int a=db.delete(Task_Table, "id=?", new String[]{String.valueOf(primary)});
+
 
     }
 
