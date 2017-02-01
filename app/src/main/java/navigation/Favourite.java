@@ -42,13 +42,19 @@ public class Favourite extends AppCompatActivity {
     RecyclerView recyclerView;
     DatabaseHandler handler;
     MyAdapter adapter;
-    int positiontoopen, listkey;
+    int positiontoopen, listkey,done;
 
     ArrayList<Task> list = new ArrayList<>();
 
 
     Cursor cursor;
-
+    public void changetask(){
+        done=0;
+        for (int i = 0; i < list.size(); i++)
+            if (list.get(i).completed)
+                done++;
+        handler.deleteTask(listkey, done, list.size());
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -262,12 +268,13 @@ public class Favourite extends AppCompatActivity {
                             handler.updateTask(task);
 
 
-                            if (!f)
+                            /*if (!f)
                                 handler.ChangeTaskCount(listkey, true);
 
                             else
                                 handler.ChangeTaskCount(listkey, false);
-                            break;
+                            break;*/
+                            changetask();
                     }
                     adapter.notifyDataSetChanged();
 

@@ -139,7 +139,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
 
-    public void changeListTaskDone(int primary, int task) {
+    /*public void changeListTaskDone(int primary, int task) {
         if (db == null)
             db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -153,7 +153,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.update(List_Table, values, "id=?", new String[]{String.valueOf(primary)});
     }
 
-
+*/
     public void ChangeTaskCount(int p, boolean f) {
         String b;
         int x = 0;
@@ -341,10 +341,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             db = this.getWritableDatabase();
         query = "select id from " + Alarm_Table;
         Cursor cursor = db.rawQuery(query, null);
-        a = new int[cursor.getCount()];
-        i = 0;
+        i=cursor.getCount();
+        a = new int[i];
 
-        for (j = 0; j < i; j++) {
+
+        for (j = 0; j <i; j++) {
             Intent intent = new Intent(context, AlarmReciever.class);
 
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, a[j], intent, 0);

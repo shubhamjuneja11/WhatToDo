@@ -41,12 +41,18 @@ public class ScheduledTask extends AppCompatActivity {
     DatabaseHandler handler;
     ScheduledTask.MyAdapter adapter;
     int positiontoopen, listkey;
-
+    int done;
     ArrayList<Task> list = new ArrayList<>();
 
 
     Cursor cursor;
-
+    public void changetask(){
+        done=0;
+        for (int i = 0; i < list.size(); i++)
+            if (list.get(i).completed)
+                done++;
+        handler.deleteTask(listkey, done, list.size());
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -267,11 +273,12 @@ public class ScheduledTask extends AppCompatActivity {
                             handler.updateTask(task);
 
 
-                            if (!f)
+                          /*  if (!f)
                                 handler.ChangeTaskCount(listkey, true);
 
                             else
-                                handler.ChangeTaskCount(listkey, false);
+                                handler.ChangeTaskCount(listkey, false);*/
+                            changetask();
                             break;
 
                         case R.id.favourite2:
