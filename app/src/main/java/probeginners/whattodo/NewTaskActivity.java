@@ -139,7 +139,7 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
                         invalidateOptionsMenu();
                     }
                     else
-                    onBackPressed();
+                    {onBackPressed();   overridePendingTransition(0, R.anim.slide_out_left);}
                 }
             });
 

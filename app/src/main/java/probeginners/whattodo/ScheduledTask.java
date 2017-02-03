@@ -15,8 +15,12 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -25,11 +29,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import classes.Task;
 import db.DatabaseHandler;
 import interfaces.ClickListener;
+import navigation.Favourite;
 import tasklist.RecyclerTouchListener;
 
 public class ScheduledTask extends AppCompatActivity {
@@ -43,9 +49,40 @@ public class ScheduledTask extends AppCompatActivity {
     int positiontoopen, listkey;
     int done;
     ArrayList<Task> list = new ArrayList<>();
-
+    ArrayList<Integer> selected = new ArrayList<>();
+    boolean isselected = false;
+    HashMap<Integer, Integer> map = new HashMap<>();
+    int b;
 
     Cursor cursor;
+
+    public void selection(int a) {
+        int b = list.get(a).getPrimary();
+        if (selected.contains(b)) {
+            selected.remove((Object) b);
+            map.remove(b);
+
+        } else {
+            selected.add(b);
+            map.put(b, a);
+        }
+
+        invalidateOptionsMenu();
+        adapter.notifyDataSetChanged();
+
+    }
+
+    public void dun(View view){
+        if(isselected){
+            {
+                isselected = false;
+                selected.clear();
+                map.clear();
+                adapter.notifyDataSetChanged();
+                invalidateOptionsMenu();
+            }
+        }
+    }
     public void changetask(){
         done=0;
         for (int i = 0; i < list.size(); i++)
@@ -71,8 +108,15 @@ public class ScheduledTask extends AppCompatActivity {
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    onBackPressed();
-                    overridePendingTransition(0, R.anim.slide_out_left);
+                    if (isselected) {
+                        isselected = false;
+                        selected.clear();
+                        adapter.notifyDataSetChanged();
+                        invalidateOptionsMenu();
+                    } else {
+                        onBackPressed();
+                        overridePendingTransition(0, R.anim.slide_out_left);
+                    }
 
                 }
             });
@@ -99,38 +143,18 @@ public class ScheduledTask extends AppCompatActivity {
                 @Override
                 public void onClick(View view, int position) {
                     positiontoopen = position;
-
+                    if (isselected) selection(position);
                 }
 
                 @Override
                 public void onLongClick(View view, final int position) {
 
-                    AlertDialog dialog = new AlertDialog.Builder(ScheduledTask.this)
-                            .setTitle("Delete")
-                            .setMessage("Delete Task?")
-                            .setIcon(R.drawable.delete)
-
-                            .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    handler.deleteTask(ScheduledTask.this, list.get(position).primary);
-                                    list.remove(position);
-                                    adapter.notifyDataSetChanged();
-                                    dialog.dismiss();
-                                }
-
-                            })
-
-
-                            .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                    dialog.dismiss();
-
-                                }
-                            })
-                            .create();
-                    dialog.show();
+                    if (!isselected) {
+                        isselected = true;
+                        selection(position);
+                    } else {
+                        selection(position);
+                    }
 
                 }
             }));
@@ -197,14 +221,29 @@ public class ScheduledTask extends AppCompatActivity {
                 if (data.getcompleted()) {
                     holder.check.setChecked(true);
                     holder.name.setPaintFlags(holder.name.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    holder.cardView.setCardBackgroundColor(Color.parseColor("#cccccc"));
-                    holder.favourite.setBackgroundColor(Color.parseColor("#cccccc"));
+                    if(isselected&&selected.contains(data.getPrimary()))
+                    {
+                        holder.cardView.setCardBackgroundColor(getResources().getColor(R.color.selected));
+                        holder.favourite.setBackgroundColor(getResources().getColor(R.color.selected));
+                    }
+                    else {
+                        holder.cardView.setCardBackgroundColor(Color.parseColor("#cccccc"));
+                        holder.favourite.setBackgroundColor(Color.parseColor("#cccccc"));
+                    }
                     holder.view.setAlpha(0.6f);
                 } else {
                     holder.check.setChecked(false);
                     holder.name.setPaintFlags(0);
-                    holder.cardView.setCardBackgroundColor(getResources().getColor(R.color.white));
-                    holder.favourite.setBackgroundColor(getResources().getColor(R.color.white));
+                    if(isselected&&selected.contains(data.getPrimary()))
+                    {
+                        holder.cardView.setCardBackgroundColor(getResources().getColor(R.color.selected));
+                        holder.favourite.setBackgroundColor(getResources().getColor(R.color.selected));
+                    }
+                    else {
+                        holder.cardView.setCardBackgroundColor(getResources().getColor(R.color.white));
+                        holder.favourite.setBackgroundColor(getResources().getColor(R.color.white));
+
+                    }
                     holder.view.setAlpha(1);
                 }
             } catch (Exception e) {
@@ -291,5 +330,75 @@ public class ScheduledTask extends AppCompatActivity {
                 }
             }
         }
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        if (isselected) {
+            inflater.inflate(R.menu.newtaskmenu2, menu);
+            MenuItem item = menu.getItem(0);
+            item.setTitle(selected.size() + " selected");
+            toolbar.setTitle("");
+
+        }
+
+        // else inflater.inflate(R.menu.newtaskmenu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.delete) {
+            if (isselected && selected.size() > 0) {
+                android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(ScheduledTask.this)
+                        .setTitle("Delete")
+                        .setMessage("Delete " + selected.size() + " tasks.")
+                        .setIcon(R.drawable.delete)
+                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                try {
+                                    for (int i = 0; i < selected.size(); i++) {
+                                        handler.deleteTask(ScheduledTask.this, selected.get(i));
+                                        b = map.get(selected.get(i));
+                                        list.remove(b);
+                                        adapter.notifyDataSetChanged();
+                                        // Log.e("abc", map.get(selected.get(i)) + "");
+                                        Log.e("afg", "l");
+                                    }
+
+                                    selected.clear();
+                                    map.clear();
+                                    dialog.dismiss();
+                                    changetask();
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                /***********************************/
+
+                            }
+
+                        })
+
+
+                        .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                selected.clear();
+                                map.clear();
+                                dialog.dismiss();
+                                adapter.notifyDataSetChanged();
+
+                            }
+                        })
+                        .create();
+                dialog.show();
+            }
+            isselected = false;
+            invalidateOptionsMenu();
+            //selected=new ArrayList<>();
+            return true;
+        }
+        return false;
     }
 }
