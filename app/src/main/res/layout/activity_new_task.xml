@@ -41,7 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/appbarlayout"
-
+        android:onClick="dun"
         android:id="@+id/relativelayout"
         android:background="@color/white"
 
@@ -51,12 +51,14 @@
             android:layout_height="wrap_content"
             android:id="@+id/newtaskenter"
             android:weightSum="20"
+            android:onClick="dun"
             android:layout_marginRight="5dp"
             android:focusable="true" android:focusableInTouchMode="true"
             >
             <android.support.design.widget.TextInputLayout
                 android:layout_width="0dp"
                 android:layout_weight="18"
+                android:onClick="dun"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:id="@+id/abcd"
@@ -66,8 +68,8 @@
                 android:layout_height="50dp"
                 android:hint="Add new task..."
                 android:id="@+id/newtaskname"
-                android:onClick="dun"
                 android:singleLine="true"
+                android:onClick="dun"
                 android:textColor="#0d47a1"
                 android:background="@color/white"
                 android:textAlignment="center"

@@ -30,6 +30,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -71,11 +72,14 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
     Target t1,t2,t4;
     ShowcaseView showcaseView;
     PrefManager prefManager;
-    ArrayList<Integer> all=new ArrayList<>();
     ArrayList<Integer> selected=new ArrayList<>();
     boolean isselected=false;
     HashMap<Integer,Integer>map=new HashMap<>();
-    RelativeLayout relativeLayout;
+    public  void hideSoftKeyboard ( View view)
+    {
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+    }
     public void selection(int a){
         Log.e("hio","a");
         int b=list.get(a).getPrimary();
@@ -99,7 +103,8 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
         handler.deleteTask(listkey, done, list.size());
     }
     public void dun(View view){
-        if(isselected){Log.e("mks","kl");
+        Log.e("mks","kl");
+        if(isselected){
             {
                 isselected = false;
                 selected.clear();
@@ -175,9 +180,11 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
 
                 @Override
                 public void onLongClick(View view, final int position) {
+                    hideSoftKeyboard(view);
                     if(!isselected){
                         isselected=true;
                         selection(position);
+                        taskname.clearFocus();
                     }
                     else {selection(position);}
                 }
@@ -328,8 +335,10 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
 
                                 .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
-
+                                        selected.clear();
+                                        map.clear();
                                         dialog.dismiss();
+                                        adapter.notifyDataSetChanged();
 
                                     }
                                 })
@@ -358,7 +367,6 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
                     if (!task.completed)
                         list.add(0, task);
                     else list.add(list.size(), task);
-        /***/            all.add(task.getPrimary());
                 } while (cursor.moveToNext());
             }
 
@@ -389,7 +397,6 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
            // handler.changeListTotalTask(listkey, adapter.getItemCount());
 
             handler.addTaskDetails(d, listkey, i, listname, task.getTaskname());
-         /****/   all.add(task.getPrimary());
         } catch (Exception e) {
         }
     }
