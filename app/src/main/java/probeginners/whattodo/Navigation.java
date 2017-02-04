@@ -35,6 +35,7 @@ import android.text.InputType;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +54,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
 import classes.List;
@@ -91,8 +93,39 @@ public class Navigation extends AppCompatActivity
     Target t1,t2,t3;
     int tut=0;
     View add;
+    Toolbar toolbar;
     private PrefManager prefManager;
     boolean decide=true;
+    ArrayList<Integer> selected = new ArrayList<>();
+    boolean isselected = false;
+    HashMap<Integer, Integer> map = new HashMap<>();
+    int b;
+    public void selection(int a) {
+        int b = taskDataList.get(a).getPrimary();
+        if (selected.contains(b)) {
+            selected.remove((Object) b);
+            map.remove(b);
+
+        } else {
+            selected.add(b);
+            map.put(b, a);
+        }
+
+        invalidateOptionsMenu();
+        adapter.notifyDataSetChanged();
+
+    }
+    public void dun(View view){
+        if(isselected){
+            {
+                isselected = false;
+                selected.clear();
+                map.clear();
+                adapter.notifyDataSetChanged();
+                invalidateOptionsMenu();
+            }
+        }
+    }
     public static String getPath(final Context context, final Uri uri) {
 
             final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
@@ -262,6 +295,7 @@ public class Navigation extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
 tut=0;
         super.onCreate(savedInstanceState);
+        toolbar=(Toolbar)findViewById(R.id.toolbar);
         prefManager=new PrefManager(this);
         setContentView(R.layout.activity_navigation);
         try {
@@ -309,14 +343,20 @@ tut=0;
                 @Override
                 public void onClick(View view, int position) {
                     positiontoopen = position;
-
+                    if (isselected) selection(position);
                 }
 
                 @Override
                 public void onLongClick(View view, int position) {
                     positiontoopen = position;
-                    deleteList();
                     //deleteList();
+                    //deleteList();
+                    if (!isselected) {
+                        isselected = true;
+                        selection(position);
+                    } else {
+                        selection(position);
+                    }
                 }
             }));
 
@@ -366,14 +406,25 @@ tut=0;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.navigation, menu);
-        add=menu.findItem(R.id.addlist).getActionView();
-        try {
-            t1 = new ViewTarget(add.getId(), this);
+        MenuInflater inflater = getMenuInflater();
+        if (isselected) {
+            inflater.inflate(R.menu.newtaskmenu2, menu);
+            MenuItem item = menu.getItem(0);
+            item.setTitle(selected.size() + " selected");
+            toolbar.setTitle("");
+            return true;
         }
-        catch (Exception e){
+else {
+            inflater.inflate(R.menu.navigation, menu);
+            add = menu.findItem(R.id.addlist).getActionView();
+            try {
+                t1 = new ViewTarget(add.getId(), this);
+
+            } catch (Exception e) {
+            }
+            return true;
         }
-        return true;
+
     }
 
     @Override
@@ -391,12 +442,68 @@ tut=0;
                 overridePendingTransition(R.anim.push_up_in, R.anim.push_down_out);
                 return true;
             }
+            else if (item.getItemId() == R.id.delete) {
+                if (isselected && selected.size() > 0) {
+                    android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(Navigation.this)
+                            .setTitle("Delete")
+                            .setMessage("Delete " + selected.size() + " tasks.")
+                            .setIcon(R.drawable.delete)
+                            .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    try {
+                                        for (int i = 0; i < selected.size(); i++) {
+                                            handler.deleteTask(Navigation.this, selected.get(i));
+                                            b = map.get(selected.get(i));
+                                            taskDataList.remove(b);
+                                            adapter.notifyDataSetChanged();
+                                            // Log.e("abc", map.get(selected.get(i)) + "");
+                                            Log.e("afg", "l");
+                                        }
+
+                                        selected.clear();
+                                        map.clear();
+                                        dialog.dismiss();
+                                        changetask();
+
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                    /***********************************/
+
+                                }
+
+                            })
+
+
+                            .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    selected.clear();
+                                    map.clear();
+                                    dialog.dismiss();
+                                    adapter.notifyDataSetChanged();
+
+                                }
+                            })
+                            .create();
+                    dialog.show();
+                }
+                isselected = false;
+                invalidateOptionsMenu();
+                //selected=new ArrayList<>();
+                return true;
+            }
+
         } catch (Exception e) {
         }
 
         return super.onOptionsItemSelected(item);
     }
+    public void changetask(){
 
+        for (int i = 0; i < taskDataList.size(); i++);
+        //handler.deleteList(this,);
+    }
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {

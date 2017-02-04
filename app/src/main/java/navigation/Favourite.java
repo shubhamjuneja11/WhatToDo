@@ -29,7 +29,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import classes.Task;
@@ -53,7 +52,6 @@ public class Favourite extends AppCompatActivity {
     ArrayList<Task> list = new ArrayList<>();
     ArrayList<Integer> selected = new ArrayList<>();
     boolean isselected = false;
-    HashMap<Integer, Integer> map = new HashMap<>();
     int b;
     Cursor cursor;
 
@@ -61,11 +59,8 @@ public class Favourite extends AppCompatActivity {
         int b = list.get(a).getPrimary();
         if (selected.contains(b)) {
             selected.remove((Object) b);
-            map.remove(b);
-
         } else {
             selected.add(b);
-            map.put(b, a);
         }
 
         invalidateOptionsMenu();
@@ -78,7 +73,6 @@ public class Favourite extends AppCompatActivity {
             {
                 isselected = false;
                 selected.clear();
-                map.clear();
                 adapter.notifyDataSetChanged();
                 invalidateOptionsMenu();
             }
@@ -353,17 +347,18 @@ public class Favourite extends AppCompatActivity {
 
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 try {
+
+
                                     for (int i = 0; i < selected.size(); i++) {
                                         handler.deleteTask(Favourite.this, selected.get(i));
-                                        b = map.get(selected.get(i));
-                                        list.remove(b);
+                                        for(i=0;i<list.size();i++){
+                                            if(selected.contains(list.get(i).getPrimary()))
+                                                list.remove(i);
+                                        }
                                         adapter.notifyDataSetChanged();
-                                        // Log.e("abc", map.get(selected.get(i)) + "");
-                                        Log.e("afg", "l");
                                     }
 
                                     selected.clear();
-                                    map.clear();
                                     dialog.dismiss();
                                     changetask();
 
@@ -380,7 +375,6 @@ public class Favourite extends AppCompatActivity {
                         .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 selected.clear();
-                                map.clear();
                                 dialog.dismiss();
                                 adapter.notifyDataSetChanged();
 

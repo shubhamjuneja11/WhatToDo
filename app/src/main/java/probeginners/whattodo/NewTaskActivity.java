@@ -74,7 +74,6 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
     PrefManager prefManager;
     ArrayList<Integer> selected=new ArrayList<>();
     boolean isselected=false;
-    HashMap<Integer,Integer>map=new HashMap<>();
     public  void hideSoftKeyboard ( View view)
     {
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -84,12 +83,12 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
         Log.e("hio","a");
         int b=list.get(a).getPrimary();
         if(selected.contains(b))
-        {selected.remove((Object)b);map.remove(b);
+        {selected.remove((Object)b);
         Log.e("abcde",selected.size()+"");
         }
 
         else
-        { selected.add(b);map.put(b,a);  Log.e("abc",b+" : "+a+"");}
+        { selected.add(b);}
 
         invalidateOptionsMenu();
         adapter.notifyDataSetChanged();
@@ -108,7 +107,6 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
             {
                 isselected = false;
                 selected.clear();
-                map.clear();
                 adapter.notifyDataSetChanged();
                 invalidateOptionsMenu();
             }
@@ -311,17 +309,18 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
 
                                     public void onClick(DialogInterface dialog, int whichButton) {
                                         try {
+
                                             for (int i = 0; i < selected.size(); i++) {
                                                 handler.deleteTask(NewTaskActivity.this, selected.get(i));
-                                                b = map.get(selected.get(i));
-                                                list.remove(b);
+
+                                                for(i=0;i<list.size();i++){
+                                                    if(selected.contains(list.get(i).getPrimary()))
+                                                        list.remove(i);
+                                                }
                                                 adapter.notifyDataSetChanged();
-                                               // Log.e("abc", map.get(selected.get(i)) + "");
-                                                            Log.e("afg","l");
                                             }
 
                                             selected.clear();
-                                            map.clear();
                                             dialog.dismiss();
                                             changetask();
 
@@ -336,7 +335,6 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
                                 .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                         selected.clear();
-                                        map.clear();
                                         dialog.dismiss();
                                         adapter.notifyDataSetChanged();
 
