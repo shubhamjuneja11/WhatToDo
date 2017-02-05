@@ -66,7 +66,7 @@ public class ScheduledTask extends AppCompatActivity {
             selected.add(b);
         }
 
-        invalidateOptionsMenu();
+        ActivityCompat.invalidateOptionsMenu(ScheduledTask.this);
         adapter.notifyDataSetChanged();
 
     }
@@ -310,11 +310,11 @@ public class ScheduledTask extends AppCompatActivity {
                             handler.updateTask(task);
 
 
-                          /*  if (!f)
+                          if (!f)
                                 handler.ChangeTaskCount(listkey, true);
 
                             else
-                                handler.ChangeTaskCount(listkey, false);*/
+                                handler.ChangeTaskCount(listkey, false);
                             changetask();
                             break;
 

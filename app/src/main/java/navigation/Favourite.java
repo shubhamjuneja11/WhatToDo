@@ -209,7 +209,6 @@ public class Favourite extends AppCompatActivity {
             try {
 
                 Task data = list.get(position);
-
                 holder.name.setText(data.getTaskname());
                 holder.listname.setText(data.getlistname());
                 if (data.getcompleted()) {
