@@ -339,6 +339,7 @@ public class ScheduledTask extends AppCompatActivity {
             toolbar.setTitle("");
 
         }
+        else toolbar.setTitle("Scheduled Tasks");
 
         // else inflater.inflate(R.menu.newtaskmenu, menu);
         return true;
@@ -380,7 +381,8 @@ public class ScheduledTask extends AppCompatActivity {
                                     }
 
                                     al.clear();
-
+                                    set.clear();
+                                    temp.clear();
                                     handler.determinecount(set);
                                     adapter.notifyDataSetChanged();
                                     selected.clear();

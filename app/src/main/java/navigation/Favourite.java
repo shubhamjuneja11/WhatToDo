@@ -82,13 +82,6 @@ public class Favourite extends AppCompatActivity {
             }
         }
     }
-    public void changetask() {
-        done = 0;
-        for ( i = 0; i < list.size(); i++)
-            if (list.get(i).completed)
-                done++;
-        handler.deleteTask(list.get(i).listkey, done, list.size());
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +92,7 @@ public class Favourite extends AppCompatActivity {
             setSupportActionBar(toolbar);
             recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
             query = "select * from " + DatabaseHandler.Task_Table + " where favourite= ?";
-            getSupportActionBar().setTitle("Favourites");
+            getSupportActionBar().setTitle("Favourite Tasks");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -333,6 +326,7 @@ public class Favourite extends AppCompatActivity {
             toolbar.setTitle("");
 
         }
+        else toolbar.setTitle("Favourite Tasks");
 
         // else inflater.inflate(R.menu.newtaskmenu, menu);
         return true;
@@ -354,8 +348,6 @@ public class Favourite extends AppCompatActivity {
                                         handler.deleteTask(Favourite.this, selected.get(i));
                                     }
                                     HashSet<Integer> set=new HashSet<>();
-                                    /*for(int i=0;i<selected.size();i++)
-                                        set.add(selected.get(i));*/
                                     ArrayList<Integer>temp=new ArrayList<>();
                                     for(int i=0;i<list.size();i++){
                                         if(selected.contains(list.get(i).getPrimary()))
@@ -378,6 +370,8 @@ public class Favourite extends AppCompatActivity {
                                     handler.determinecount(set);
                                     adapter.notifyDataSetChanged();
                                     selected.clear();
+                                    set.clear();
+                                    temp.clear();
                                     dialog.dismiss();
 
                                 } catch (Exception e) {

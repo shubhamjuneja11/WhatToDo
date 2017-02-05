@@ -104,14 +104,11 @@ public class Navigation extends AppCompatActivity
         int b = taskDataList.get(a).getPrimary();
         if (selected.contains(b)) {
             selected.remove((Object) b);
-            map.remove(b);
-
         } else {
             selected.add(b);
-            map.put(b, a);
         }
+        ActivityCompat.invalidateOptionsMenu(this);
 
-        invalidateOptionsMenu();
         adapter.notifyDataSetChanged();
 
     }
@@ -122,7 +119,7 @@ public class Navigation extends AppCompatActivity
                 selected.clear();
                 map.clear();
                 adapter.notifyDataSetChanged();
-                invalidateOptionsMenu();
+                ActivityCompat.invalidateOptionsMenu(this);
             }
         }
     }
@@ -407,6 +404,7 @@ tut=0;
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
+
         if (isselected) {
             inflater.inflate(R.menu.newtaskmenu2, menu);
             MenuItem item = menu.getItem(0);
