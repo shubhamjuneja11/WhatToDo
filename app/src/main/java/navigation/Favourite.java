@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -66,7 +67,7 @@ public class Favourite extends AppCompatActivity {
             selected.add(b);
         }
 
-        invalidateOptionsMenu();
+       ActivityCompat.invalidateOptionsMenu(Favourite.this);
         adapter.notifyDataSetChanged();
 
     }
@@ -77,7 +78,7 @@ public class Favourite extends AppCompatActivity {
                 isselected = false;
                 selected.clear();
                 adapter.notifyDataSetChanged();
-                invalidateOptionsMenu();
+               ActivityCompat.invalidateOptionsMenu(Favourite.this);
             }
         }
     }
@@ -109,7 +110,7 @@ public class Favourite extends AppCompatActivity {
                         isselected = false;
                         selected.clear();
                         adapter.notifyDataSetChanged();
-                        invalidateOptionsMenu();
+                       ActivityCompat.invalidateOptionsMenu(Favourite.this);
                     } else {
                         onBackPressed();
                         overridePendingTransition(0, R.anim.slide_out_left);
@@ -349,9 +350,7 @@ public class Favourite extends AppCompatActivity {
                         .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                try {
-
-                                    ArrayList<Integer> al=new ArrayList<>();
+                                try {ArrayList<Integer> al=new ArrayList<>();
                                     for (int i = 0; i < selected.size(); i++) {
                                         handler.deleteTask(Favourite.this, selected.get(i));
                                     }
@@ -360,7 +359,6 @@ public class Favourite extends AppCompatActivity {
                                         set.add(selected.get(i));*/
                                     ArrayList<Integer>temp=new ArrayList<>();
                                     for(int i=0;i<list.size();i++){
-                                        Log.e("mmmmco","lo");
                                         if(selected.contains(list.get(i).getPrimary()))
                                         {int y=list.get(i).listkey;
                                             al.add(y);
@@ -369,9 +367,7 @@ public class Favourite extends AppCompatActivity {
 
                                         }
                                     }int k;
-                                    Log.e("mmmmap",temp.size()+"");
                                     Collections.sort(temp);
-
                                     for(i=temp.size()-1;i>=0;i--)
                                     {
                                         k=temp.get(i);
@@ -407,7 +403,7 @@ public class Favourite extends AppCompatActivity {
                 dialog.show();
             }
             isselected = false;
-            invalidateOptionsMenu();
+            ActivityCompat.invalidateOptionsMenu(Favourite.this);
             //selected=new ArrayList<>();
             return true;
         }

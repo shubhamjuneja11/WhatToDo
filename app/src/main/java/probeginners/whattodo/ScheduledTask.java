@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -29,6 +30,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 import classes.Task;
@@ -74,7 +77,7 @@ public class ScheduledTask extends AppCompatActivity {
                 isselected = false;
                 selected.clear();
                 adapter.notifyDataSetChanged();
-                invalidateOptionsMenu();
+                ActivityCompat.invalidateOptionsMenu(ScheduledTask.this);
             }
         }
     }
@@ -107,7 +110,7 @@ public class ScheduledTask extends AppCompatActivity {
                         isselected = false;
                         selected.clear();
                         adapter.notifyDataSetChanged();
-                        invalidateOptionsMenu();
+                        ActivityCompat.invalidateOptionsMenu(ScheduledTask.this);
                     } else {
                         onBackPressed();
                         overridePendingTransition(0, R.anim.slide_out_left);
@@ -352,18 +355,36 @@ public class ScheduledTask extends AppCompatActivity {
                         .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                try {
+                                try {ArrayList<Integer> al=new ArrayList<>();
                                     for (int i = 0; i < selected.size(); i++) {
                                         handler.deleteTask(ScheduledTask.this, selected.get(i));
                                     }
+                                    HashSet<Integer> set=new HashSet<>();
+                                    /*for(int i=0;i<selected.size();i++)
+                                        set.add(selected.get(i));*/
+                                    ArrayList<Integer>temp=new ArrayList<>();
                                     for(int i=0;i<list.size();i++){
                                         if(selected.contains(list.get(i).getPrimary()))
-                                            list.remove(i);
+                                        {int y=list.get(i).listkey;
+                                            al.add(y);
+                                            set.add(y);
+                                            temp.add(i);
+
+                                        }
+                                    }int k;
+                                    Collections.sort(temp);
+                                    for(i=temp.size()-1;i>=0;i--)
+                                    {
+                                        k=temp.get(i);
+                                        list.remove(k);
                                     }
+
+                                    al.clear();
+
+                                    handler.determinecount(set);
                                     adapter.notifyDataSetChanged();
                                     selected.clear();
                                     dialog.dismiss();
-                                    changetask();
 
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -373,6 +394,7 @@ public class ScheduledTask extends AppCompatActivity {
                             }
 
                         })
+
 
 
                         .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
@@ -388,7 +410,7 @@ public class ScheduledTask extends AppCompatActivity {
                 dialog.show();
             }
             isselected = false;
-            invalidateOptionsMenu();
+            ActivityCompat.invalidateOptionsMenu(this);
             //selected=new ArrayList<>();
             return true;
         }
