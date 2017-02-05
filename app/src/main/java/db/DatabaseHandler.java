@@ -11,6 +11,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import classes.List;
 import classes.Task;
@@ -49,7 +51,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private String query;
     private Context context;
     private SQLiteDatabase db;
-
+    private  int i;
     public DatabaseHandler(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
         this.context = context;
@@ -135,11 +137,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(listname, newname);
-        int x = db.update(List_Table, values, "id=?", new String[]{String.valueOf(primary)});
+         db.update(List_Table, values, "id=?", new String[]{String.valueOf(primary)});
     }
 
-
-    /*public void changeListTaskDone(int primary, int task) {
+    public void changeListTaskDone(int primary, int task) {
         if (db == null)
             db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -148,12 +149,61 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public void changeListTotalTask(int primary, int task) {
+        if (db == null)
+            db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(totaltask, task);
         db.update(List_Table, values, "id=?", new String[]{String.valueOf(primary)});
     }
 
-*/
+public void determinecount(HashSet<Integer> set){
+    Log.e("friends","15");
+    int primary;
+    if(db==null)
+        db=this.getReadableDatabase();
+    Integer a[]=null;
+    Log.e("friends","17");
+    try {Log.e("friends09",set.size()+"");
+         a= set.toArray(new Integer[set.size()]);
+    }
+
+    catch (Exception e){
+        Log.e("friends",e.getMessage());
+
+    }
+    Log.e("friendsss",a.length+"");
+    for(int i=0;i<a.length;i++) {
+        primary=a[i];
+        Cursor cursor;
+        ContentValues values = new ContentValues();
+        int total, count = 0;
+        total = 0;
+
+        try {Log.e("friends","22");
+            cursor = db.rawQuery("select completed from "+Task_Table+" where listkey=?", new String[]{String.valueOf(primary)});
+            Log.e("friends56",primary+"");
+            Log.e("friends12",cursor.getCount()+"");
+            if (cursor.moveToFirst()) {
+                do {
+                    Log.e("mmmm", "hio");
+                    if (cursor.getInt(0) == 1)
+                        count++;
+                    Log.e("mmmm", "hio222");
+                    total++;
+                } while (cursor.moveToNext());
+
+            }
+            Log.e("mmmm", count + "");
+            Log.e("mmmm", total + "");
+            db = this.getWritableDatabase();
+            values.put(taskcount, count);
+            values.put(totaltask, total);
+            db.update(List_Table, values, "id=?", new String[]{String.valueOf(primary)});
+        } catch (Exception e) {
+            Log.e("mmmm", e.getMessage());
+        }
+    }
+}
     public void ChangeTaskCount(int p, boolean f) {
         String b;
         int x = 0;
@@ -192,6 +242,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(taskcount,done);
         values.put(totaltask,total);
         db.update(List_Table,values,"id=?",new String[]{String.valueOf(key)});
+
     }
 
     /*-------TASK--------*/
@@ -224,7 +275,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             db = this.getWritableDatabase();
         deleteAlarm(context, primary, false);
         db.delete(Details_Task, "taskkey=?", new String[]{String.valueOf(primary)});
-        int a=db.delete(Task_Table, "id=?", new String[]{String.valueOf(primary)});
+        db.delete(Task_Table, "id=?", new String[]{String.valueOf(primary)});
 
 
     }

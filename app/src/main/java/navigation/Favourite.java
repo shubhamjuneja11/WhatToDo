@@ -29,7 +29,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import classes.Task;
 import db.DatabaseHandler;
@@ -52,7 +55,7 @@ public class Favourite extends AppCompatActivity {
     ArrayList<Task> list = new ArrayList<>();
     ArrayList<Integer> selected = new ArrayList<>();
     boolean isselected = false;
-    int b;
+    int i;
     Cursor cursor;
 
     public void selection(int a) {
@@ -80,10 +83,10 @@ public class Favourite extends AppCompatActivity {
     }
     public void changetask() {
         done = 0;
-        for (int i = 0; i < list.size(); i++)
+        for ( i = 0; i < list.size(); i++)
             if (list.get(i).completed)
                 done++;
-        handler.deleteTask(listkey, done, list.size());
+        handler.deleteTask(list.get(i).listkey, done, list.size());
     }
 
     @Override
@@ -303,13 +306,13 @@ public class Favourite extends AppCompatActivity {
                             handler.updateTask(task);
 
 
-                            /*if (!f)
+                            if (!f)
                                 handler.ChangeTaskCount(listkey, true);
 
                             else
                                 handler.ChangeTaskCount(listkey, false);
-                            break;*/
-                            changetask();
+                            break;
+                           // changetask();
                     }
                     adapter.notifyDataSetChanged();
 
@@ -339,7 +342,7 @@ public class Favourite extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.delete) {
             if (isselected && selected.size() > 0) {
-                android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(Favourite.this)
+                android.app.AlertDialog dialog = new AlertDialog.Builder(Favourite.this)
                         .setTitle("Delete")
                         .setMessage("Delete " + selected.size() + " tasks.")
                         .setIcon(R.drawable.delete)
@@ -348,19 +351,39 @@ public class Favourite extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 try {
 
-
+                                    ArrayList<Integer> al=new ArrayList<>();
                                     for (int i = 0; i < selected.size(); i++) {
                                         handler.deleteTask(Favourite.this, selected.get(i));
-                                        for(i=0;i<list.size();i++){
-                                            if(selected.contains(list.get(i).getPrimary()))
-                                                list.remove(i);
+                                    }
+                                    HashSet<Integer> set=new HashSet<>();
+                                    /*for(int i=0;i<selected.size();i++)
+                                        set.add(selected.get(i));*/
+                                    ArrayList<Integer>temp=new ArrayList<>();
+                                    for(int i=0;i<list.size();i++){
+                                        Log.e("mmmmco","lo");
+                                        if(selected.contains(list.get(i).getPrimary()))
+                                        {int y=list.get(i).listkey;
+                                            al.add(y);
+                                            set.add(y);
+                                            temp.add(i);
+
                                         }
-                                        adapter.notifyDataSetChanged();
+                                    }int k;
+                                    Log.e("mmmmap",temp.size()+"");
+                                    Collections.sort(temp);
+
+                                    for(i=temp.size()-1;i>=0;i--)
+                                    {
+                                        k=temp.get(i);
+                                        list.remove(k);
                                     }
 
+                                    al.clear();
+
+                                    handler.determinecount(set);
+                                    adapter.notifyDataSetChanged();
                                     selected.clear();
                                     dialog.dismiss();
-                                    changetask();
 
                                 } catch (Exception e) {
                                     e.printStackTrace();

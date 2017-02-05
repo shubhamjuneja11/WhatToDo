@@ -50,7 +50,7 @@ public class ScheduledTask extends AppCompatActivity {
     ArrayList<Task> list = new ArrayList<>();
     ArrayList<Integer> selected = new ArrayList<>();
     boolean isselected = false;
-    int b;
+    int i;
 
     Cursor cursor;
 
@@ -80,10 +80,10 @@ public class ScheduledTask extends AppCompatActivity {
     }
     public void changetask(){
         done=0;
-        for (int i = 0; i < list.size(); i++)
+        for ( i = 0; i < list.size(); i++)
             if (list.get(i).completed)
                 done++;
-        handler.deleteTask(listkey, done, list.size());
+        handler.deleteTask(list.get(i).listkey, done, list.size());
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -355,13 +355,12 @@ public class ScheduledTask extends AppCompatActivity {
                                 try {
                                     for (int i = 0; i < selected.size(); i++) {
                                         handler.deleteTask(ScheduledTask.this, selected.get(i));
-                                        for(i=0;i<list.size();i++){
-                                            if(selected.contains(list.get(i).getPrimary()))
-                                                list.remove(i);
-                                        }
-                                        adapter.notifyDataSetChanged();
                                     }
-
+                                    for(int i=0;i<list.size();i++){
+                                        if(selected.contains(list.get(i).getPrimary()))
+                                            list.remove(i);
+                                    }
+                                    adapter.notifyDataSetChanged();
                                     selected.clear();
                                     dialog.dismiss();
                                     changetask();

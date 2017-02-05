@@ -99,7 +99,7 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
         for (int i = 0; i < list.size(); i++)
             if (list.get(i).completed)
                 done++;
-        handler.deleteTask(listkey, done, list.size());
+        handler.deleteTask(listkey,done, list.size());
     }
     public void dun(View view){
         Log.e("mks","kl");
@@ -312,14 +312,16 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
 
                                             for (int i = 0; i < selected.size(); i++) {
                                                 handler.deleteTask(NewTaskActivity.this, selected.get(i));
-
-                                                for(i=0;i<list.size();i++){
-                                                    if(selected.contains(list.get(i).getPrimary()))
-                                                        list.remove(i);
-                                                }
-                                                adapter.notifyDataSetChanged();
                                             }
-
+                                         /*  String a[]=new String[selected.size()];
+                                            for(int i=0;i<selected.size();i++)
+                                                a[i]=selected.get(i).toString();
+                                           handler.deletemanytask(NewTaskActivity.this,a);*/
+                                            for(int i=0;i<list.size();i++){
+                                                if(selected.contains(list.get(i).getPrimary()))
+                                                    list.remove(i);
+                                            }
+                                            adapter.notifyDataSetChanged();
                                             selected.clear();
                                             dialog.dismiss();
                                             changetask();
