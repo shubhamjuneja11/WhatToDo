@@ -11,7 +11,6 @@
     <color name="grey">#A9A9A9</color>
 
 
-
     <!-- Screens background color-->
     <color name="bg_screen1">#f64c73</color>
     <color name="bg_screen2">#20d2bb</color>
@@ -43,5 +42,5 @@
         <item>@color/dot_dark_screen3</item>
         <item>@color/dot_dark_screen4</item>
     </array>
-    <color name="selected">@color/dot_dark_screen2</color>
+    <color name="selected">#703395ff</color>
 </resources>

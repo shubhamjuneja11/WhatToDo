@@ -53,8 +53,10 @@ import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
 
 import classes.List;
@@ -86,20 +88,18 @@ public class Navigation extends AppCompatActivity
     Cursor cursor;
     SQLiteDatabase readdatabase;
     DatabaseHandler handler;
-    int positiontoopen, total;
+    int positiontoopen;
     private String name;
     private String query;
     ShowcaseView showcaseView;
     Target t1,t2,t3;
-    int tut=0;
+    int tut=0,k,i;
     View add;
     Toolbar toolbar;
     private PrefManager prefManager;
-    boolean decide=true;
     ArrayList<Integer> selected = new ArrayList<>();
-    boolean isselected = false;
+    public static boolean isselected = false;
     HashMap<Integer, Integer> map = new HashMap<>();
-    int b;
     public void selection(int a) {
         int b = taskDataList.get(a).getPrimary();
         if (selected.contains(b)) {
@@ -108,7 +108,6 @@ public class Navigation extends AppCompatActivity
             selected.add(b);
         }
         ActivityCompat.invalidateOptionsMenu(this);
-
         adapter.notifyDataSetChanged();
 
     }
@@ -292,11 +291,11 @@ public class Navigation extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
 tut=0;
         super.onCreate(savedInstanceState);
-        toolbar=(Toolbar)findViewById(R.id.toolbar);
+
         prefManager=new PrefManager(this);
         setContentView(R.layout.activity_navigation);
         try {
-            final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+           toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
             getSupportActionBar().setTitle(R.string.app_name);
             //fun();
@@ -304,6 +303,7 @@ tut=0;
             fb.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    dun(view);
                     Intent intent = new Intent(Navigation.this, InboxTask.class);
                     startActivityForResult(intent, INBOX_TASK);
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
@@ -326,7 +326,7 @@ tut=0;
             handler = new DatabaseHandler(this);
             readdatabase = handler.getReadableDatabase();
             cursor = readdatabase.rawQuery(query, null);
-            adapter = new TaskAdapter(taskDataList);
+            adapter = new TaskAdapter(this,taskDataList,selected);
             preparedata();
             recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
             RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
@@ -449,20 +449,37 @@ else {
                             .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
 
                                 public void onClick(DialogInterface dialog, int whichButton) {
-                                    try {
+                                    try {ArrayList<Integer> al=new ArrayList<>();
                                         for (int i = 0; i < selected.size(); i++) {
+                                            handler.deleteList(Navigation.this,selected.get(i));
                                             handler.deleteTask(Navigation.this, selected.get(i));
-                                            b = map.get(selected.get(i));
-                                            taskDataList.remove(b);
-                                            adapter.notifyDataSetChanged();
-                                            // Log.e("abc", map.get(selected.get(i)) + "");
-                                            Log.e("afg", "l");
+                                        }
+                                        HashSet<Integer> set=new HashSet<>();
+                                        ArrayList<Integer>temp=new ArrayList<>();
+                                        for(int i=0;i<taskDataList.size();i++){
+                                            if(selected.contains(taskDataList.get(i).getPrimary()))
+                                            {int y=taskDataList.get(i).getPrimary();
+                                                al.add(y);
+                                                set.add(y);
+                                                temp.add(i);
+
+                                            }
+                                        }int k;
+                                        Collections.sort(temp);
+                                        for(i=temp.size()-1;i>=0;i--)
+                                        {
+                                            k=temp.get(i);
+                                            taskDataList.remove(k);
                                         }
 
+                                        al.clear();
+
+                                        handler.determinecount(set);
+                                        adapter.notifyDataSetChanged();
                                         selected.clear();
-                                        map.clear();
+                                        set.clear();
+                                        temp.clear();
                                         dialog.dismiss();
-                                        changetask();
 
                                     } catch (Exception e) {
                                         e.printStackTrace();
@@ -487,7 +504,7 @@ else {
                     dialog.show();
                 }
                 isselected = false;
-                invalidateOptionsMenu();
+                ActivityCompat.invalidateOptionsMenu(Navigation.this);
                 //selected=new ArrayList<>();
                 return true;
             }
@@ -573,7 +590,7 @@ else {
                         SharedPreferences sharedPreferences;
                         sharedPreferences = getSharedPreferences("list", Context.MODE_PRIVATE);
                         int i;
-                        i = sharedPreferences.getInt("list", 1);
+                        i = sharedPreferences.getInt("list", 2);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putInt("list", i + 1);
                         editor.commit();
@@ -742,7 +759,7 @@ else {
                     .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
 
                         public void onClick(DialogInterface dialog, int whichButton) {
-                            handler.deleteList(Navigation.this, taskDataList.get(positiontoopen));
+                            handler.deleteList(Navigation.this, taskDataList.get(positiontoopen).getPrimary());
                             taskDataList.remove(positiontoopen);
                             adapter.notifyDataSetChanged();
                             dialog.dismiss();

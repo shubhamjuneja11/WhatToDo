@@ -1,6 +1,7 @@
 package tasklist;
 
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
@@ -12,10 +13,12 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import navigation.SettingsActivity;
 import probeginners.whattodo.ColorsHelper;
+import probeginners.whattodo.Navigation;
 import probeginners.whattodo.R;
 
 /**
@@ -23,12 +26,13 @@ import probeginners.whattodo.R;
  */
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> {
     List<classes.List> taskDataList;
+    ArrayList<Integer> selected;
+    Context context;
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView taskname,taskcount;
         public ProgressBar progressBar;
         public ImageView taskimage;
         public View view;
-
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -44,8 +48,10 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
         }
     }
 
-    public TaskAdapter(List<classes.List> taskDataList){
+    public TaskAdapter(Context context,List<classes.List> taskDataList,ArrayList<Integer> selected){
         this.taskDataList=taskDataList;
+        this.selected=selected;
+        this.context=context;
     }
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -70,14 +76,27 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
                 holder.taskimage.setImageBitmap(bitmap);
             else
                 holder.taskimage.setImageResource(R.drawable.grocery);
-            if(SettingsActivity.color)
-            {holder.view.setBackgroundColor(ColorsHelper.getRandomColor());
-                holder.taskname.setTextColor(Color.WHITE);
-                holder.taskcount.setTextColor(Color.WHITE);
+
+            if(!Navigation.isselected) {
+                if (SettingsActivity.color) {
+                    holder.view.setBackgroundColor(ColorsHelper.getRandomColor());
+                    holder.taskname.setTextColor(Color.WHITE);
+                    holder.taskcount.setTextColor(Color.WHITE);
+                } else {
+
+                    holder.view.setBackgroundColor(Color.WHITE);
+                    holder.taskname.setTextColor(Color.BLACK);
+                    holder.taskcount.setTextColor(Color.BLACK);
+                }
             }
-            else  {holder.view.setBackgroundColor(Color.WHITE);
-            holder.taskname.setTextColor(Color.BLACK);
+            else{
+                holder.taskname.setTextColor(Color.BLACK);
                 holder.taskcount.setTextColor(Color.BLACK);
+                if(selected.contains(taskData.getPrimary()))
+                holder.view.setBackgroundColor(context.getResources().getColor(R.color.selected));
+                else
+                    holder.view.setBackgroundColor(Color.WHITE);
+
             }
         }catch (Exception e){}
     }

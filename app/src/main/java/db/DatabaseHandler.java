@@ -224,11 +224,11 @@ public void determinecount(HashSet<Integer> set){
     }
 
 
-    public void deleteList(Context context, List list) {
+    public void deleteList(Context context, int primary) {
         if (db == null)
             db = this.getWritableDatabase();
-        deleteAlarm(context, list.getPrimary(), true);
-        String i = String.valueOf(Integer.valueOf(list.getPrimary()));
+        deleteAlarm(context, primary, true);
+        String i = String.valueOf(Integer.valueOf(primary));
         db.delete(Details_Task, "listkey=?", new String[]{i});
         db.delete(Task_Table, "listkey=?", new String[]{i});
         db.delete(List_Table, "id=?", new String[]{i});
