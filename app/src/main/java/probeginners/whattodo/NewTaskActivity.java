@@ -24,6 +24,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -112,6 +113,12 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
             }
         }
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return super.onKeyDown(keyCode, event);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -338,13 +345,13 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
                                     public void onClick(DialogInterface dialog, int which) {
                                         selected.clear();
                                         dialog.dismiss();
-                                        adapter.notifyDataSetChanged();
+
 
                                     }
                                 })
                                 .create();
                         dialog.show();
-                    }isselected=false;invalidateOptionsMenu();
+                    }isselected=false;adapter.notifyDataSetChanged();invalidateOptionsMenu();
                     //selected=new ArrayList<>();
                     return true;
                 }

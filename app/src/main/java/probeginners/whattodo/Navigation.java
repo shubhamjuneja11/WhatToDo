@@ -312,10 +312,20 @@ tut=0;
             });
 
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-            drawer.setDrawerListener(toggle);
-            toggle.syncState();
+            ActionBarDrawerToggle toggle1=new ActionBarDrawerToggle( this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+                @Override
+                public void onDrawerOpened(View drawerView) {
+                    super.onDrawerOpened(drawerView);
+                    dun(drawerView);
+                }
+
+                @Override
+                public void onDrawerClosed(View drawerView) {
+                    super.onDrawerClosed(drawerView);
+                }
+            };
+            drawer.setDrawerListener(toggle1);
+            toggle1.syncState();
 
             NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
             navigationView.setNavigationItemSelectedListener(this);
@@ -392,6 +402,10 @@ tut=0;
     }
     @Override
     public void onBackPressed() {
+        if(isselected){
+            isselected=false;
+            adapter.notifyDataSetChanged();
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -435,6 +449,7 @@ else {
         //noinspection SimplifiableIfStatement
         try {
             if (id == R.id.addlist) {
+                Log.e("yeah","l");
                 Intent intent = new Intent(Navigation.this, NewList.class);
                 startActivityForResult(intent, 11);
                 overridePendingTransition(R.anim.push_up_in, R.anim.push_down_out);
@@ -513,11 +528,6 @@ else {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-    public void changetask(){
-
-        for (int i = 0; i < taskDataList.size(); i++);
-        //handler.deleteList(this,);
     }
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -601,15 +611,7 @@ else {
 
                 case CAMERA_REQUEST:
                     try {
-
                         List list = taskDataList.get(positiontoopen);
-
-
-                        /****************important***************/
-
-
-                        /******************************/
-
                         list.puticon(getPath(this, uri));
                         adapter.notifyDataSetChanged();
                         handler.updateList(list);
@@ -639,8 +641,6 @@ else {
         } catch (Exception e) {
         }
     }
-
-
     private void preparedata() {
         try {
             taskDataList.clear();

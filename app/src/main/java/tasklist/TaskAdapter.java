@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,11 +73,15 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
             if (taskData.getTotaltasks() != 0)
                 holder.progressBar.setProgress((taskData.getTaskdone() * 100) / taskData.getTotaltasks());
             else holder.progressBar.setProgress(100);
-            Bitmap bitmap = taskData.getImage();
+            if(taskData.getIcon().trim().equals(""))
+                holder.taskimage.setImageResource(R.drawable.grocery);
+            else
+            Glide.with(context).load(taskData.getIcon()).into(holder.taskimage);
+           /* Bitmap bitmap = taskData.getImage();
             if (bitmap != null)
                 holder.taskimage.setImageBitmap(bitmap);
             else
-                holder.taskimage.setImageResource(R.drawable.grocery);
+                holder.taskimage.setImageResource(R.drawable.grocery);*/
 
             if(!Navigation.isselected) {
                 if (SettingsActivity.color) {

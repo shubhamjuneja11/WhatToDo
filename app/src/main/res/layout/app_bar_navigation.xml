@@ -14,6 +14,7 @@
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
+            android:onClick="dun"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
@@ -37,13 +38,11 @@
         />
 <RelativeLayout
     android:layout_width="match_parent"
-    android:onClick="dun"
     android:layout_height="wrap_content">
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="invisible"
-        android:clickable="false"
         android:id="@+id/mynav"
         android:layout_alignParentLeft="true"
         />
