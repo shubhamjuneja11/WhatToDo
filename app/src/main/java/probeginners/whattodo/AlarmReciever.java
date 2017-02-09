@@ -30,7 +30,7 @@ public class AlarmReciever extends BroadcastReceiver {
         Notification.Builder builder=new Notification.Builder(context)
                 .setContentTitle(listname)
                 .setContentText(taskname)
-                .setSmallIcon(R.drawable.logo)
+                .setSmallIcon(R.drawable.icon2)
                 .setAutoCancel(true);
         SharedPreferences sharedPreferences=context.getSharedPreferences("settings", Context.MODE_PRIVATE);
         String chosenRingtone=sharedPreferences.getString("ringtone","");

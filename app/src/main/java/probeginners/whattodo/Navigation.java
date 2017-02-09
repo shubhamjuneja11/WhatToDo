@@ -574,9 +574,10 @@ else {
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             } else if (id == R.id.hel) {
-                Intent intent = new Intent(Navigation.this, Info.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+
+                PrefManager prefManager=new PrefManager(this);
+                prefManager.setTutorial(0);
+                onResume();
             }
 
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -743,6 +744,7 @@ else {
             intent.putExtra("taskdone", taskData.getTaskdone());
             intent.putExtra("listkey", taskData.getPrimary());
             startActivity(intent);
+
         } catch (Exception e) {
         }
     }
@@ -956,7 +958,7 @@ else {
         super.onDestroy();
         try {
 
-            unbindDrawables(findViewById(R.id.drawer_layout));
+            unbindDrawables(findViewById(R.id.include));
             System.gc();
         } catch (Exception e) {
         }

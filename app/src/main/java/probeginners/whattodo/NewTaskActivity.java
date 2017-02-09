@@ -291,7 +291,7 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
                                 .setTarget(Target.NONE)
                                 .setOnClickListener(this)
                                 .setContentTitle("Hurray!!")
-                                .setContentText("You have added your first task.")
+                                .setContentText("You have added a task.")
                                 .hideOnTouchOutside()
                                 .build();
                         Log.e("abcde","3");

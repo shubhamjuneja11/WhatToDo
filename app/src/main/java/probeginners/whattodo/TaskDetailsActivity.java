@@ -467,12 +467,12 @@ public class TaskDetailsActivity extends AppCompatActivity implements View.OnCli
             switch (requestCode) {
 
                 case CAMERA_REQUEST:
-                    try {
+                    try {//uri=data.getData();
                         task.putimagename(Navigation.getPath(this, uri));
                         handler.updateTaskDetails(task);
                         reminderimage.setImageBitmap(task.getImage());
                     } catch (Exception e) {
-
+                    e.printStackTrace();
                     }
                     break;
 

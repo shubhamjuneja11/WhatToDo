@@ -17,7 +17,7 @@
         <item
             android:id="@+id/hel"
             android:icon="@drawable/help"
-            android:title="Help" />
+            android:title="Start Tutorial" />
 
     </group>
 
