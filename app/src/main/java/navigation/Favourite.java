@@ -168,6 +168,17 @@ public class Favourite extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if(isselected){
+            isselected=false;
+            invalidateOptionsMenu();
+            adapter.notifyDataSetChanged();
+        }
+        else
+        super.onBackPressed();
+    }
+
     private int dpToPx(int dp) {
         try {
             Resources r = getResources();

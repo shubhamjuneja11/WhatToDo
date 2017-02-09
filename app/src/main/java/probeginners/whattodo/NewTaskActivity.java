@@ -114,10 +114,7 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        return super.onKeyDown(keyCode, event);
-    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -435,23 +432,28 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        //super.onBackPressed();
+        if(isselected){
+            isselected=false;
+            invalidateOptionsMenu();
+            adapter.notifyDataSetChanged();
+        }
+        else {
+            Intent upIntent = NavUtils.getParentActivityIntent(NewTaskActivity.this);
+            if (NavUtils.shouldUpRecreateTask(NewTaskActivity.this, upIntent)) {
 
-        Intent upIntent = NavUtils.getParentActivityIntent(NewTaskActivity.this);
-        if (NavUtils.shouldUpRecreateTask(NewTaskActivity.this, upIntent)) {
+                TaskStackBuilder.create(NewTaskActivity.this)
+                        .addNextIntentWithParentStack(upIntent)
+                        .startActivities();
+                overridePendingTransition(0, R.anim.slide_out_left);
 
-            TaskStackBuilder.create(NewTaskActivity.this)
-                    .addNextIntentWithParentStack(upIntent)
-                    .startActivities();
-            overridePendingTransition(0, R.anim.slide_out_left);
+            } else {
+                NavUtils.navigateUpTo(NewTaskActivity.this, upIntent);
+                overridePendingTransition(0, R.anim.slide_out_left);
 
-        } else {
-            NavUtils.navigateUpTo(NewTaskActivity.this, upIntent);
-            overridePendingTransition(0, R.anim.slide_out_left);
+            }
 
         }
-
-
     }
 
     @Override

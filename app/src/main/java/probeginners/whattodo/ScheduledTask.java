@@ -183,7 +183,12 @@ public class ScheduledTask extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if(isselected){
+            isselected=false;
+            invalidateOptionsMenu();
+            adapter.notifyDataSetChanged();
+        }
+        else super.onBackPressed();
     }
 
     public class MyAdapter extends RecyclerView.Adapter<ScheduledTask.MyAdapter.ViewHolder> {

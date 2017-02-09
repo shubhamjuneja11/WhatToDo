@@ -404,6 +404,7 @@ tut=0;
     public void onBackPressed() {
         if(isselected){
             isselected=false;
+            invalidateOptionsMenu();
             adapter.notifyDataSetChanged();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
