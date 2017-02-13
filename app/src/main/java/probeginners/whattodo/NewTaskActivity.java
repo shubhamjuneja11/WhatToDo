@@ -40,6 +40,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.Target;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
@@ -123,7 +124,8 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_new_task);
         prefManager=new PrefManager(this);
         try {
-            getWindow().setBackgroundDrawableResource(R.drawable.back9);
+            //getWindow().setBackgroundDrawableResource(R.drawable.back9);
+            //Glide.with(this).load(R.drawable.back9).into((ImageView)findViewById(R.id.imgv));
             toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
 
@@ -168,7 +170,7 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
 
             RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
             recyclerView.setLayoutManager(mLayoutManager);
-            recyclerView.addItemDecoration(new GridSpacingItemDecoration(1, dpToPx(0), true));
+            recyclerView.addItemDecoration(new GridSpacingItemDecoration(1, dpToPx(5), true));
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             recyclerView.setAdapter(adapter);
 
@@ -373,7 +375,7 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
                     else list.add(list.size(), task);
                 } while (cursor.moveToNext());
             }
-
+                cursor.close();
            /* if(adapter!=null)
             {adapter.notifyDataSetChanged();Log.e("hello","ssss");
                 Log.e("hello",list.size()+"");
@@ -447,12 +449,13 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
                         .startActivities();
                 overridePendingTransition(0, R.anim.slide_out_left);
 
+
             } else {
                 NavUtils.navigateUpTo(NewTaskActivity.this, upIntent);
                 overridePendingTransition(0, R.anim.slide_out_left);
 
             }
-
+            finish();
         }
     }
 

@@ -39,7 +39,7 @@
     <ImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@drawable/myfav"
+        android:src="@drawable/myfavmin"
         android:id="@+id/image5"
         android:onClick="dun"
         android:layout_centerHorizontal="true"

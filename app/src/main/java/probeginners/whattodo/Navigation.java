@@ -42,9 +42,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.bumptech.glide.Glide;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
 import com.github.amlcurran.showcaseview.targets.Target;
@@ -291,9 +293,11 @@ public class Navigation extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
 tut=0;
         super.onCreate(savedInstanceState);
-
+//setContentView(R.layout.xyz);
         prefManager=new PrefManager(this);
         setContentView(R.layout.activity_navigation);
+       /* ImageView i=(ImageView)findViewById(R.id.myback);
+        Glide.with(this).load(R.drawable.back9).into(i);*/
         try {
            toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
@@ -331,7 +335,7 @@ tut=0;
             navigationView.setNavigationItemSelectedListener(this);
 
 
-            //database connection and result
+            //database connection and result*/
             query = "select * from " + DatabaseHandler.List_Table + ";";
             handler = new DatabaseHandler(this);
             readdatabase = handler.getReadableDatabase();
@@ -454,6 +458,7 @@ else {
                 Intent intent = new Intent(Navigation.this, NewList.class);
                 startActivityForResult(intent, 11);
                 overridePendingTransition(R.anim.push_up_in, R.anim.push_down_out);
+
                 return true;
             }
             else if (item.getItemId() == R.id.delete) {
@@ -605,7 +610,7 @@ else {
                         i = sharedPreferences.getInt("list", 2);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putInt("list", i + 1);
-                        editor.commit();
+                        editor.apply();
                         addTask(i, name, 0, 0, "");
                     }
                     break;

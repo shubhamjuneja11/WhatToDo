@@ -171,7 +171,7 @@ public class ScheduledTask extends AppCompatActivity {
                     else list.add(list.size(), task);
                 } while (cursor.moveToNext());
             }
-
+            cursor.close();
         } catch (Exception e) {
         }
     }

@@ -33,13 +33,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/appbarlayout1"
-        android:background="@drawable/back9"
+        android:background="@drawable/backcolor2"
         android:onClick="dun"
         >
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/alarmclock"
+            android:src="@drawable/alarmclockmin"
             android:id="@+id/image5"
             android:onClick="dun"
             android:layout_marginTop="10dp"

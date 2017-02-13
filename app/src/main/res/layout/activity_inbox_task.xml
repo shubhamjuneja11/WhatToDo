@@ -32,10 +32,10 @@
             android:id="@+id/activity_new_list"
             android:layout_below="@id/appbarlayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             tools:showIn="@layout/activity_new_list"
             tools:context="probeginners.whattodo.NewList"
-            android:background="@drawable/back9"
+            android:background="@drawable/backcolor2"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
            <RelativeLayout
@@ -147,7 +147,7 @@
     android:layout_centerInParent="true"
     android:layout_marginTop="20dp"
 
-    android:src="@drawable/minion_burned"
+    android:src="@drawable/minion_burnedmin"
     />
         </RelativeLayout>
 

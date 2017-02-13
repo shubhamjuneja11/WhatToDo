@@ -5,7 +5,7 @@
     android:id="@+id/activity_task_details"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/back9"
+    android:background="@drawable/backcolor2"
     tools:context="probeginners.whattodo.TaskDetailsActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -147,7 +147,7 @@
             android:layout_height="250dp"
             android:layout_centerInParent="true"
             android:id="@+id/reminderimage"
-            android:src="@drawable/remember"
+            android:src="@drawable/remembermin"
             />
 
 

@@ -33,6 +33,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.Target;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
@@ -263,7 +264,7 @@ public class TaskDetailsActivity extends AppCompatActivity implements View.OnCli
             else alarm.setImageResource(R.drawable.alarmoff);
             if (task.getImage() != null)
                 reminderimage.setImageBitmap(task.getImage());
-            else reminderimage.setImageResource(R.drawable.remember);
+            else reminderimage.setImageResource(R.drawable.remembermin);
         } catch (Exception e) {
         }
     }
@@ -470,7 +471,8 @@ public class TaskDetailsActivity extends AppCompatActivity implements View.OnCli
                     try {//uri=data.getData();
                         task.putimagename(Navigation.getPath(this, uri));
                         handler.updateTaskDetails(task);
-                        reminderimage.setImageBitmap(task.getImage());
+                        //reminderimage.setImageBitmap(task.getImage());
+                        Glide.with(this).load(task.getImage()).into(reminderimage);
                     } catch (Exception e) {
                     e.printStackTrace();
                     }
@@ -483,7 +485,8 @@ public class TaskDetailsActivity extends AppCompatActivity implements View.OnCli
                         if(uri1==null) Log.e("abcd","a");
                         task.putimagename(Navigation.getPath(this, uri1));
                         handler.updateTaskDetails(task);
-                        reminderimage.setImageBitmap(task.getImage());
+                        //reminderimage.setImageBitmap(task.getImage());
+                        Glide.with(this).load(task.getImage()).into(reminderimage);
                         Log.e("abcd",Navigation.getPath(this, uri1));
                     } catch (Exception e) {
                         e.printStackTrace();Log.e("abcd","ac");
@@ -593,7 +596,7 @@ public class TaskDetailsActivity extends AppCompatActivity implements View.OnCli
         try {
             task.putimagename("");
             handler.updateTaskDetails(task);
-            reminderimage.setImageResource(R.drawable.remember);
+            reminderimage.setImageResource(R.drawable.remembermin);
         } catch (Exception e) {
         }
     }

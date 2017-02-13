@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:showIn="@layout/activity_new_list"
     tools:context="probeginners.whattodo.NewList"
-    android:background="@drawable/back9"
+    android:background="@drawable/backcolor2"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
@@ -31,7 +31,7 @@
 <ImageView
     android:layout_width="300dp"
     android:layout_height="300dp"
-    android:src="@drawable/study"
+    android:src="@drawable/studymin"
     android:id="@+id/abcd2"
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
