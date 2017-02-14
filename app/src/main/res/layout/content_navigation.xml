@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:onClick="dun"
-    android:background="@drawable/hello4"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="probeginners.whattodo.Navigation"
     tools:showIn="@layout/app_bar_navigation">

@@ -301,6 +301,7 @@ tut=0;
         try {
            toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
+            getWindow().setBackgroundDrawableResource(R.drawable.jakol);
             getSupportActionBar().setTitle(R.string.app_name);
             //fun();
             fb = (FloatingActionButton) findViewById(R.id.fab);
