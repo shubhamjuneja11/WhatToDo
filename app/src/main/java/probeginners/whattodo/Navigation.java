@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
@@ -71,6 +72,7 @@ import navigation.SettingsActivity;
 import tasklist.RecyclerTouchListener;
 import tasklist.TaskAdapter;
 import welcome.PrefManager;
+import welcome.WelcomeActivity;
 
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;
@@ -84,6 +86,7 @@ public class Navigation extends AppCompatActivity
     private static final String IMAGE_DIRECTORY_NAME = "WhatToDo";
     public Uri uri;
     TaskAdapter adapter;
+    SharedPreferences sharedPreferences;
     RecyclerView recyclerView;
     FloatingActionButton fb;
     ArrayList<List> taskDataList = new ArrayList<>();
@@ -95,7 +98,8 @@ public class Navigation extends AppCompatActivity
     private String query;
     ShowcaseView showcaseView;
     Target t1,t2,t3;
-    int tut=0,k,i;
+    int tut=0,i;
+
     View add;
     Toolbar toolbar;
     private PrefManager prefManager;
@@ -287,6 +291,11 @@ public class Navigation extends AppCompatActivity
             showcaseView.setButtonPosition(params);
             prefManager.setTutorial(1);
         }
+        SharedPreferences sharedPreferences1= PreferenceManager.getDefaultSharedPreferences(Navigation.this);
+        int a=sharedPreferences1.getInt("myback",0);
+        if(WelcomeActivity.myback(a)!=0)
+            getWindow().setBackgroundDrawableResource(WelcomeActivity.myback(a));
+        else getWindow().setBackgroundDrawableResource(R.drawable.backcolor);
     }
 
     @Override
@@ -296,12 +305,12 @@ tut=0;
 //setContentView(R.layout.xyz);
         prefManager=new PrefManager(this);
         setContentView(R.layout.activity_navigation);
+        sharedPreferences = getSharedPreferences("list", Context.MODE_PRIVATE);
        /* ImageView i=(ImageView)findViewById(R.id.myback);
         Glide.with(this).load(R.drawable.back9).into(i);*/
         try {
            toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
-            getWindow().setBackgroundDrawableResource(R.drawable.jakol);
             getSupportActionBar().setTitle(R.string.app_name);
             //fun();
             fb = (FloatingActionButton) findViewById(R.id.fab);
@@ -544,8 +553,8 @@ else {
             int id = item.getItemId();
 
             if (id == R.id.inbox) {
-                SharedPreferences sharedPreferences;
-                sharedPreferences = getSharedPreferences("list", Context.MODE_PRIVATE);
+
+
                 int done;
                 done = sharedPreferences.getInt("done", 0);
                 Intent intent = new Intent(Navigation.this, NewTaskActivity.class);
@@ -605,8 +614,7 @@ else {
                         name = data.getStringExtra("name").trim();
                     if (data != null && name != null)//some stupid stuff happening
                     {
-                        SharedPreferences sharedPreferences;
-                        sharedPreferences = getSharedPreferences("list", Context.MODE_PRIVATE);
+
                         int i;
                         i = sharedPreferences.getInt("list", 2);
                         SharedPreferences.Editor editor = sharedPreferences.edit();

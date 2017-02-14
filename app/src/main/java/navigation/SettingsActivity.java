@@ -10,6 +10,7 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -26,13 +27,17 @@ public class SettingsActivity extends AppCompatActivity {
     public static boolean vibrate = false,color=true;
     Toolbar toolbar;
     boolean decide,decide2;
+    int back;
     TextView v, t,co;
     String title,mycolor;
-
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        sharedPreferences = getSharedPreferences("settings", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
         try {
 
             toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -89,7 +94,7 @@ public class SettingsActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int id) {
 
-                            if (decide == true) {
+                            if (decide) {
                                 vibrate = true;
                                 v.setText("On");
                                 decide = false;
@@ -139,8 +144,7 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         try {
-            SharedPreferences sharedPreferences = getSharedPreferences("settings", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
+
             editor.putString("ringtone", chosenRingtone);
             editor.putBoolean("vibrate", vibrate);
             editor.putString("title", title);
@@ -226,6 +230,40 @@ Log.e("abcd",decide2+"");
     Dialog dialog = builder.create();
     dialog.show();
 }
+    public void changeback(View view){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        CharSequence[] array = {"No Image","Image 1","Image 2"};
+        builder.setTitle("Set Background Image")
+
+                .setSingleChoiceItems(array, 1, new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                      back=which;
+
+                    }
+                })
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        SharedPreferences sharedPreferences1= PreferenceManager.getDefaultSharedPreferences(SettingsActivity.this);
+                        SharedPreferences.Editor editor1=sharedPreferences1.edit();
+                            editor1.putInt("myback",back);
+                        Log.e("jija",back+"");
+                        editor1.apply();
+                        Toast.makeText(SettingsActivity.this, "Background changed", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                });
+
+        Dialog dialog = builder.create();
+        dialog.show();
+    }
     @Override
     public void onBackPressed() {
         super.onBackPressed();

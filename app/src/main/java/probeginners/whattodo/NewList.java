@@ -1,7 +1,9 @@
 package probeginners.whattodo;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -12,12 +14,24 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
+import welcome.WelcomeActivity;
+
 public class NewList extends AppCompatActivity {
     Toolbar toolbar;
     EditText editText;
     boolean flag;
     MenuItem done;
     private String name;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences sharedPreferences1= PreferenceManager.getDefaultSharedPreferences(this);
+        int a=sharedPreferences1.getInt("myback",0);
+        if(WelcomeActivity.myback(a)!=0)
+            getWindow().setBackgroundDrawableResource(WelcomeActivity.myback(a));
+        else getWindow().setBackgroundDrawableResource(R.drawable.backcolor);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

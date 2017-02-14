@@ -3,12 +3,14 @@ package probeginners.whattodo;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -39,6 +41,7 @@ import db.DatabaseHandler;
 import interfaces.ClickListener;
 import navigation.Favourite;
 import tasklist.RecyclerTouchListener;
+import welcome.WelcomeActivity;
 
 public class ScheduledTask extends AppCompatActivity {
 
@@ -56,6 +59,16 @@ public class ScheduledTask extends AppCompatActivity {
     int i;
 
     Cursor cursor;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences sharedPreferences1= PreferenceManager.getDefaultSharedPreferences(this);
+        int a=sharedPreferences1.getInt("myback",0);
+        if(WelcomeActivity.myback(a)!=0)
+            getWindow().setBackgroundDrawableResource(WelcomeActivity.myback(a));
+        else getWindow().setBackgroundDrawableResource(R.drawable.backcolor);
+    }
 
     public void selection(int a) {
         int b = list.get(a).getPrimary();

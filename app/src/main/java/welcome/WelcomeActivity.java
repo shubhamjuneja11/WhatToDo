@@ -30,7 +30,15 @@ public class WelcomeActivity extends AppCompatActivity {
     private int[] layouts;
     private Button btnSkip, btnNext;
     private PrefManager prefManager;
+public  static int myback(int a){
+    switch (a){
 
+        case 1:return R.drawable.jakol;
+        case 2:return R.drawable.gijo;
+        case 3:return R.drawable.back9;
+    }
+    return 0;
+}
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

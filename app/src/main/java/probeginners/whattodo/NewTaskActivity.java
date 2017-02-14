@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
@@ -54,6 +55,7 @@ import db.DatabaseHandler;
 import interfaces.ClickListener;
 import tasklist.RecyclerTouchListener;
 import welcome.PrefManager;
+import welcome.WelcomeActivity;
 
 
 public class NewTaskActivity extends AppCompatActivity implements View.OnClickListener{
@@ -380,6 +382,16 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
             }*/
         } catch (Exception e) {
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences sharedPreferences1= PreferenceManager.getDefaultSharedPreferences(this);
+        int a=sharedPreferences1.getInt("myback",0);
+        if(WelcomeActivity.myback(a)!=0)
+            getWindow().setBackgroundDrawableResource(WelcomeActivity.myback(a));
+        else getWindow().setBackgroundDrawableResource(R.drawable.backcolor);
     }
 
     private void adddata(String name, boolean flag, boolean fav) {

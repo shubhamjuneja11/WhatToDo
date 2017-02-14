@@ -13,6 +13,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -48,6 +49,7 @@ import classes.TaskDetails;
 import db.DatabaseHandler;
 import navigation.Favourite;
 import welcome.PrefManager;
+import welcome.WelcomeActivity;
 
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;
@@ -83,6 +85,11 @@ public class TaskDetailsActivity extends AppCompatActivity implements View.OnCli
             alarmset = task.getAlarmstatus() == 1;
         } catch (Exception e) {
         }
+        SharedPreferences sharedPreferences1= PreferenceManager.getDefaultSharedPreferences(this);
+        int a=sharedPreferences1.getInt("myback",0);
+        if(WelcomeActivity.myback(a)!=0)
+            getWindow().setBackgroundDrawableResource(WelcomeActivity.myback(a));
+        else getWindow().setBackgroundDrawableResource(R.drawable.backcolor);
     }
 
     @Override

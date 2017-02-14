@@ -1,7 +1,9 @@
 package navigation;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import probeginners.whattodo.R;
+import welcome.WelcomeActivity;
 
 public class FeedbackActivity extends AppCompatActivity {
     EditText name, feedback;
@@ -83,6 +86,16 @@ public class FeedbackActivity extends AppCompatActivity {
 
     public void open(View view) {
         spinner.performClick();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences sharedPreferences1= PreferenceManager.getDefaultSharedPreferences(this);
+        int a=sharedPreferences1.getInt("myback",0);
+        if(WelcomeActivity.myback(a)!=0)
+            getWindow().setBackgroundDrawableResource(WelcomeActivity.myback(a));
+        else getWindow().setBackgroundDrawableResource(R.drawable.backcolor);
     }
 
     @Override
