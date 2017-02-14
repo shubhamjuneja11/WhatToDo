@@ -319,13 +319,11 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
                                             for (int i = 0; i < selected.size(); i++) {
                                                 handler.deleteTask(NewTaskActivity.this, selected.get(i));
                                             }
-                                         /*  String a[]=new String[selected.size()];
-                                            for(int i=0;i<selected.size();i++)
-                                                a[i]=selected.get(i).toString();
-                                           handler.deletemanytask(NewTaskActivity.this,a);*/
-                                            for(int i=0;i<list.size();i++){
+
+                                            for(int i=list.size()-1;i>=0;i--){
+
                                                 if(selected.contains(list.get(i).getPrimary()))
-                                                    list.remove(i);
+                                                { list.remove(i);}
                                             }
                                             adapter.notifyDataSetChanged();
                                             selected.clear();
