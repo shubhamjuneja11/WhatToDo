@@ -35,7 +35,7 @@ public  static int myback(int a){
 
         case 1:return R.drawable.jakol;
         case 2:return R.drawable.gijo;
-        case 3:return R.drawable.back9;
+       // case 3:return R.drawable.back9;
     }
     return 0;
 }
