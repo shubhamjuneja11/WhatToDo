@@ -627,9 +627,14 @@ else {
                 case CAMERA_REQUEST:
                     try {
                         List list = taskDataList.get(positiontoopen);
-                        list.puticon(getPath(this, uri));
-                        adapter.notifyDataSetChanged();
-                        handler.updateList(list);
+                        String path=Navigation.getPath(this,uri);
+                        File file=new File(path);
+                        if(file.exists()){
+                            list.puticon(getPath(this, uri));
+                            adapter.notifyDataSetChanged();
+                            handler.updateList(list);
+                        }
+
 
                     } catch (Exception e) {
                         e.printStackTrace();
