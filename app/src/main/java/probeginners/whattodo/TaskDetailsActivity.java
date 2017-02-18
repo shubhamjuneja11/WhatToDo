@@ -269,12 +269,10 @@ public class TaskDetailsActivity extends AppCompatActivity implements View.OnCli
             if (task.getAlarmstatus() == 1)
                 alarm.setImageResource(R.drawable.alarmon);
             else alarm.setImageResource(R.drawable.alarmoff);
-
             if (!task.getImagename().trim().equals(""))
-                Glide.with(this).load(task.getImagename()).into(reminderimage);
-            // reminderimage.setImageBitmap(task.getImage());
-            else reminderimage.setImageResource(R.drawable.remembermin);
-        } catch (Exception e) {
+            {Glide.with(this).load(task.getImagename()).into(reminderimage); Log.e("abcdef",task.getImagename());}
+            else {reminderimage.setImageResource(R.drawable.remembermin); Log.e("abcde","gh");}
+        } catch (Exception e) {reminderimage.setImageResource(R.drawable.remembermin); Log.e("abcde","qw");
         }
     }
 
@@ -476,14 +474,18 @@ public class TaskDetailsActivity extends AppCompatActivity implements View.OnCli
             switch (requestCode) {
 
                 case CAMERA_REQUEST:
-                    try {//uri=data.getData();
+                    try {
 
-                            task.putimagename(Navigation.getPath(this, uri));
-                            handler.updateTaskDetails(task);
-                            //reminderimage.setImageBitmap(task.getImage());
-                            Glide.with(this).load(task.getImagename()).into(reminderimage);
-
-                    } catch (Exception e) {
+                            if(uri!=null) {
+                                String path=Navigation.getPath(this,uri);
+                                File file=new File(path);
+                                if(file.exists()){ task.putimagename(Navigation.getPath(this, uri));
+                                    handler.updateTaskDetails(task);}
+                            }
+                       /* if(!task.getImagename().trim().equals(""))
+                        {Log.e("abcde","3");Glide.with(this).load(task.getImagename()).into(reminderimage);}
+                        else {Log.e("abcde","4");reminderimage.setImageResource(R.drawable.remembermin);}*/
+                    } catch (Exception e) {Log.e("abcde","5");
                         reminderimage.setImageResource(R.drawable.remembermin);
                     }
                     break;
@@ -496,9 +498,9 @@ public class TaskDetailsActivity extends AppCompatActivity implements View.OnCli
                             task.putimagename(Navigation.getPath(this, uri1));
                             handler.updateTaskDetails(task);
                             //reminderimage.setImageBitmap(task.getImage());
-                            Glide.with(this).load(task.getImagename()).into(reminderimage);
+                           // Glide.with(this).load(task.getImagename()).into(reminderimage);
                         }
-                        reminderimage.setImageResource(R.drawable.remembermin);
+                       // reminderimage.setImageResource(R.drawable.remembermin);
                     } catch (Exception e) {
                         reminderimage.setImageResource(R.drawable.remembermin);
                     }
