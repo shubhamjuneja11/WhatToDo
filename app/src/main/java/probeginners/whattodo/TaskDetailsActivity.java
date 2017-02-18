@@ -155,7 +155,7 @@ public class TaskDetailsActivity extends AppCompatActivity implements View.OnCli
                                         + "/" + (monthNumber + 1) + "/" + year
                                         + ", " + hour12 + ":" + min
                                         + " " + AM_PM);
-                            task.putalarmtime(datetime.getText().toString());
+                            task.putalarmtime(datetime.getText().toString().trim());
                             handler.updateTaskDetails(task);
                             alarmsetup(alarmcalendar, image);
                         }
@@ -201,7 +201,7 @@ public class TaskDetailsActivity extends AppCompatActivity implements View.OnCli
                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            String m_Text = input.getText().toString();
+                            String m_Text = input.getText().toString().trim();
                             notetext.setText(m_Text);
                             task.putnote(m_Text);
                             handler.updateTaskDetails(task);
@@ -269,8 +269,10 @@ public class TaskDetailsActivity extends AppCompatActivity implements View.OnCli
             if (task.getAlarmstatus() == 1)
                 alarm.setImageResource(R.drawable.alarmon);
             else alarm.setImageResource(R.drawable.alarmoff);
-            if (task.getImage() != null)
-                reminderimage.setImageBitmap(task.getImage());
+
+            if (!task.getImagename().trim().equals(""))
+                Glide.with(this).load(task.getImagename()).into(reminderimage);
+            // reminderimage.setImageBitmap(task.getImage());
             else reminderimage.setImageResource(R.drawable.remembermin);
         } catch (Exception e) {
         }
@@ -332,7 +334,6 @@ public class TaskDetailsActivity extends AppCompatActivity implements View.OnCli
                 AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
                 task.putalarmstatus(status);
                 handler.updateTaskDetails(task);
-                // handler.updateTaskDetails(new TaskDetails(listname,taskname,datetime.getText().toString(),notetext.getText().toString(),uri.getPath(),status));
                 alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
             } else Toast.makeText(this, "Invalid time", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
@@ -476,12 +477,14 @@ public class TaskDetailsActivity extends AppCompatActivity implements View.OnCli
 
                 case CAMERA_REQUEST:
                     try {//uri=data.getData();
-                        task.putimagename(Navigation.getPath(this, uri));
-                        handler.updateTaskDetails(task);
-                        //reminderimage.setImageBitmap(task.getImage());
-                        Glide.with(this).load(task.getImage()).into(reminderimage);
+
+                            task.putimagename(Navigation.getPath(this, uri));
+                            handler.updateTaskDetails(task);
+                            //reminderimage.setImageBitmap(task.getImage());
+                            Glide.with(this).load(task.getImagename()).into(reminderimage);
+
                     } catch (Exception e) {
-                    e.printStackTrace();
+                        reminderimage.setImageResource(R.drawable.remembermin);
                     }
                     break;
 
@@ -489,14 +492,15 @@ public class TaskDetailsActivity extends AppCompatActivity implements View.OnCli
                     try {
 
                         Uri uri1 = data.getData();
-                        if(uri1==null) Log.e("abcd","a");
-                        task.putimagename(Navigation.getPath(this, uri1));
-                        handler.updateTaskDetails(task);
-                        //reminderimage.setImageBitmap(task.getImage());
-                        Glide.with(this).load(task.getImage()).into(reminderimage);
-                        Log.e("abcd",Navigation.getPath(this, uri1));
+                        if(uri1!=null) {
+                            task.putimagename(Navigation.getPath(this, uri1));
+                            handler.updateTaskDetails(task);
+                            //reminderimage.setImageBitmap(task.getImage());
+                            Glide.with(this).load(task.getImagename()).into(reminderimage);
+                        }
+                        reminderimage.setImageResource(R.drawable.remembermin);
                     } catch (Exception e) {
-                        e.printStackTrace();Log.e("abcd","ac");
+                        reminderimage.setImageResource(R.drawable.remembermin);
                     }
 
             }

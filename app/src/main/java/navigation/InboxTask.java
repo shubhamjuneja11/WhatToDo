@@ -198,7 +198,7 @@ public class InboxTask extends AppCompatActivity {
 
             switch (item.getItemId()) {
                 case R.id.add: {
-                    String task = taskname.getText().toString();
+                    String task = taskname.getText().toString().trim();
                     adddata(task, false, favflag);
                     if (click) {
                         if (status == 1)
@@ -238,7 +238,7 @@ public class InboxTask extends AppCompatActivity {
             sharedPreferences = getSharedPreferences("list", Context.MODE_PRIVATE);
             int i, d;
 
-            s = datetime.getText().toString();
+            s = datetime.getText().toString().trim();
             i = sharedPreferences.getInt("task", 0);
             taskey = i;
             d = sharedPreferences.getInt("detail", 0);
@@ -312,7 +312,7 @@ public class InboxTask extends AppCompatActivity {
                 Intent intent = new Intent(this, AlarmReciever.class);
                 intent.putExtra("taskid", taskey);
                 intent.putExtra("listname", "Inbox");
-                intent.putExtra("taskname", taskname.getText().toString());
+                intent.putExtra("taskname", taskname.getText().toString().trim());
                 intent.putExtra("listkey", -1);
                 intent.putExtra("taskkey", taskey);
 
@@ -328,7 +328,7 @@ public class InboxTask extends AppCompatActivity {
                 editor.apply();
 
                 editor.commit();
-                TaskDetails task = new TaskDetails(d, -1, taskey, "Inbox", taskname.getText().toString(), s, "", "", 1);
+                TaskDetails task = new TaskDetails(d, -1, taskey, "Inbox", taskname.getText().toString().trim(), s, "", "", 1);
                 handler.addTaskDetails2(task);
                 handler.addAlarm(i, -1, taskey);
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), i, intent, 0);
@@ -339,4 +339,9 @@ public class InboxTask extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

@@ -282,23 +282,19 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
         try {
             switch (item.getItemId()) {
                 case R.id.add: {
-                    String task = taskname.getText().toString();
+                    String task = taskname.getText().toString().trim();
                     adddata(task, false, favflag);
                     favflag = false;
                     taskname.setText("");
                     fav.setImageResource(R.drawable.favourite);
                     if(prefManager.tutorial()<3) {
-                        Log.e("abcde","1");
-
-                      //  t3 = new ViewTarget(R.id.check, this);
-                       showcaseView=new ShowcaseView.Builder(this)
+                        showcaseView=new ShowcaseView.Builder(this)
                                 .setTarget(Target.NONE)
                                 .setOnClickListener(this)
                                 .setContentTitle("Hurray!!")
                                 .setContentText("You have added a task.")
                                 .hideOnTouchOutside()
                                 .build();
-                        Log.e("abcde","3");
 
                         tut=4;
                         prefManager.setTutorial(3);

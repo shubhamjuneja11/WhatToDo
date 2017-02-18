@@ -97,7 +97,7 @@ public class NewList extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
         try {
-            name = editText.getText().toString();
+            name = editText.getText().toString().trim();
             if (item.getItemId() == R.id.done && flag) {
                 Intent intent = new Intent();
                 intent.putExtra("name", name);

@@ -28,16 +28,19 @@ public class SettingsActivity extends AppCompatActivity {
     Toolbar toolbar;
     boolean decide,decide2;
     int back;
-    TextView v, t,co;
+    TextView v, t,co,bg;
     String title,mycolor;
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
+    SharedPreferences sharedPreferences,sharedPreferences1;
+    SharedPreferences.Editor editor,editor1;
+    CharSequence[] array = {"No Image","Image 1","Image 2"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         sharedPreferences = getSharedPreferences("settings", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
+        sharedPreferences1= PreferenceManager.getDefaultSharedPreferences(SettingsActivity.this);
+        editor1=sharedPreferences1.edit();
         try {
 
             toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -46,6 +49,7 @@ public class SettingsActivity extends AppCompatActivity {
             v = (TextView) findViewById(R.id.vibrate);
             t = (TextView) findViewById(R.id.tone);
             co=(TextView)findViewById(R.id.color);
+            bg=(TextView)findViewById(R.id.background);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -149,8 +153,9 @@ public class SettingsActivity extends AppCompatActivity {
             editor.putBoolean("vibrate", vibrate);
             editor.putString("title", title);
             editor.putBoolean("color",color);
-            Log.e("abcd",color+"hi");
-            editor.apply();
+            editor1.putInt("myback",back);
+            editor.commit();
+            editor1.commit();
         } catch (Exception e) {
         }
     }
@@ -159,12 +164,12 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         try {
-            SharedPreferences sharedPreferences = getSharedPreferences("settings", Context.MODE_PRIVATE);
+            //SharedPreferences sharedPreferences = getSharedPreferences("settings", Context.MODE_PRIVATE);
             chosenRingtone = sharedPreferences.getString("ringtone", "");
             vibrate = sharedPreferences.getBoolean("vibrate", false);
             title = sharedPreferences.getString("title", "");
             color=sharedPreferences.getBoolean("color",true);
-            Log.e("abcd",color+"start");
+            back=sharedPreferences1.getInt("myback",0);
             if(color)
                 co.setText("Colorful");
             else co.setText("White");
@@ -177,6 +182,7 @@ public class SettingsActivity extends AppCompatActivity {
             if(mycolor.equals(""))
                 co.setText("White");
             else co.setText("Colorful");
+            bg.setText(array[back]);
         } catch (Exception e) {
         }
     }
@@ -191,11 +197,12 @@ public class SettingsActivity extends AppCompatActivity {
     }
 public void changecolor(View view){
     decide2=true;
+
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
     CharSequence[] array = {"White","Colorful"};
     builder.setTitle("Set Color")
 
-            .setSingleChoiceItems(array, 1, new DialogInterface.OnClickListener() {
+            .setSingleChoiceItems(array,1, new DialogInterface.OnClickListener() {
 
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -232,10 +239,10 @@ Log.e("abcd",decide2+"");
 }
     public void changeback(View view){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        CharSequence[] array = {"No Image","Image 1","Image 2"};
+
         builder.setTitle("Set Background Image")
 
-                .setSingleChoiceItems(array, 1, new DialogInterface.OnClickListener() {
+                .setSingleChoiceItems(array,back, new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -246,11 +253,7 @@ Log.e("abcd",decide2+"");
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        SharedPreferences sharedPreferences1= PreferenceManager.getDefaultSharedPreferences(SettingsActivity.this);
-                        SharedPreferences.Editor editor1=sharedPreferences1.edit();
-                            editor1.putInt("myback",back);
-                        Log.e("jija",back+"");
-                        editor1.apply();
+                       bg.setText(array[back]);
                         Toast.makeText(SettingsActivity.this, "Background changed", Toast.LENGTH_SHORT).show();
                     }
                 })
@@ -261,7 +264,7 @@ Log.e("abcd",decide2+"");
                     }
                 });
 
-        Dialog dialog = builder.create();
+        AlertDialog dialog = builder.create();
         dialog.show();
     }
     @Override

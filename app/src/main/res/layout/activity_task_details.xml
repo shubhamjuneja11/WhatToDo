@@ -5,7 +5,6 @@
     android:id="@+id/activity_task_details"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/backcolor2"
     tools:context="probeginners.whattodo.TaskDetailsActivity">
 
     <android.support.design.widget.AppBarLayout

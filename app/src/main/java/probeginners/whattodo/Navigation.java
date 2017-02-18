@@ -419,14 +419,18 @@ tut=0;
         if(isselected){
             isselected=false;
             invalidateOptionsMenu();
+            selected.clear();
             adapter.notifyDataSetChanged();
         }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
+        else {
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawer(GravityCompat.START);
+            }
+            else
+            super.onBackPressed();}
+
+
     }
 
     @Override
@@ -536,7 +540,6 @@ else {
                 }
                 isselected = false;
                 ActivityCompat.invalidateOptionsMenu(Navigation.this);
-                //selected=new ArrayList<>();
                 return true;
             }
 
@@ -548,13 +551,9 @@ else {
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         try {
             int id = item.getItemId();
-
             if (id == R.id.inbox) {
-
-
                 int done;
                 done = sharedPreferences.getInt("done", 0);
                 Intent intent = new Intent(Navigation.this, NewTaskActivity.class);
@@ -722,7 +721,7 @@ else {
                             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    String input = editText.getText().toString();
+                                    String input = editText.getText().toString().trim();
                                     List list = taskDataList.get(positiontoopen);
                                     handler.changeListname(list.getPrimary(), input);
                                     list.putlistname(input);
