@@ -30,6 +30,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -196,7 +197,13 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
                 }
             }));
 
-
+taskname.setOnTouchListener(new View.OnTouchListener() {
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        if(isselected)dun(v);
+        return false;
+    }
+});
 //menu listener
             taskname.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -422,7 +429,7 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     public void favourite(View view) {
-        try {
+        try {if(isselected)dun(view);
             ImageView imageView = (ImageView) view;
             if (favflag) {
                 favflag = false;

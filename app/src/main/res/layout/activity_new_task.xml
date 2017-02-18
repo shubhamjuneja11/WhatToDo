@@ -60,7 +60,6 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="0dp"
                 android:layout_weight="18"
-                android:onClick="dun"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:id="@+id/abcd"
@@ -71,7 +70,6 @@
                 android:hint="Add new task..."
                 android:id="@+id/newtaskname"
                 android:singleLine="true"
-                android:onClick="dun"
                 android:textColor="#0d47a1"
                 android:background="@color/white"
                 android:textAlignment="center"
