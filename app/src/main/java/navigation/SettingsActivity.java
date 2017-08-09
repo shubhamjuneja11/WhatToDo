@@ -32,7 +32,7 @@ public class SettingsActivity extends AppCompatActivity {
     String title,mycolor;
     SharedPreferences sharedPreferences,sharedPreferences1;
     SharedPreferences.Editor editor,editor1;
-    CharSequence[] array = {"No Image","Image 1","Image 2"};
+    CharSequence array[] = {"Image 1","Image 2"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +49,7 @@ public class SettingsActivity extends AppCompatActivity {
             v = (TextView) findViewById(R.id.vibrate);
             t = (TextView) findViewById(R.id.tone);
             co=(TextView)findViewById(R.id.color);
-            bg=(TextView)findViewById(R.id.background);
+            bg=(TextView)findViewById(R.id.backgroundss);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -80,11 +80,11 @@ public class SettingsActivity extends AppCompatActivity {
 
     public void setvibrate(final View view) {
         try {
-
+int a=vibrate?0:1;
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             CharSequence[] array = {"On", "Off"};
             builder.setTitle("Vibrate")
-                    .setSingleChoiceItems(array, 1, new DialogInterface.OnClickListener() {
+                    .setSingleChoiceItems(array,a, new DialogInterface.OnClickListener() {
 
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -179,31 +179,45 @@ public class SettingsActivity extends AppCompatActivity {
                 t.setText(title);
             if (vibrate) v.setText("On");
             else v.setText("Off");
-            if(mycolor.equals(""))
-                co.setText("White");
-            else co.setText("Colorful");
-            bg.setText(array[back]);
-        } catch (Exception e) {
+           switch (back){
+               case 0:bg.setText("Image 1");break;
+               case 1:bg.setText("Image 2");break;
+           }
+        } catch (Exception ep) {
+            ep.printStackTrace();
         }
     }
 
     public void deleteall(View view) {
         try {
-            DatabaseHandler handler = new DatabaseHandler(this);
-            handler.deleteall();
-            Toast.makeText(this, "Cleared", Toast.LENGTH_SHORT).show();
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Clear all data?").setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    DatabaseHandler handler = new DatabaseHandler(SettingsActivity.this);
+                    handler.deleteall();
+                    Toast.makeText(SettingsActivity.this, "Cleared", Toast.LENGTH_SHORT).show();
+
+                }
+            })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+
+                        }
+                    }).show();
+
+
         } catch (Exception e) {
         }
     }
 public void changecolor(View view){
     decide2=true;
-
+int a=color?1:0;
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
     CharSequence[] array = {"White","Colorful"};
     builder.setTitle("Set Color")
-
-            .setSingleChoiceItems(array,1, new DialogInterface.OnClickListener() {
-
+            .setSingleChoiceItems(array,a, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     if (which == 0)
@@ -215,7 +229,6 @@ public void changecolor(View view){
             .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int id) {
-Log.e("abcd",decide2+"");
                     if (decide2) {
                         color = true;
                         co.setText("Colorful");
@@ -224,7 +237,6 @@ Log.e("abcd",decide2+"");
                         color=false;
                         co.setText("White");
                     }
-                    Log.e("abcd",color+"");
                 }
             })
             .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -271,4 +283,5 @@ Log.e("abcd",decide2+"");
     public void onBackPressed() {
         super.onBackPressed();
     }
+
 }

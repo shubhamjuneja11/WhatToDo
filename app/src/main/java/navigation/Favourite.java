@@ -18,7 +18,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,20 +27,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import classes.Task;
 import db.DatabaseHandler;
 import interfaces.ClickListener;
 import probeginners.whattodo.GridSpacingItemDecoration;
-import probeginners.whattodo.NewTaskActivity;
 import probeginners.whattodo.R;
 import probeginners.whattodo.TaskDetailsActivity;
 import tasklist.RecyclerTouchListener;
@@ -75,7 +72,6 @@ public class Favourite extends AppCompatActivity {
 
     }
     public void dun(View view){
-        Log.e("mks","kl");
         if(isselected){
             {
                 isselected = false;
@@ -176,6 +172,7 @@ public class Favourite extends AppCompatActivity {
         if(isselected){
             isselected=false;
             invalidateOptionsMenu();
+            selected.clear();
             adapter.notifyDataSetChanged();
         }
         else
@@ -261,7 +258,7 @@ public class Favourite extends AppCompatActivity {
             public ImageButton favourite;
             public CardView cardView;
             public View view;
-            public RelativeLayout open;
+            public LinearLayout open;
 
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -272,7 +269,7 @@ public class Favourite extends AppCompatActivity {
                     listname = (TextView) itemView.findViewById(R.id.listname);
                     check = (CheckBox) itemView.findViewById(R.id.check);
                     favourite = (ImageButton) itemView.findViewById(R.id.favourite2);
-                    open = (RelativeLayout) itemView.findViewById(R.id.open);
+                    open = (LinearLayout) itemView.findViewById(R.id.open);
                     cardView = (CardView) itemView;
                     check.setOnClickListener(this);
                     open.setOnClickListener(this);
@@ -335,9 +332,7 @@ public class Favourite extends AppCompatActivity {
         super.onResume();
         SharedPreferences sharedPreferences1= PreferenceManager.getDefaultSharedPreferences(this);
         int a=sharedPreferences1.getInt("myback",0);
-        if(WelcomeActivity.myback(a)!=0)
             getWindow().setBackgroundDrawableResource(WelcomeActivity.myback(a));
-        else getWindow().setBackgroundDrawableResource(R.drawable.backcolor);
     }
 
     @Override

@@ -8,11 +8,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
 
 import classes.List;
 import classes.Task;
@@ -157,21 +154,19 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
 public void determinecount(HashSet<Integer> set){
-    Log.e("friends","15");
     int primary;
     if(db==null)
         db=this.getReadableDatabase();
     Integer a[]=null;
-    Log.e("friends","17");
-    try {Log.e("friends09",set.size()+"");
+    try {
          a= set.toArray(new Integer[set.size()]);
     }
 
     catch (Exception e){
-        Log.e("friends",e.getMessage());
+
 
     }
-    Log.e("friendsss",a.length+"");
+
     for(int i=0;i<a.length;i++) {
         primary=a[i];
         Cursor cursor;
@@ -179,28 +174,21 @@ public void determinecount(HashSet<Integer> set){
         int total, count = 0;
         total = 0;
 
-        try {Log.e("friends","22");
+        try {
             cursor = db.rawQuery("select completed from "+Task_Table+" where listkey=?", new String[]{String.valueOf(primary)});
-            Log.e("friends56",primary+"");
-            Log.e("friends12",cursor.getCount()+"");
             if (cursor.moveToFirst()) {
                 do {
-                    Log.e("mmmm", "hio");
                     if (cursor.getInt(0) == 1)
                         count++;
-                    Log.e("mmmm", "hio222");
                     total++;
                 } while (cursor.moveToNext());
 
             }
-            Log.e("mmmm", count + "");
-            Log.e("mmmm", total + "");
             db = this.getWritableDatabase();
             values.put(taskcount, count);
             values.put(totaltask, total);
             db.update(List_Table, values, "id=?", new String[]{String.valueOf(primary)});
         } catch (Exception e) {
-            Log.e("mmmm", e.getMessage());
         }
     }
 }

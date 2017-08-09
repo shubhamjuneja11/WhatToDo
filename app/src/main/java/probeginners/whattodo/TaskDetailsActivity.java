@@ -24,7 +24,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -87,9 +86,7 @@ public class TaskDetailsActivity extends AppCompatActivity implements View.OnCli
         }
         SharedPreferences sharedPreferences1= PreferenceManager.getDefaultSharedPreferences(this);
         int a=sharedPreferences1.getInt("myback",0);
-        if(WelcomeActivity.myback(a)!=0)
             getWindow().setBackgroundDrawableResource(WelcomeActivity.myback(a));
-        else getWindow().setBackgroundDrawableResource(R.drawable.backcolor);
     }
 
     @Override
@@ -155,9 +152,12 @@ public class TaskDetailsActivity extends AppCompatActivity implements View.OnCli
                                         + "/" + (monthNumber + 1) + "/" + year
                                         + ", " + hour12 + ":" + min
                                         + " " + AM_PM);
-                            task.putalarmtime(datetime.getText().toString().trim());
-                            handler.updateTaskDetails(task);
-                            alarmsetup(alarmcalendar, image);
+                            try {
+                                task.putalarmtime(datetime.getText().toString().trim());
+                                handler.updateTaskDetails(task);
+                                alarmsetup(alarmcalendar, image);
+                            }
+                            catch(Exception e){}
                         }
 
                         @Override
@@ -270,9 +270,9 @@ public class TaskDetailsActivity extends AppCompatActivity implements View.OnCli
                 alarm.setImageResource(R.drawable.alarmon);
             else alarm.setImageResource(R.drawable.alarmoff);
             if (!task.getImagename().trim().equals(""))
-            {Glide.with(this).load(task.getImagename()).into(reminderimage); Log.e("abcdef",task.getImagename());}
-            else {reminderimage.setImageResource(R.drawable.remembermin); Log.e("abcde","gh");}
-        } catch (Exception e) {reminderimage.setImageResource(R.drawable.remembermin); Log.e("abcde","qw");
+            {Glide.with(this).load(task.getImagename()).into(reminderimage); }
+            else {reminderimage.setImageResource(R.drawable.remembermin);}
+        } catch (Exception e) {reminderimage.setImageResource(R.drawable.remembermin);
         }
     }
 
@@ -374,25 +374,18 @@ public class TaskDetailsActivity extends AppCompatActivity implements View.OnCli
             int result = ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA);
             int result2 = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
             boolean flag = false;
-
             if (result == PackageManager.PERMISSION_GRANTED && result2 == PackageManager.PERMISSION_GRANTED)
                 flag = true;
-            else {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                        android.Manifest.permission.CAMERA)) {
 
-                } else {
+            else {
                     ActivityCompat.requestPermissions(this,
                             new String[]{android.Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, CAMERA_REQUEST);
-                }
-
             }
 
             if (flag) {
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 uri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
                 cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-
                 startActivityForResult(cameraIntent, CAMERA_REQUEST);
             }
 
@@ -454,14 +447,9 @@ public class TaskDetailsActivity extends AppCompatActivity implements View.OnCli
                         Intent.createChooser(intent, "Complete action using"),
                         PICK_FROM_GALLERY);
             } else {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                        android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
-
-                } else {
                     ActivityCompat.requestPermissions(this,
                             new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, PICK_FROM_GALLERY);
 
-                }
             }
         } catch (Exception e) {
         }
@@ -482,10 +470,7 @@ public class TaskDetailsActivity extends AppCompatActivity implements View.OnCli
                                 if(file.exists()){ task.putimagename(Navigation.getPath(this, uri));
                                     handler.updateTaskDetails(task);}
                             }
-                       /* if(!task.getImagename().trim().equals(""))
-                        {Log.e("abcde","3");Glide.with(this).load(task.getImagename()).into(reminderimage);}
-                        else {Log.e("abcde","4");reminderimage.setImageResource(R.drawable.remembermin);}*/
-                    } catch (Exception e) {Log.e("abcde","5");
+                    } catch (Exception e) {
                         reminderimage.setImageResource(R.drawable.remembermin);
                     }
                     break;
@@ -497,10 +482,7 @@ public class TaskDetailsActivity extends AppCompatActivity implements View.OnCli
                         if(uri1!=null) {
                             task.putimagename(Navigation.getPath(this, uri1));
                             handler.updateTaskDetails(task);
-                            //reminderimage.setImageBitmap(task.getImage());
-                           // Glide.with(this).load(task.getImagename()).into(reminderimage);
                         }
-                       // reminderimage.setImageResource(R.drawable.remembermin);
                     } catch (Exception e) {
                         reminderimage.setImageResource(R.drawable.remembermin);
                     }
@@ -546,11 +528,9 @@ public class TaskDetailsActivity extends AppCompatActivity implements View.OnCli
         try {
             switch (requestCode) {
                 case CAMERA_REQUEST: {
-
                     if (grantResults.length > 0
-                            && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                            && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                         Intent i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-
                         File file = getOutputMediaFile(1);
                         uri = Uri.fromFile(file); // create
                         i.putExtra(MediaStore.EXTRA_OUTPUT, uri); // set the image file

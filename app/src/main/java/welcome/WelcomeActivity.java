@@ -32,9 +32,8 @@ public class WelcomeActivity extends AppCompatActivity {
     private PrefManager prefManager;
 public  static int myback(int a){
     switch (a){
-
-        case 1:return R.drawable.jakol;
-        case 2:return R.drawable.gijo;
+        case 0:return R.drawable.jakol;
+        case 1:return R.drawable.gijo;
        // case 3:return R.drawable.back9;
     }
     return 0;
@@ -49,7 +48,6 @@ public  static int myback(int a){
             launchHomeScreen();
             finish();
         }
-
         // Making notification bar transparent
         if (Build.VERSION.SDK_INT >= 21) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);

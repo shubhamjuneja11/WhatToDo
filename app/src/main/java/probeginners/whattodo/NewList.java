@@ -28,9 +28,7 @@ public class NewList extends AppCompatActivity {
         super.onResume();
         SharedPreferences sharedPreferences1= PreferenceManager.getDefaultSharedPreferences(this);
         int a=sharedPreferences1.getInt("myback",0);
-        if(WelcomeActivity.myback(a)!=0)
             getWindow().setBackgroundDrawableResource(WelcomeActivity.myback(a));
-        else getWindow().setBackgroundDrawableResource(R.drawable.backcolor);
     }
 
     @Override
@@ -60,14 +58,15 @@ public class NewList extends AppCompatActivity {
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                    if(s.length()==0){
-                        flag=false;
-                        done.setEnabled(false);
-                    }
-                    else if(!flag){
-                        flag=true;
-                        done.setEnabled(true);
+                    if (s != null) {
+                        String x = s.toString();
+                        if (x.trim().length() == 0) {
+                            flag = false;
+                            done.setEnabled(false);
+                        } else if (!flag) {
+                            flag = true;
+                            done.setEnabled(true);
+                        }
                     }
                 }
 

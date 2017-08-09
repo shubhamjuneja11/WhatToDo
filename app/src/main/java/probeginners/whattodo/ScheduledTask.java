@@ -1,6 +1,5 @@
 package probeginners.whattodo;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,7 +17,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -39,7 +38,6 @@ import java.util.List;
 import classes.Task;
 import db.DatabaseHandler;
 import interfaces.ClickListener;
-import navigation.Favourite;
 import tasklist.RecyclerTouchListener;
 import welcome.WelcomeActivity;
 
@@ -65,9 +63,7 @@ public class ScheduledTask extends AppCompatActivity {
         super.onResume();
         SharedPreferences sharedPreferences1= PreferenceManager.getDefaultSharedPreferences(this);
         int a=sharedPreferences1.getInt("myback",0);
-        if(WelcomeActivity.myback(a)!=0)
             getWindow().setBackgroundDrawableResource(WelcomeActivity.myback(a));
-        else getWindow().setBackgroundDrawableResource(R.drawable.backcolor);
     }
 
     public void selection(int a) {
@@ -199,6 +195,7 @@ public class ScheduledTask extends AppCompatActivity {
         if(isselected){
             isselected=false;
             invalidateOptionsMenu();
+            selected.clear();
             adapter.notifyDataSetChanged();
         }
         else super.onBackPressed();
@@ -277,7 +274,7 @@ public class ScheduledTask extends AppCompatActivity {
             public ImageButton favourite;
             public CardView cardView;
             public View view;
-            public RelativeLayout open;
+            public LinearLayout open;
 
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -287,7 +284,7 @@ public class ScheduledTask extends AppCompatActivity {
                     listname = (TextView) itemView.findViewById(R.id.listname);
                     check = (CheckBox) itemView.findViewById(R.id.check);
                     favourite = (ImageButton) itemView.findViewById(R.id.favourite2);
-                    open = (RelativeLayout) itemView.findViewById(R.id.open);
+                    open = (LinearLayout) itemView.findViewById(R.id.open);
                     cardView = (CardView) itemView;
                     check.setOnClickListener(this);
                     favourite.setOnClickListener(this);

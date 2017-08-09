@@ -120,6 +120,7 @@
             android:layout_width="0dp"
             android:layout_height="25dp"
             android:layout_weight="3"
+            android:layout_marginLeft="7dp"
             app:srcCompat="@drawable/delete"/>
 
             <TextView
@@ -150,7 +151,7 @@
             android:layout_height="25dp"
             android:layout_weight="3"
             android:layout_marginTop="5dp"
-            app:srcCompat="@drawable/ic_vibration_black_24dp"/>
+            app:srcCompat="@drawable/color"/>
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -188,8 +189,9 @@
             android:layout_width="0dp"
             android:layout_height="25dp"
             android:layout_weight="3"
+            android:layout_marginLeft="2dp"
             android:layout_marginTop="5dp"
-            app:srcCompat="@drawable/ic_vibration_black_24dp"/>
+            app:srcCompat="@drawable/wallpaper"/>
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -204,7 +206,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/background"
+                android:id="@+id/backgroundss"
                 android:text="Off"/>
         </LinearLayout>
     </LinearLayout>

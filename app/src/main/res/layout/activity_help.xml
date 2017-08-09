@@ -21,7 +21,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="200dp"
-                android:src="@drawable/icon2"/>
+                android:src="@drawable/mylogo"/>
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
@@ -58,6 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
+                android:textSize="15dp"
                 android:text="supergeekdeveloper@gmail.com"/>
         </LinearLayout>
     </RelativeLayout>

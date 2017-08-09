@@ -93,9 +93,7 @@ public class FeedbackActivity extends AppCompatActivity {
         super.onResume();
         SharedPreferences sharedPreferences1= PreferenceManager.getDefaultSharedPreferences(this);
         int a=sharedPreferences1.getInt("myback",0);
-        if(WelcomeActivity.myback(a)!=0)
             getWindow().setBackgroundDrawableResource(WelcomeActivity.myback(a));
-        else getWindow().setBackgroundDrawableResource(R.drawable.backcolor);
     }
 
     @Override

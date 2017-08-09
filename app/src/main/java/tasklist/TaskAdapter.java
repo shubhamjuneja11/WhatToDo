@@ -77,12 +77,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.MyViewHolder> 
                 holder.taskimage.setImageResource(R.drawable.grocery);
             else
             Glide.with(context).load(taskData.getIcon()).into(holder.taskimage);
-           /* Bitmap bitmap = taskData.getImage();
-            if (bitmap != null)
-                holder.taskimage.setImageBitmap(bitmap);
-            else
-                holder.taskimage.setImageResource(R.drawable.grocery);*/
-
             if(!Navigation.isselected) {
                 if (SettingsActivity.color) {
                     holder.view.setBackgroundColor(ColorsHelper.getRandomColor());

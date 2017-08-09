@@ -1,6 +1,5 @@
 package probeginners.whattodo;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,7 +10,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
@@ -23,9 +21,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.util.TypedValue;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,17 +34,14 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.Target;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import classes.Task;
@@ -59,13 +52,14 @@ import welcome.PrefManager;
 import welcome.WelcomeActivity;
 
 
-public class NewTaskActivity extends AppCompatActivity implements View.OnClickListener{
+public class NewTaskActivity extends AppCompatActivity implements View.OnClickListener {
     Toolbar toolbar;
     RecyclerView recyclerView;
     MyAdapter adapter;
     EditText taskname;
     int positiontoopen;
-    ArrayList<Task> list=new ArrayList<>();;
+    ArrayList<Task> list = new ArrayList<>();
+    ;
     ImageButton fav;
     boolean flag = false, favflag = false;
     SQLiteDatabase readdatabase;
@@ -73,42 +67,40 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
     String query, listname;
     Cursor cursor;
     int taskdone, listkey;
-    int tut=0,b,done;
-    Target t1,t2,t4;
+    int tut = 0, b, done;
+    Target t1, t2, t4;
     ShowcaseView showcaseView;
     PrefManager prefManager;
-    ArrayList<Integer> selected=new ArrayList<>();
-    boolean isselected=false;
-    public  void hideSoftKeyboard ( View view)
-    {
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+    ArrayList<Integer> selected = new ArrayList<>();
+    boolean isselected = false;
+
+    public void hideSoftKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
     }
-    public void selection(int a){
-        Log.e("hio","a");
-        int b=list.get(a).getPrimary();
-        if(selected.contains(b))
-        {selected.remove((Object)b);
-        Log.e("abcde",selected.size()+"");
-        }
 
-        else
-        { selected.add(b);}
+    public void selection(int a) {
+        int b = list.get(a).getPrimary();
+        if (selected.contains(b)) {
+            selected.remove((Object) b);
+        } else {
+            selected.add(b);
+        }
 
         invalidateOptionsMenu();
         adapter.notifyDataSetChanged();
-        Log.e("hio",selected.size()+"");
     }
-    public void changetask(){
-        done=0;
+
+    public void changetask() {
+        done = 0;
         for (int i = 0; i < list.size(); i++)
             if (list.get(i).completed)
                 done++;
-        handler.deleteTask(listkey,done, list.size());
+        handler.deleteTask(listkey, done, list.size());
     }
-    public void dun(View view){
-        Log.e("mks","kl");
-        if(isselected){
+
+    public void dun(View view) {
+        if (isselected) {
             {
                 isselected = false;
                 selected.clear();
@@ -119,13 +111,12 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_task);
-        prefManager=new PrefManager(this);
+        prefManager = new PrefManager(this);
         try {
             //getWindow().setBackgroundDrawableResource(R.drawable.back9);
             //Glide.with(this).load(R.drawable.back9).into((ImageView)findViewById(R.id.imgv));
@@ -138,15 +129,15 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(isselected)
-                    {
-                        isselected=false;
+                    if (isselected) {
+                        isselected = false;
                         selected.clear();
                         adapter.notifyDataSetChanged();
                         invalidateOptionsMenu();
+                    } else {
+                        onBackPressed();
+                        overridePendingTransition(0, R.anim.slide_out_left);
                     }
-                    else
-                    {onBackPressed();   overridePendingTransition(0, R.anim.slide_out_left);}
                 }
             });
 
@@ -182,28 +173,29 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
                 @Override
                 public void onClick(View view, int position) {
                     positiontoopen = position;
-                    if(isselected)selection(position);
+                    if (isselected) selection(position);
                 }
 
                 @Override
                 public void onLongClick(View view, final int position) {
                     hideSoftKeyboard(view);
-                    if(!isselected){
-                        isselected=true;
+                    if (!isselected) {
+                        isselected = true;
                         selection(position);
                         taskname.clearFocus();
+                    } else {
+                        selection(position);
                     }
-                    else {selection(position);}
                 }
             }));
 
-taskname.setOnTouchListener(new View.OnTouchListener() {
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        if(isselected)dun(v);
-        return false;
-    }
-});
+            taskname.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (isselected) dun(v);
+                    return false;
+                }
+            });
 //menu listener
             taskname.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -232,23 +224,22 @@ taskname.setOnTouchListener(new View.OnTouchListener() {
 
                 }
             });
-            if(prefManager.tutorial()<2)
-            {
-               showcaseView=new ShowcaseView.Builder(this)
+            if (prefManager.tutorial() < 2) {
+                showcaseView = new ShowcaseView.Builder(this)
                         .setTarget(Target.NONE)
                         .setOnClickListener(this)
                         .setContentTitle("Tasks List")
                         .setContentText("It contains various tasks in your List/Inbox.")
                         .hideOnTouchOutside()
                         .build();
-                RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                 params.addRule(RelativeLayout.CENTER_HORIZONTAL);
-                params.setMargins(0,0,0,200);
+                params.setMargins(0, 0, 0, 200);
                 showcaseView.setButtonPosition(params);
 
-                t1=new ViewTarget(R.id.abcd,this);
-                t2=new ViewTarget(R.id.fav,this);
+                t1 = new ViewTarget(R.id.abcd, this);
+                t2 = new ViewTarget(R.id.fav, this);
                 prefManager.setTutorial(2);
             }
 
@@ -260,7 +251,7 @@ taskname.setOnTouchListener(new View.OnTouchListener() {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         MenuInflater inflater = getMenuInflater();
-        if(!isselected) {
+        if (!isselected) {
 
             inflater.inflate(R.menu.newtaskmenu, menu);
             MenuItem item = menu.getItem(0);
@@ -270,11 +261,10 @@ taskname.setOnTouchListener(new View.OnTouchListener() {
                 item.setEnabled(false);
             getSupportActionBar().setTitle(listname);
 
-        }
-        else{
-            inflater.inflate(R.menu.newtaskmenu2,menu);
-            MenuItem item=menu.getItem(0);
-            item.setTitle(selected.size()+" selected");
+        } else {
+            inflater.inflate(R.menu.newtaskmenu2, menu);
+            MenuItem item = menu.getItem(0);
+            item.setTitle(selected.size() + " selected");
             toolbar.setTitle("");
 
         }
@@ -282,7 +272,10 @@ taskname.setOnTouchListener(new View.OnTouchListener() {
         // else inflater.inflate(R.menu.newtaskmenu, menu);
         return true;
     }
-
+public boolean funz(){
+    hideSoftKeyboard(findViewById(R.id.toolbar));
+    return true;
+}
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
@@ -293,9 +286,11 @@ taskname.setOnTouchListener(new View.OnTouchListener() {
                     adddata(task, false, favflag);
                     favflag = false;
                     taskname.setText("");
+                   boolean b=funz();
                     fav.setImageResource(R.drawable.favourite);
-                    if(prefManager.tutorial()<3) {
-                        showcaseView=new ShowcaseView.Builder(this)
+                    if(b)
+                    if (prefManager.tutorial() < 3) {
+                        showcaseView = new ShowcaseView.Builder(this)
                                 .setTarget(Target.NONE)
                                 .setOnClickListener(this)
                                 .setContentTitle("Hurray!!")
@@ -303,18 +298,17 @@ taskname.setOnTouchListener(new View.OnTouchListener() {
                                 .hideOnTouchOutside()
                                 .build();
 
-                        tut=4;
+                        tut = 4;
                         prefManager.setTutorial(3);
                     }
 
                     return true;
                 }
-                case R.id.delete:{
-                    Log.e("hiod",selected.size()+"");
-                    if(isselected&&selected.size()>0) {
+                case R.id.delete: {
+                    if (isselected && selected.size() > 0) {
                         android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(NewTaskActivity.this)
                                 .setTitle("Delete")
-                                .setMessage("Delete "+selected.size()+" tasks.")
+                                .setMessage("Delete " + selected.size() + " tasks.")
                                 .setIcon(R.drawable.delete)
                                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
 
@@ -325,18 +319,21 @@ taskname.setOnTouchListener(new View.OnTouchListener() {
                                                 handler.deleteTask(NewTaskActivity.this, selected.get(i));
                                             }
 
-                                            for(int i=list.size()-1;i>=0;i--){
+                                            for (int i = list.size() - 1; i >= 0; i--) {
 
-                                                if(selected.contains(list.get(i).getPrimary()))
-                                                { list.remove(i);}
+                                                if (selected.contains(list.get(i).getPrimary())) {
+                                                    list.remove(i);
+                                                }
                                             }
                                             adapter.notifyDataSetChanged();
                                             selected.clear();
                                             dialog.dismiss();
                                             changetask();
 
-                                        }catch (Exception e){e.printStackTrace();}
-                                       /***********************************/
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                        /***********************************/
 
                                     }
 
@@ -353,7 +350,10 @@ taskname.setOnTouchListener(new View.OnTouchListener() {
                                 })
                                 .create();
                         dialog.show();
-                    }isselected=false;adapter.notifyDataSetChanged();invalidateOptionsMenu();
+                    }
+                    isselected = false;
+                    adapter.notifyDataSetChanged();
+                    invalidateOptionsMenu();
                     //selected=new ArrayList<>();
                     return true;
                 }
@@ -368,7 +368,7 @@ taskname.setOnTouchListener(new View.OnTouchListener() {
 
     private void preparedata() {
         Task task;
-       // list.clear();
+        // list.clear();
         try {
             if (cursor.moveToFirst()) {
                 do {
@@ -378,11 +378,7 @@ taskname.setOnTouchListener(new View.OnTouchListener() {
                     else list.add(list.size(), task);
                 } while (cursor.moveToNext());
             }
-                cursor.close();
-           /* if(adapter!=null)
-            {adapter.notifyDataSetChanged();Log.e("hello","ssss");
-                Log.e("hello",list.size()+"");
-            }*/
+            cursor.close();
         } catch (Exception e) {
         }
     }
@@ -390,11 +386,9 @@ taskname.setOnTouchListener(new View.OnTouchListener() {
     @Override
     protected void onResume() {
         super.onResume();
-        SharedPreferences sharedPreferences1= PreferenceManager.getDefaultSharedPreferences(this);
-        int a=sharedPreferences1.getInt("myback",0);
-        if(WelcomeActivity.myback(a)!=0)
-            getWindow().setBackgroundDrawableResource(WelcomeActivity.myback(a));
-        else getWindow().setBackgroundDrawableResource(R.drawable.backcolor);
+        SharedPreferences sharedPreferences1 = PreferenceManager.getDefaultSharedPreferences(this);
+        int a = sharedPreferences1.getInt("myback", 0);
+        getWindow().setBackgroundDrawableResource(WelcomeActivity.myback(a));
     }
 
     private void adddata(String name, boolean flag, boolean fav) {
@@ -413,8 +407,7 @@ taskname.setOnTouchListener(new View.OnTouchListener() {
             adapter.notifyDataSetChanged();
             handler.addTask(task);
             changetask();
-           // handler.changeListTotalTask(listkey, adapter.getItemCount());
-
+            hideSoftKeyboard(findViewById(R.id.toolbar));
             handler.addTaskDetails(d, listkey, i, listname, task.getTaskname());
         } catch (Exception e) {
         }
@@ -429,7 +422,8 @@ taskname.setOnTouchListener(new View.OnTouchListener() {
     }
 
     public void favourite(View view) {
-        try {if(isselected)dun(view);
+        try {
+            if (isselected) dun(view);
             ImageView imageView = (ImageView) view;
             if (favflag) {
                 favflag = false;
@@ -447,13 +441,12 @@ taskname.setOnTouchListener(new View.OnTouchListener() {
 
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
-        if(isselected){
-            isselected=false;
+        if (isselected) {
+            isselected = false;
             invalidateOptionsMenu();
+            selected.clear();
             adapter.notifyDataSetChanged();
-        }
-        else {
+        } else {
             Intent upIntent = NavUtils.getParentActivityIntent(NewTaskActivity.this);
             if (NavUtils.shouldUpRecreateTask(NewTaskActivity.this, upIntent)) {
 
@@ -474,7 +467,7 @@ taskname.setOnTouchListener(new View.OnTouchListener() {
 
     @Override
     public void onClick(View view) {
-        switch (tut){
+        switch (tut) {
             case 0:
                 showcaseView.setShowcase(t1, true);
                 showcaseView.setContentTitle("Add New Task");
@@ -483,27 +476,43 @@ taskname.setOnTouchListener(new View.OnTouchListener() {
             case 1:
                 showcaseView.setShowcase(t2, true);
                 showcaseView.setContentTitle("Favourite Task");
-                showcaseView.setContentText("Tap this to mark this task as favourite.");break;
-            case 2:t4 = new ViewTarget(R.id.button1,NewTaskActivity.this);
-                showcaseView.setShowcase(t4,true);
-                showcaseView.setContentTitle("Add Task");
-                showcaseView.setContentText("Click this to add a new task in the list.");break;
-            case 3:showcaseView.hide();
+                showcaseView.setContentText("Tap this to mark this task as favourite.");
                 break;
-            case 4:t4 = new ViewTarget(R.id.check, NewTaskActivity.this);
-                showcaseView.setShowcase(t4,true);
+            case 2:
+                t4 = new ViewTarget(R.id.button1, NewTaskActivity.this);
+                showcaseView.setShowcase(t4, true);
+                showcaseView.setContentTitle("Add Task");
+                showcaseView.setContentText("Click this to add a new task in the list.");
+                break;
+            case 3:
+                showcaseView.hide();
+                break;
+            case 4:
+                t4 = new ViewTarget(R.id.check, NewTaskActivity.this);
+                showcaseView.setShowcase(t4, true);
                 showcaseView.setContentTitle("Task status");
                 showcaseView.setContentText("Click this to change the status of your task as pending/done.");
+                showcaseView.forceTextPosition(ShowcaseView.BELOW_SHOWCASE);
                 break;
             case 5:
                 t4 = new ViewTarget(R.id.favourite2, NewTaskActivity.this);
-                showcaseView.setShowcase(t4,true);
+                showcaseView.setShowcase(t4, true);
                 showcaseView.setContentTitle("Favourite Task");
-                showcaseView.setContentText("Tap this to mark this task as favourite.");break;
-
-            case 6:showcaseView.hide();
+                showcaseView.setContentText("Tap this to mark this task as favourite.");
+                showcaseView.forceTextPosition(ShowcaseView.BELOW_SHOWCASE);
                 break;
-        }tut++;
+            case 6:
+                t4 = new ViewTarget(R.id.name, NewTaskActivity.this);
+                showcaseView.setShowcase(t4, true);
+                showcaseView.setContentTitle("Details");
+                showcaseView.setContentText("Tap to set details.");
+                showcaseView.forceTextPosition(ShowcaseView.BELOW_SHOWCASE);
+                break;
+            case 7:
+                showcaseView.hide();
+                break;
+        }
+        tut++;
     }
 
 
@@ -511,16 +520,15 @@ taskname.setOnTouchListener(new View.OnTouchListener() {
         List<Task> list;
         //ArrayList<Integer> selected;
 
-        @Override
-        public void registerAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
-            super.registerAdapterDataObserver(observer);
-            Log.e("abc","changed");
-        }
-
         public MyAdapter(List<Task> list/*ArrayList<Integer> selected*/) {
 
             this.list = list;
             //this.selected=selected;
+        }
+
+        @Override
+        public void registerAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
+            super.registerAdapterDataObserver(observer);
         }
 
         @Override
@@ -547,18 +555,14 @@ taskname.setOnTouchListener(new View.OnTouchListener() {
                 }
 
 
-
-
                 if (data.getcompleted()) {
                     holder.view.setAlpha(0.6f);
                     holder.check.setChecked(true);
                     holder.name.setPaintFlags(holder.name.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    if(isselected&&selected.contains(data.getPrimary()))
-                    {
+                    if (isselected && selected.contains(data.getPrimary())) {
                         holder.cardView.setCardBackgroundColor(getResources().getColor(R.color.selected));
                         holder.favourite.setBackgroundColor(getResources().getColor(R.color.selected));
-                    }
-                    else {
+                    } else {
                         holder.cardView.setCardBackgroundColor(Color.parseColor("#cccccc"));
                         holder.favourite.setBackgroundColor(Color.parseColor("#cccccc"));
                     }
@@ -567,12 +571,10 @@ taskname.setOnTouchListener(new View.OnTouchListener() {
                     holder.view.setAlpha(1);
                     holder.check.setChecked(false);
                     holder.name.setPaintFlags(0);
-                    if(isselected&&selected.contains(data.getPrimary()))
-                    {
+                    if (isselected && selected.contains(data.getPrimary())) {
                         holder.cardView.setCardBackgroundColor(getResources().getColor(R.color.selected));
                         holder.favourite.setBackgroundColor(getResources().getColor(R.color.selected));
-                    }
-                    else {
+                    } else {
                         holder.cardView.setCardBackgroundColor(getResources().getColor(R.color.white));
                         holder.favourite.setBackgroundColor(getResources().getColor(R.color.white));
 
@@ -593,6 +595,7 @@ taskname.setOnTouchListener(new View.OnTouchListener() {
             public ImageButton favourite;
             public CardView cardView;
             public View view;
+
             public ViewHolder(View itemView) {
                 super(itemView);
                 try {
@@ -612,47 +615,48 @@ taskname.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
             public void onClick(View v) {
-                try {if(!isselected)
-                    switch (v.getId()) {
-                        case R.id.name:
-                            Intent intent = new Intent(NewTaskActivity.this, TaskDetailsActivity.class);
-                            intent.putExtra("listname", list.get(positiontoopen).getlistname());
-                            intent.putExtra("taskname", list.get(positiontoopen).getTaskname());
-                            intent.putExtra("listkey", listkey);
-                            intent.putExtra("taskkey", list.get(positiontoopen).getPrimary());
+                try {
+                    if (!isselected)
+                        switch (v.getId()) {
+                            case R.id.name:
+                                Intent intent = new Intent(NewTaskActivity.this, TaskDetailsActivity.class);
+                                intent.putExtra("listname", list.get(positiontoopen).getlistname());
+                                intent.putExtra("taskname", list.get(positiontoopen).getTaskname());
+                                intent.putExtra("listkey", listkey);
+                                intent.putExtra("taskkey", list.get(positiontoopen).getPrimary());
 
-                            startActivity(intent);
-                            break;
+                                startActivity(intent);
+                                break;
 
-                        case R.id.check:
-                            boolean f = list.get(positiontoopen).getcompleted();
-                            list.get(positiontoopen).putcompleted(!f);
-                            Task task = list.get(positiontoopen);
-                            list.remove(positiontoopen);
-                            if (f) {
+                            case R.id.check:
+                                boolean f = list.get(positiontoopen).getcompleted();
+                                list.get(positiontoopen).putcompleted(!f);
+                                Task task = list.get(positiontoopen);
+                                list.remove(positiontoopen);
+                                if (f) {
 
-                                list.add(0, task);
-                                adapter.notifyDataSetChanged();
-                            } else {
+                                    list.add(0, task);
+                                    adapter.notifyDataSetChanged();
+                                } else {
 
-                                list.add(list.size(), task);
-                                adapter.notifyDataSetChanged();
-                            }
-                            handler.updateTask(task);
+                                    list.add(list.size(), task);
+                                    adapter.notifyDataSetChanged();
+                                }
+                                handler.updateTask(task);
 
 
                             /*if (!f)
                                 taskdone++;
                             else taskdone--;
                             handler.changeListTaskDone(listkey, taskdone);*/
-                            changetask();
-                            break;
+                                changetask();
+                                break;
 
-                        case R.id.favourite2:
-                            list.get(positiontoopen).putfavourite(!list.get(positiontoopen).getfavourite());
-                            handler.updateTask(list.get(positiontoopen));
-                            break;
-                    }
+                            case R.id.favourite2:
+                                list.get(positiontoopen).putfavourite(!list.get(positiontoopen).getfavourite());
+                                handler.updateTask(list.get(positiontoopen));
+                                break;
+                        }
                     adapter.notifyDataSetChanged();
                 } catch (Exception e) {
                 }

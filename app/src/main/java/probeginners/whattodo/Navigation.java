@@ -1,5 +1,6 @@
 package probeginners.whattodo;
 
+import android.content.ActivityNotFoundException;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +17,7 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -28,7 +29,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -44,12 +44,10 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.github.amlcurran.showcaseview.ShowcaseView;
-import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
 import com.github.amlcurran.showcaseview.targets.Target;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
@@ -63,6 +61,8 @@ import java.util.HashSet;
 import java.util.Locale;
 
 import classes.List;
+import classes.Task;
+import classes.TaskDetails;
 import db.DatabaseHandler;
 import interfaces.ClickListener;
 import navigation.Favourite;
@@ -99,7 +99,7 @@ public class Navigation extends AppCompatActivity
     ShowcaseView showcaseView;
     Target t1,t2,t3;
     int tut=0,i;
-
+    private final int REQ_CODE_SPEECH_INPUT = 100;
     View add;
     Toolbar toolbar;
     private PrefManager prefManager;
@@ -293,21 +293,17 @@ public class Navigation extends AppCompatActivity
         }
         SharedPreferences sharedPreferences1= PreferenceManager.getDefaultSharedPreferences(Navigation.this);
         int a=sharedPreferences1.getInt("myback",0);
-        if(WelcomeActivity.myback(a)!=0)
-            getWindow().setBackgroundDrawableResource(WelcomeActivity.myback(a));
-        else getWindow().setBackgroundDrawableResource(R.drawable.backcolor);
+        getWindow().setBackgroundDrawableResource(WelcomeActivity.myback(a));
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 tut=0;
         super.onCreate(savedInstanceState);
-//setContentView(R.layout.xyz);
         prefManager=new PrefManager(this);
         setContentView(R.layout.activity_navigation);
+        speechtotext();
         sharedPreferences = getSharedPreferences("list", Context.MODE_PRIVATE);
-       /* ImageView i=(ImageView)findViewById(R.id.myback);
-        Glide.with(this).load(R.drawable.back9).into(i);*/
         try {
            toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
@@ -355,11 +351,9 @@ tut=0;
             recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
             RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
             recyclerView.setLayoutManager(mLayoutManager);
-            recyclerView.addItemDecoration(new GridSpacingItemDecoration(1, dpToPx(5), true));
+            recyclerView.addItemDecoration(new GridSpacingItemDecoration(1, dpToPx(8), true));
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             recyclerView.setAdapter(adapter);
-
-
             recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
                 @Override
                 public void onClick(View view, int position) {
@@ -468,7 +462,6 @@ else {
         //noinspection SimplifiableIfStatement
         try {
             if (id == R.id.addlist) {
-                Log.e("yeah","l");
                 Intent intent = new Intent(Navigation.this, NewList.class);
                 startActivityForResult(intent, 11);
                 overridePendingTransition(R.anim.push_up_in, R.anim.push_down_out);
@@ -652,7 +645,36 @@ else {
                     } catch (Exception e) {
                     }
                     break;
+                case REQ_CODE_SPEECH_INPUT:
+                    if (resultCode == RESULT_OK && null != data) {
 
+
+
+
+                        try {
+                            ArrayList<String> result = data
+                                    .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                            SharedPreferences sharedPreferences;
+
+                            sharedPreferences = getSharedPreferences("list", Context.MODE_PRIVATE);
+                            int i, d;
+                            i = sharedPreferences.getInt("task", 0);
+                            d = sharedPreferences.getInt("detail", 0);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putInt("task", i + 1);
+                            editor.putInt("detail", d + 1);
+                            editor.apply();
+                            Task task = new Task(i, -1, "Inbox", result.get(0), false,false);
+                            handler.addTask(task);
+                            TaskDetails details = new TaskDetails(d, -1, i, "Inbox", name, "Click to Set Reminder", "", "", 0);
+                            handler.addTaskDetails2(details);
+                            Toast.makeText(this, "Task added to Inbox", Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) { Log.e("abcdefg","555555");
+                        }
+
+
+                    }
+                    break;
                 case INBOX_TASK:
                     break;
 
@@ -835,12 +857,9 @@ else {
             if (result == PackageManager.PERMISSION_GRANTED && result2 == PackageManager.PERMISSION_GRANTED)
                 flag = true;
             else {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                        android.Manifest.permission.CAMERA)) {
-                } else {
                     ActivityCompat.requestPermissions(this,
                             new String[]{android.Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, CAMERA_REQUEST);
-                }
+
 
             }
 
@@ -848,10 +867,11 @@ else {
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 uri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
                 cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+
                 startActivityForResult(cameraIntent, CAMERA_REQUEST);
             }
 
-        } catch (Exception e) {
+        } catch (Exception e) {e.printStackTrace();
         }
     }
 
@@ -914,17 +934,10 @@ else {
                         Intent.createChooser(intent, "Complete action using"),
                         PICK_FROM_GALLERY);
             } else {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                        android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                } else {
 
                     ActivityCompat.requestPermissions(this,
                             new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, PICK_FROM_GALLERY);
 
-                    // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                    // app-defined int constant. The callback method gets the
-                    // result of the request.
-                }
             }
         } catch (Exception e) {
         }
@@ -939,7 +952,7 @@ else {
 
                     // If request is cancelled, the result arrays are empty.
                     if (grantResults.length > 0
-                            && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                            && grantResults[0] == PackageManager.PERMISSION_GRANTED&& grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         uri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
                         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
@@ -996,5 +1009,37 @@ else {
         } catch (Exception e) {
         }
     }
+
+    public void speechtotext(){
+        ImageView ib=(ImageView) findViewById(R.id.mic);
+        ib.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                promptSpeechInput();
+            }
+        });
+    }
+    private void promptSpeechInput() {
+       try {
+            Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                    RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
+                    getString(R.string.speech_prompt));
+
+            try {
+                startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
+            } catch (ActivityNotFoundException a) {
+                Toast.makeText(getApplicationContext(),
+                        getString(R.string.speech_not_supported),
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+        catch (Exception e){
+            Log.e("abcdefg","323232");
+        }
+    }
+
 
 }

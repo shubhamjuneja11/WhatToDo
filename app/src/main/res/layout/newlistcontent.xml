@@ -15,6 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
+
         android:id="@+id/abcd"
         >
 
@@ -22,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:hint="List Name"
-
+            android:singleLine="true"
             android:id="@+id/newtaskname"
             />
     </android.support.design.widget.TextInputLayout>
@@ -30,7 +31,7 @@
 <ImageView
     android:layout_width="300dp"
     android:layout_height="300dp"
-    android:src="@drawable/studymin"
+    android:src="@drawable/grocery"
     android:id="@+id/abcd2"
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
