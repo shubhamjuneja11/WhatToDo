@@ -24,6 +24,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -50,6 +53,7 @@ public class InboxTask extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     int i;
     boolean click = false;
+    AdView mAdView;
     ImageView image;
     TaskDetails details;
     String s = "";
@@ -66,7 +70,9 @@ public class InboxTask extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inbox_task);
-
+        mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
         try {
 
             toolbar = (Toolbar) findViewById(R.id.toolbar);

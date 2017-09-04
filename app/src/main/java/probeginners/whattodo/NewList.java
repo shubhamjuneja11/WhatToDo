@@ -14,6 +14,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import welcome.WelcomeActivity;
 
 public class NewList extends AppCompatActivity {
@@ -22,7 +25,7 @@ public class NewList extends AppCompatActivity {
     boolean flag;
     MenuItem done;
     private String name;
-
+    AdView mAdView;
     @Override
     protected void onResume() {
         super.onResume();
@@ -35,6 +38,9 @@ public class NewList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_list);
+        mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
         try{
             toolbar=(Toolbar)findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);

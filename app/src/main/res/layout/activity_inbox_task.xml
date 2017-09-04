@@ -75,7 +75,7 @@
                                android:layout_width="match_parent"
                                android:layout_height="50dp"
                                android:hint="Add a new task"
-
+                               android:inputType="textCapSentences"
                                android:id="@+id/newtaskname"
                                />
                        </android.support.design.widget.TextInputLayout>

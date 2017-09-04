@@ -30,6 +30,9 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -52,7 +55,7 @@ public class Favourite extends AppCompatActivity {
     DatabaseHandler handler;
     MyAdapter adapter;
     int positiontoopen, listkey, done;
-
+    AdView mAdView;
     ArrayList<Task> list = new ArrayList<>();
     ArrayList<Integer> selected = new ArrayList<>();
     boolean isselected = false;
@@ -87,6 +90,9 @@ public class Favourite extends AppCompatActivity {
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_favourite);
+            mAdView = (AdView) findViewById(R.id.adView);
+            AdRequest adRequest = new AdRequest.Builder().build();
+            mAdView.loadAd(adRequest);
             toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
             recyclerView = (RecyclerView) findViewById(R.id.recycler_view);

@@ -40,6 +40,8 @@ import android.widget.TextView;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.Target;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +61,7 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
     EditText taskname;
     int positiontoopen;
     ArrayList<Task> list = new ArrayList<>();
-    ;
+    AdView mAdView;
     ImageButton fav;
     boolean flag = false, favflag = false;
     SQLiteDatabase readdatabase;
@@ -116,6 +118,9 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_task);
+        mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
         prefManager = new PrefManager(this);
         try {
             //getWindow().setBackgroundDrawableResource(R.drawable.back9);

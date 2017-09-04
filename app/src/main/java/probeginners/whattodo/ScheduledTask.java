@@ -30,6 +30,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -55,7 +58,7 @@ public class ScheduledTask extends AppCompatActivity {
     ArrayList<Integer> selected = new ArrayList<>();
     boolean isselected = false;
     int i;
-
+    AdView mAdView;
     Cursor cursor;
 
     @Override
@@ -104,6 +107,9 @@ public class ScheduledTask extends AppCompatActivity {
             setContentView(R.layout.activity_scheduled_task);
             toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
+            mAdView = (AdView) findViewById(R.id.adView);
+            AdRequest adRequest = new AdRequest.Builder().build();
+            mAdView.loadAd(adRequest);
             recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
             query = "SELECT * FROM TaskTable a INNER JOIN TaskDetails b ON a.id=b.taskkey WHERE b.alarmstatus= ?";
             getSupportActionBar().setTitle("Scheduled Tasks");

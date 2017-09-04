@@ -68,6 +68,7 @@
                 android:hint="Add new task..."
                 android:id="@+id/newtaskname"
                 android:singleLine="true"
+                android:inputType="textCapSentences"
                 android:textColor="#0d47a1"
                 android:background="@color/white"
                 android:textAlignment="center"

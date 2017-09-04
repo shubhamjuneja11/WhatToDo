@@ -300,9 +300,7 @@ public class Navigation extends AppCompatActivity
         SharedPreferences sharedPreferences1= PreferenceManager.getDefaultSharedPreferences(Navigation.this);
         int a=sharedPreferences1.getInt("myback",0);
         getWindow().setBackgroundDrawableResource(WelcomeActivity.myback(a));
-        mAdView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+
 
     }
 
@@ -312,6 +310,9 @@ tut=0;
         super.onCreate(savedInstanceState);
         prefManager=new PrefManager(this);
         setContentView(R.layout.activity_navigation);
+        mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
         speechtotext();
         sharedPreferences = getSharedPreferences("list", Context.MODE_PRIVATE);
         try {
