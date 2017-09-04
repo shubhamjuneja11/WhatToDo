@@ -124,7 +124,6 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/image4"
         android:text="Add an Image"
-        android:id="@+id/link"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:textColor="@color/hintcolor"

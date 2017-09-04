@@ -111,11 +111,8 @@ public class NewList extends AppCompatActivity {
                 overridePendingTransition(0, R.anim.push_up_out);
                 return true;
             }
-            if (item.getItemId() == android.R.id.home) {
-                return true;
-            }
+            return item.getItemId() == android.R.id.home;
 
-            return false;
         }
         catch (Exception e){return false;}
     }

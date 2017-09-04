@@ -88,9 +88,7 @@ int a=vibrate?0:1;
 
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            if (which == 0)
-                                decide = true;
-                            else decide = false;
+                            decide = which == 0;
 
                         }
                     })
@@ -220,9 +218,7 @@ int a=color?1:0;
             .setSingleChoiceItems(array,a, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    if (which == 0)
-                        decide2 = false;
-                    else decide2 = true;
+                    decide2 = which != 0;
 
                 }
             })

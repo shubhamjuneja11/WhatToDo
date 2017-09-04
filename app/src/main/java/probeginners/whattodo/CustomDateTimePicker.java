@@ -238,13 +238,13 @@ public class CustomDateTimePicker implements View.OnClickListener {
     }
 
     public interface ICustomDateTimeListener {
-        public void onSet(Dialog dialog, Calendar calendarSelected,
-                          Date dateSelected, int year, String monthFullName,
-                          String monthShortName, int monthNumber, int date,
-                          String weekDayFullName, String weekDayShortName, int hour24,
-                          int hour12, int min, int sec, String AM_PM);
+        void onSet(Dialog dialog, Calendar calendarSelected,
+                   Date dateSelected, int year, String monthFullName,
+                   String monthShortName, int monthNumber, int date,
+                   String weekDayFullName, String weekDayShortName, int hour24,
+                   int hour12, int min, int sec, String AM_PM);
 
-        public void onCancel();
+        void onCancel();
     }
 
     @Override

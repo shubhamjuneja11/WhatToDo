@@ -275,11 +275,11 @@ public void determinecount(HashSet<Integer> set){
         if (db == null)
             db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(this.id, primary);
+        values.put(id, primary);
         values.put(listkey, listke);
         values.put(taskkey, taskke);
-        values.put(this.listname, listname);
-        values.put(this.taskname, taskname);
+        values.put(DatabaseHandler.listname, listname);
+        values.put(DatabaseHandler.taskname, taskname);
         db.insert(Details_Task, null, values);
     }
 
@@ -287,11 +287,11 @@ public void determinecount(HashSet<Integer> set){
         if (db == null)
             db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(this.id, details.primary);
+        values.put(id, details.primary);
         values.put(listkey, details.listkey);
         values.put(taskkey, details.taskkey);
-        values.put(this.listname, listname);
-        values.put(this.taskname, taskname);
+        values.put(listname, listname);
+        values.put(taskname, taskname);
         values.put(alarmtime, details.getAlarmtime());
         values.put(alarmstatus, details.getAlarmstatus());
         db.insert(Details_Task, null, values);

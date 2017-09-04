@@ -2,7 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:title="0"
-        android:id="@+id/delcount"
         app:showAsAction="always">
     </item>
     <item android:title="Delete"
