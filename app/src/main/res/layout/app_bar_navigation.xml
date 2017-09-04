@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,6 +10,7 @@
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/appbarlayout"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
@@ -23,14 +24,30 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_navigation" />
-<ImageView
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/content_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/appbarlayout"
+        android:layout_marginBottom="60dp"
+        android:onClick="dun"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context="probeginners.whattodo.Navigation"
+        tools:showIn="@layout/app_bar_navigation">
+
+        <include layout="@layout/recycler" android:id="@+id/include"></include>
+    </RelativeLayout>
+
+    <ImageView
     android:layout_width="70dp"
     android:layout_height="60dp"
     android:scaleType="fitCenter"
     android:src="@drawable/speak"
-    android:layout_margin="@dimen/fab_margin"
-    android:layout_gravity="bottom|start"
+    android:layout_marginBottom="60dp"
+    android:layout_marginLeft="16dp"
+    android:layout_alignParentBottom="true"
     android:id="@+id/mic"
     />
     <android.support.design.widget.FloatingActionButton
@@ -38,11 +55,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
+        android:layout_marginBottom="60dp"
+        android:layout_marginRight="16dp"
         android:src="@drawable/add"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
         app:backgroundTint="@color/black"
 
         />
+
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id">
+    </com.google.android.gms.ads.AdView>
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -61,4 +92,4 @@
         android:clickable="false"
         android:id="@+id/button"/>
 </RelativeLayout>
-</android.support.design.widget.CoordinatorLayout>
+</RelativeLayout>

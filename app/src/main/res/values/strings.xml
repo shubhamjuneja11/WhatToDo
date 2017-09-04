@@ -107,10 +107,12 @@ It is very easy to use and will definitely help you in making your lifestyle eas
 
     <string name="slide_4_title">Let\'s Go!</string>
 
+
     <string name="play_again_desc">To see the welcome slider again, goto Settings -> apps -> welcome slider -> clear data</string>
     <string name="play_again">Play Again</string>
 <string name="query">For any queries, contact us at   </string>
     <string name="speech_prompt">Tell me your task</string>
     <string name="speech_not_supported">Sorry! Your device doesn\'t support speech input</string>
     <string name="tap_on_mic">Tap on mic to speak</string>
+    <string name="banner_ad_unit_id">ca-app-pub-5750055305709604/5207926741</string>
 </resources>

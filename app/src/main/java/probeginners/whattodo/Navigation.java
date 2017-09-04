@@ -50,6 +50,9 @@ import android.widget.Toast;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.Target;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -106,6 +109,9 @@ public class Navigation extends AppCompatActivity
     ArrayList<Integer> selected = new ArrayList<>();
     public static boolean isselected = false;
     HashMap<Integer, Integer> map = new HashMap<>();
+    AdView mAdView;
+
+
     public void selection(int a) {
         int b = taskDataList.get(a).getPrimary();
         if (selected.contains(b)) {
@@ -294,6 +300,10 @@ public class Navigation extends AppCompatActivity
         SharedPreferences sharedPreferences1= PreferenceManager.getDefaultSharedPreferences(Navigation.this);
         int a=sharedPreferences1.getInt("myback",0);
         getWindow().setBackgroundDrawableResource(WelcomeActivity.myback(a));
+        mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
     }
 
     @Override
