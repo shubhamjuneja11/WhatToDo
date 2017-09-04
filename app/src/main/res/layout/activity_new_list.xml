@@ -25,4 +25,5 @@
 
     </android.support.design.widget.AppBarLayout>
 <include layout="@layout/newlistcontent"></include>
+
     </android.support.design.widget.CoordinatorLayout>
