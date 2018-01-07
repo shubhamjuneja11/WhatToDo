@@ -72,7 +72,6 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
     int tut = 0, b, done;
     Target t1, t2, t4;
     ShowcaseView showcaseView;
-    PrefManager prefManager;
     ArrayList<Integer> selected = new ArrayList<>();
     boolean isselected = false;
 
@@ -121,7 +120,6 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
         mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
-        prefManager = new PrefManager(this);
         try {
             //getWindow().setBackgroundDrawableResource(R.drawable.back9);
             //Glide.with(this).load(R.drawable.back9).into((ImageView)findViewById(R.id.imgv));
@@ -229,24 +227,7 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
 
                 }
             });
-            if (prefManager.tutorial() < 2) {
-                showcaseView = new ShowcaseView.Builder(this)
-                        .setTarget(Target.NONE)
-                        .setOnClickListener(this)
-                        .setContentTitle("Tasks List")
-                        .setContentText("It contains various tasks in your List/Inbox.")
-                        .hideOnTouchOutside()
-                        .build();
-                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                params.addRule(RelativeLayout.CENTER_HORIZONTAL);
-                params.setMargins(0, 0, 0, 200);
-                showcaseView.setButtonPosition(params);
 
-                t1 = new ViewTarget(R.id.abcd, this);
-                t2 = new ViewTarget(R.id.fav, this);
-                prefManager.setTutorial(2);
-            }
 
         } catch (Exception e) {
         }
@@ -293,19 +274,7 @@ public boolean funz(){
                     taskname.setText("");
                    boolean b=funz();
                     fav.setImageResource(R.drawable.favourite);
-                    if(b)
-                    if (prefManager.tutorial() < 3) {
-                        showcaseView = new ShowcaseView.Builder(this)
-                                .setTarget(Target.NONE)
-                                .setOnClickListener(this)
-                                .setContentTitle("Hurray!!")
-                                .setContentText("You have added a task.")
-                                .hideOnTouchOutside()
-                                .build();
 
-                        tut = 4;
-                        prefManager.setTutorial(3);
-                    }
 
                     return true;
                 }
@@ -362,6 +331,8 @@ public boolean funz(){
                     //selected=new ArrayList<>();
                     return true;
                 }
+                case R.id.edit:
+
 
 
             }

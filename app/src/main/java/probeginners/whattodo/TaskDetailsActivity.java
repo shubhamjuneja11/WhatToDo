@@ -99,7 +99,6 @@ public class TaskDetailsActivity extends AppCompatActivity implements View.OnCli
         mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
-        prefManager=new PrefManager(this);
         try {
             toolbar = (Toolbar) findViewById(R.id.toolbar);
             Intent intent = getIntent();
@@ -224,25 +223,7 @@ public class TaskDetailsActivity extends AppCompatActivity implements View.OnCli
                     dialog.show();
                 }
             });
-            if(prefManager.tutorial()<4) {
-                t1 = new ViewTarget(R.id.alarm, this);
-                t2 = new ViewTarget(R.id.note, this);
-                t3 = new ViewTarget(R.id.reminderimage, this);
-                showcaseView = new ShowcaseView.Builder(this)
-                        .setTarget(Target.NONE)
-                        .setOnClickListener(this)
-                        .setContentTitle("TaskDetails")
-                        .setContentText("This contains the details of your individual task.")
-                        .hideOnTouchOutside()
-                        .build();
-                showcaseView.setHideOnTouchOutside(true);
-                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                params.addRule(RelativeLayout.CENTER_HORIZONTAL);
-                params.setMargins(0, 0, 0, 100);
-                showcaseView.setButtonPosition(params);
-                prefManager.setTutorial(4);
-            }
+
 
 
         } catch (Exception e) {

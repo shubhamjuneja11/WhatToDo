@@ -74,7 +74,6 @@ import navigation.InboxTask;
 import navigation.SettingsActivity;
 import tasklist.RecyclerTouchListener;
 import tasklist.TaskAdapter;
-import welcome.PrefManager;
 import welcome.WelcomeActivity;
 
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
@@ -105,7 +104,6 @@ public class Navigation extends AppCompatActivity
     private final int REQ_CODE_SPEECH_INPUT = 100;
     View add;
     Toolbar toolbar;
-    private PrefManager prefManager;
     ArrayList<Integer> selected = new ArrayList<>();
     public static boolean isselected = false;
     HashMap<Integer, Integer> map = new HashMap<>();
@@ -277,26 +275,7 @@ public class Navigation extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         preparedata();
-        if(prefManager.tutorial()<1)
-        {
-            t1 = new ViewTarget(R.id.button, this);
-            t2 = new ViewTarget(R.id.fab, this);
-            t3 = new ViewTarget(R.id.mynav, this);
-            showcaseView = new ShowcaseView.Builder(this)
-                    .setTarget(Target.NONE)
-                    .setOnClickListener(this)
-                    .setContentTitle("WhatToDo Tutorial")
-                    .setContentText("Hello,I'll guide you throughout the app.")
-                    .hideOnTouchOutside()
-                    .build();
-            showcaseView.setHideOnTouchOutside(true);
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-            params.addRule(RelativeLayout.CENTER_HORIZONTAL);
-            params.setMargins(0, 0, 0, 200);
-            showcaseView.setButtonPosition(params);
-            prefManager.setTutorial(1);
-        }
+
         SharedPreferences sharedPreferences1= PreferenceManager.getDefaultSharedPreferences(Navigation.this);
         int a=sharedPreferences1.getInt("myback",0);
         getWindow().setBackgroundDrawableResource(WelcomeActivity.myback(a));
@@ -308,7 +287,6 @@ public class Navigation extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
 tut=0;
         super.onCreate(savedInstanceState);
-        prefManager=new PrefManager(this);
         setContentView(R.layout.activity_navigation);
         mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
@@ -591,11 +569,6 @@ else {
                 Intent intent = new Intent(Navigation.this, Help.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-            } else if (id == R.id.hel) {
-
-                PrefManager prefManager=new PrefManager(this);
-                prefManager.setTutorial(0);
-                onResume();
             }
 
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

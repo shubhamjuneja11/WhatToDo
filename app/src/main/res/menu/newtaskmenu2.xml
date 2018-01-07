@@ -4,6 +4,11 @@
     <item android:title="0"
         app:showAsAction="always">
     </item>
+    <item android:title="Edit"
+        app:showAsAction="always"
+        android:id="@+id/edit"
+        android:icon="@drawable/edit"
+        ></item>
     <item android:title="Delete"
         app:showAsAction="always"
         android:id="@+id/delete"
