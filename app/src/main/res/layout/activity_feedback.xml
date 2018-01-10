@@ -87,24 +87,7 @@
                 android:lines="5"
                 android:layout_width="fill_parent">
             </EditText>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                style="@style/layoutmargin"
 
-                android:weightSum="10">
-            <CheckBox
-                android:layout_width="0dp"
-                android:id="@+id/feedbackcheckbox"
-                android:layout_height="match_parent"                android:layout_weight="1"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="9"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="10dp"
-                    android:text="Would you like an email response?"/>
-            </LinearLayout>
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

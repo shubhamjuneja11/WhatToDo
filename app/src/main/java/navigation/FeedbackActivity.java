@@ -17,10 +17,8 @@ import welcome.WelcomeActivity;
 
 public class FeedbackActivity extends AppCompatActivity {
     EditText name, feedback;
-    CheckBox checkBox;
     Spinner spinner;
     String a, c, d;
-    boolean f;
     String developeremailid = "supergeekdeveloper@gmail.com";
     Toolbar toolbar;
 
@@ -35,7 +33,6 @@ public class FeedbackActivity extends AppCompatActivity {
             getSupportActionBar().setTitle("Feedback Form");
             name = (EditText) findViewById(R.id.name);
             feedback = (EditText) findViewById(R.id.feedbacktext);
-            checkBox = (CheckBox) findViewById(R.id.feedbackcheckbox);
             spinner = (Spinner) findViewById(R.id.spinner);
 
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -59,16 +56,12 @@ public class FeedbackActivity extends AppCompatActivity {
             a = name.getText().toString().trim();
             c = feedback.getText().toString().trim();
             d = spinner.getSelectedItem().toString().trim();
-            f = checkBox.isChecked();
 
             if (a.isEmpty())
                 Toast.makeText(this, "Enter a valid name", Toast.LENGTH_SHORT).show();
             else if (c.isEmpty())
                 Toast.makeText(this, "Enter valid Feedback", Toast.LENGTH_SHORT).show();
             else {
-                if (f)
-                    c += "\n\n Yes,I would like to get a response.";
-                else c += "\n\n No,I don't want a response. ";
                 Intent i = new Intent(Intent.ACTION_SEND);
                 i.setType("message/rfc822");
                 i.putExtra(Intent.EXTRA_EMAIL, new String[]{developeremailid});

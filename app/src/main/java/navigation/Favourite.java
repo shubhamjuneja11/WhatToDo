@@ -345,7 +345,7 @@ public class Favourite extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         if (isselected) {
-            inflater.inflate(R.menu.newtaskmenu2, menu);
+            inflater.inflate(R.menu.newtaskmenu3, menu);
             MenuItem item = menu.getItem(0);
             item.setTitle(selected.size() + " selected");
             toolbar.setTitle("");
