@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -20,6 +21,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -247,12 +249,18 @@ public class NewTaskActivity extends AppCompatActivity implements View.OnClickLi
                 item.setEnabled(false);
             getSupportActionBar().setTitle(listname);
 
-        } else {
-            inflater.inflate(R.menu.newtaskmenu2, menu);
+        } else if(selected.size()>1){
+            inflater.inflate(R.menu.newtaskmenu3, menu);
             MenuItem item = menu.getItem(0);
             item.setTitle(selected.size() + " selected");
             toolbar.setTitle("");
 
+        }
+        else {
+            inflater.inflate(R.menu.newtaskmenu2, menu);
+            MenuItem item = menu.getItem(0);
+            item.setTitle(selected.size() + " selected");
+            toolbar.setTitle("");
         }
 
         // else inflater.inflate(R.menu.newtaskmenu, menu);
@@ -332,6 +340,47 @@ public boolean funz(){
                     return true;
                 }
                 case R.id.edit:
+                {
+
+                    final int taskkey=selected.get(0);
+
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Enter new name");
+                    final EditText editText = new EditText(this);
+                    editText.setInputType(InputType.TYPE_CLASS_TEXT);
+                    builder.setView(editText);
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            String input = editText.getText().toString().trim();
+                            for(int i=0;i<list.size();i++)
+                            {
+                                if(taskkey==list.get(i).getPrimary()) {
+                                    list.get(i).taskname = input;
+                                    break;
+                                }
+
+
+                            }
+                            adapter.notifyDataSetChanged();
+                            handler.updateTaskName(taskkey,input);
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    builder.show();
+
+
+                    isselected=false;
+                    selected.clear();
+
+                    adapter.notifyDataSetChanged();
+                    invalidateOptionsMenu();
+                }
 
 
 

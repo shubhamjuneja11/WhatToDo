@@ -257,6 +257,14 @@ public void determinecount(HashSet<Integer> set){
         db.update(Task_Table, values, "id=?", new String[]{String.valueOf(Integer.valueOf(task.getPrimary()))});
 
     }
+    public void updateTaskName(int taskey,String name){
+        if (db == null)
+            db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(taskname, name);
+        db.update(Task_Table, values, "id=?", new String[]{String.valueOf(Integer.valueOf(taskey))});
+
+    }
 
     public void deleteTask(Context context, int primary) {
         if (db == null)
@@ -310,6 +318,7 @@ public void determinecount(HashSet<Integer> set){
                 , new String[]{String.valueOf(Integer.valueOf(taskDetails.primary))
                 });
     }
+
 
     public void turnalarmoff(Context context, int id) {
         if (db == null)
